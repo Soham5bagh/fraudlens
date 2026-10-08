@@ -1,5 +1,7 @@
 # Halden
 
+Live desk: [https://halden-fraud-agent-demo.vercel.app](https://halden-fraud-agent-demo.vercel.app)
+
 Halden is a fraud investigation desk. A payment is flagged, an agent reads the file the way an analyst would, and a person decides whether to approve, hold, escalate, or block. The agent never takes the action itself.
 
 It runs on a seeded synthetic book: card testing, account takeover, mule-account chains, merchant collusion, and honest customers who look suspicious (a real trip, a one-off electronics purchase, a lunch-hour sale, a new phone at home, a shared household device). No API key.
@@ -28,7 +30,10 @@ Tests:
 
 ```bash
 python -m pytest tests -q
+npm test
 ```
+
+`npm test` runs the in-browser investigator without starting the server. The same seed repeats. Across 200 seeds of each scenario it has to name the planted pattern, recommend block or escalate for fraud, and approve a genuine trip. One thousand further seeds must not crash. The same checks are replayed on the 30 precomputed cases and compared with the Python agent.
 
 ## Deploy to Vercel
 
@@ -46,7 +51,8 @@ The queue, case files, and metrics are static files under `public/data/`, so the
 
 ## What to click
 
-- **Queue** is the morning review. The five tiles at the top are the pitch.
+- **Queue** is the morning review. The five tiles at the top are the pitch. **Investigate a new payment** opens a live file.
+- **Investigate** (`/investigate`) builds a fresh flagged payment in the browser from a seed you can replay (`/investigate?scenario=card_testing&seed=1234`). Choose card testing, account takeover, a mule chain, merchant collusion, a genuine trip, or random. The TypeScript agent runs the same checks as the Python desk — history, velocity, amount, device, money flow, merchant — and does not receive the planted label. Steps appear one by one, then the score, the pattern, and a suggested action. Record approve, hold, escalate, or block the same way as on a queued case. The planted scenario is shown only after that decision. Nothing here calls Python or an API key, so it runs on Vercel Hobby.
 - **Demo** walks card testing, account takeover, a mule chain, merchant collusion, then a genuine trip the queue got wrong.
 - Open a case to read the evidence, the step timeline, the linked-entity graph, and the suggested action. Record a decision. The button does not block anyone.
 - **Metrics** is the scorecard against held-out labels: recall, precision, false alarms, genuine customers each approach would have blocked, and the same checks on three other seeds.
@@ -77,9 +83,14 @@ flowchart LR
 
   subgraph vercel [Vercel Next.js]
     UI[Queue, case file, metrics]
+    Live[Investigate page]
+    TS[TypeScript agent]
     API[Route handlers]
     Human[Analyst decision]
   end
+
+  Live --> TS
+  TS --> Human
 
   JSON --> UI
   JSON --> API
@@ -88,6 +99,8 @@ flowchart LR
 ```
 
 Ground truth lives in `ground_truth` (SQLite) and `data/seed/judge.json`. The agent module only receives `public_world()`: customers, accounts, cards, devices, IPs, merchants, transactions, and device enrollments. Labels are joined after the investigation, for the scorecard.
+
+The live page does not read those cases. `lib/live` builds one flagged payment and the history around it from a numeric seed, then runs the same nine checks in TypeScript. The function that decides never receives the scenario name. The page keeps that name beside the result and shows it only after the analyst records a decision.
 
 The investigator is a fixed graph of steps, in the shape of a LangGraph flow without a model call: open the case, baseline, velocity, amount, device and IP, NetworkX money-flow, merchant, classify, recommend. Each step writes a timestamped finding. If a model key is present, `polish_narrative` is the hook for a prose pass; this build does not call out, so a demo cannot fail on a vendor.
 
@@ -111,6 +124,8 @@ See [DATA_ASSUMPTIONS.md](DATA_ASSUMPTIONS.md). Short version: one currency (USD
 | `engine/generate.py` | Seeded customers, payments, planted fraud, honest traps |
 | `engine/flagging.py` | Rules and an Isolation Forest queue |
 | `engine/agent.py` | Deterministic investigation |
+| `lib/live/` | Same checks, plus a one-case generator, running in the browser |
+| `app/investigate/` | Live investigation page |
 | `engine/metrics.py` | Recall, precision, false alarms, customer harm |
 | `engine/build.py` | Writes SQLite and the JSON the app serves |
 | `app/` | Next.js desk |

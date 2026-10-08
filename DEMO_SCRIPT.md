@@ -16,4 +16,6 @@ Halden investigates a flagged payment and stops before it acts. A person still a
 
 **Metrics.** "Same frauds caught: 100% recall. Precision moves from 84% to 100%. False alarms from 19 payments to zero. Genuine customers blocked: 8 versus 0. The label was not in the file the agent read. You can reveal it on the case."
 
+**Live, thirty seconds.** "The queue was precomputed. This one is not. Investigate, card testing, new payment. Watch the checks land: history, a burst of declines, a new device, a datacenter IP. Then the score and block. I still have to press it. Only after I record the decision does the page admit what was planted. Change the seed in the URL and the file changes. Same seed, same file."
+
 **Close.** "The agent explains itself with the payment ids, the device, and the amounts. The analyst decides. Nothing in this demo called a model, and nothing here needs an API key."

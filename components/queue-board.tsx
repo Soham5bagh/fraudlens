@@ -68,6 +68,11 @@ export function QueueBoard() {
         Halden re-investigated the queue, kept the fraud, and cleared the honest ones.
         Nothing here is blocked until you say so.
       </p>
+      <p>
+        <Link href="/investigate" className="primary" style={{ display: "inline-block", width: "auto", padding: "10px 14px" }}>
+          Investigate a new payment
+        </Link>
+      </p>
       <div className="demo-strip">
         {demo.map((step, index) => (
           <Link key={step.case_id} href={`/cases/${step.case_id}?demo=1`}>
