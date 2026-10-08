@@ -4,8 +4,10 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { NetworkGraph } from "@/components/network-graph";
+import { VerdictBanner } from "@/components/verdict-banner";
 import { ACTIONS, loadDecisions, saveDecision } from "@/lib/decisions";
 import { actionLabel, money, when } from "@/lib/format";
+import { actionPlain, patternPlain, statusPlain } from "@/lib/glossary";
 import { PLANTED, runLive } from "@/lib/live/generate";
 import type { Investigation, PlantedScenario, ScenarioChoice, Truth } from "@/lib/live/types";
 import type { Action, AnalystDecision } from "@/lib/types";
@@ -89,19 +91,19 @@ export function InvestigateDesk() {
 
   return (
     <>
-      <p className="kicker">Live file · generated in the browser</p>
+      <p className="kicker">Live file · made up in your browser</p>
       <h1>Investigate a new payment.</h1>
       <p className="lede">
-        Pick a shape, then open a fresh flagged payment. Halden walks the same checks it uses on the morning queue:
-        history, velocity, amount, device, money flow, merchant. The planted label stays hidden until you decide.
+        Pick the kind of case you want to see, then open a fresh flagged payment. Halden checks the history, the device, the location, and where the money went. It does not know which kind you picked. That answer appears only after you decide.
       </p>
-      <div className="filters" role="group" aria-label="Scenario">
+      <div className="filters" role="group" aria-label="What kind of case to generate">
         {CHOICES.map((item) => (
-          <button key={item.id} type="button" className={picked === item.id ? "on" : undefined} onClick={() => setPicked(item.id)}>
+          <button key={item.id} type="button" className={picked === item.id ? "on" : undefined} title={patternPlain(item.id)} onClick={() => setPicked(item.id)}>
             {item.label}
           </button>
         ))}
       </div>
+      <p className="hint">{patternPlain(picked)}</p>
       <button className="primary" type="button" onClick={investigateNew} style={{ width: "auto", padding: "10px 14px" }}>
         Investigate a new payment
       </button>
@@ -116,7 +118,8 @@ export function InvestigateDesk() {
         <div className="case-grid" style={{ marginTop: 22 }}>
           <div className="stack">
             <section className="panel">
-              <p className="meta">Seed {seed} · requested {labelFor(choice)} · {file.customer.id}</p>
+              <p className="meta">Seed {seed} · you chose {labelFor(choice)}</p>
+              <p className="hint">{patternPlain(choice)}</p>
               <h2 style={{ fontSize: "clamp(28px, 4vw, 42px)" }}>{file.customer.name}</h2>
               <p className="lede" style={{ marginBottom: 0 }}>
                 {money(file.lead.amountCents)} at {file.lead.merchantName} · {when(file.lead.occurredAt)}
@@ -126,8 +129,27 @@ export function InvestigateDesk() {
               </p>
             </section>
 
+            {ready && file ? (
+              <VerdictBanner
+                score={file.riskScore}
+                action={file.action}
+                pattern={file.pattern}
+                patternLabel={file.patternLabel}
+                why={file.summary}
+              />
+            ) : (
+              <section className="verdict pending" aria-live="polite">
+                <div>
+                  <p className="kicker">Verdict</p>
+                  <p className="verdict-why">Halden is still checking this payment.</p>
+                  <p className="hint">The risk score and the recommendation appear when the last check finishes. You decide after that.</p>
+                </div>
+              </section>
+            )}
+
             <section className="panel">
-              <h2>How the file is being worked</h2>
+              <h2>Evidence, step by step</h2>
+              <p className="hint">Each step is one check, with the numbers Halden found.</p>
               {shown === 0 ? <p className="state">Opening the file…</p> : null}
               <ol className="timeline">
                 {file.timeline.slice(0, shown).map((step, index) => (
@@ -139,7 +161,7 @@ export function InvestigateDesk() {
                     <div className="step">
                       <div className="row-title">
                         <h3>{step.title}</h3>
-                        <span className={`pill ${step.status}`}>{step.status}</span>
+                        <span className={`pill ${step.status}`}>{statusPlain(step.status)}</span>
                       </div>
                       <p className="meta">{when(step.started_at)} · {step.duration_ms} ms</p>
                       <p>{step.finding}</p>
@@ -175,7 +197,8 @@ export function InvestigateDesk() {
                   </ul>
                 </section>
                 <section className="panel">
-                  <h2>Payments in the episode</h2>
+                  <h2>Payments Halden looked at</h2>
+                  <p className="hint">The burst of activity around the flagged payment.</p>
                   <div className="scroll">
                     <table>
                       <thead>
@@ -207,17 +230,18 @@ export function InvestigateDesk() {
 
           <aside className="sticky-side">
             <section className="panel">
-              <p className="kicker">Suggested action</p>
+              <p className="kicker">Your decision</p>
               {ready ? (
                 <>
-                  <h2 style={{ textTransform: "capitalize" }}>{file.action}</h2>
+                  <h2 style={{ textTransform: "capitalize" }}>{actionLabel(file.action)}</h2>
                   <p>{file.actionRationale}</p>
-                  <p className="note">Score {file.riskScore} / 100 · {file.patternLabel}. Halden does not apply this. You do.</p>
+                  <p className="hint">{actionPlain(file.action)} Halden does not apply this. You do.</p>
                   <div className="actions" style={{ marginTop: 12 }}>
                     {ACTIONS.map((option) => (
                       <button
                         key={option}
                         type="button"
+                        title={actionPlain(option)}
                         className={`${option === action ? "chosen" : ""} pill ${option}`}
                         onClick={() => setAction(option)}
                       >
@@ -243,18 +267,19 @@ export function InvestigateDesk() {
 
             {ready && decision && planted ? (
               <section className="panel">
-                <h2>Held-out label</h2>
+                <h2>What was actually planted</h2>
                 <p>
-                  Planted: {truth.label}. Halden named {file.patternLabel} and suggested {file.action}.{" "}
-                  {verdict(truth, file) ? "Correct." : "Incorrect."}
+                  Planted: {truth.label}. {patternPlain(truth.scenario)} Halden named {file.patternLabel} and suggested {file.action}.{" "}
+                  {verdict(truth, file) ? "That matches." : "That does not match."}
                 </p>
-                <p className="note">The investigator never received this label. It only saw the generated payments.</p>
+                <p className="hint">Halden never received this label. It only saw the generated payments.</p>
               </section>
             ) : null}
 
             {ready ? (
               <section className="panel">
-                <h2>Linked entities</h2>
+                <h2>Who is connected</h2>
+                <p className="hint">Customers, devices, and shops tied to this payment.</p>
                 <NetworkGraph graph={file.graph} />
                 <p className="note">{file.graph.caption}</p>
               </section>

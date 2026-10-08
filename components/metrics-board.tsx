@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { countLabel, money, patternName, pct } from "@/lib/format";
+import { patternPlain, TERM_HELP } from "@/lib/glossary";
 import type { Metrics } from "@/lib/types";
 
 export function MetricsBoard() {
@@ -23,37 +24,62 @@ export function MetricsBoard() {
 
   return (
     <>
-      <p className="kicker">Held-out labels · not shown to the agent</p>
-      <h1>Frauds caught, honest customers spared.</h1>
-      <p className="lede">{metrics.narrative}</p>
+      <p className="kicker">Synthetic book · the answers were hidden from Halden</p>
+      <h1>Did it catch the fraud without stopping real customers?</h1>
+      <p className="lede">
+        On {population.transactions.toLocaleString()} synthetic payments, Halden caught {agent.tp} of {population.fraud_transactions} frauds and raised {agent.fp} false alarms.
+        A basic rule queue caught the same {naive.tp} frauds and raised {naive.fp} false alarms. Following that queue would have blocked {headline.genuine_customers_blocked_by_queue} genuine customers. Following Halden would have blocked {headline.genuine_customers_blocked_by_agent}.
+      </p>
+      <div className="compare-plain">
+        <article className="panel">
+          <h2>Basic rule queue</h2>
+          <p className="hint">{TERM_HELP.queue} If someone blocked every flag, this is the result.</p>
+          <div className="figure">
+            <div><b>{naive.tp}</b><span>frauds caught, of {population.fraud_transactions}</span></div>
+            <div><b>{headline.genuine_customers_blocked_by_queue}</b><span>genuine customers wrongly blocked</span></div>
+            <div><b>{naive.fp}</b><span>false alarms. {TERM_HELP.falseAlarms}</span></div>
+          </div>
+        </article>
+        <article className="panel halden">
+          <h2>Halden</h2>
+          <p className="hint">The same flagged payments, read one by one. A person still has to agree before anything is blocked.</p>
+          <div className="figure">
+            <div><b>{agent.tp}</b><span>frauds caught, of {population.fraud_transactions}</span></div>
+            <div><b>{headline.genuine_customers_blocked_by_agent}</b><span>genuine customers wrongly blocked</span></div>
+            <div><b>{agent.fp}</b><span>false alarms. {TERM_HELP.falseAlarms}</span></div>
+          </div>
+        </article>
+      </div>
+      <p className="hint" style={{ marginBottom: 16 }}>{metrics.narrative}</p>
       <div className="stats">
         <article className="stat">
-          <span className="kicker">Frauds caught</span>
+          <span className="kicker" title={TERM_HELP.recall}>Frauds caught</span>
           <b>{pct(headline.frauds_caught_recall)}</b>
-          <span className="muted">{agent.tp} of {agent.tp + agent.fn} fraud payments</span>
+          <span className="muted">{agent.tp} of {agent.tp + agent.fn} fraud payments. {TERM_HELP.recall}</span>
         </article>
         <article className="stat">
-          <span className="kicker">Precision</span>
+          <span className="kicker" title={TERM_HELP.precision}>Right when it says fraud</span>
           <b>{pct(headline.precision)}</b>
-          <span className="muted">Queue alone was {pct(naive.precision)}</span>
+          <span className="muted">This is precision. The rule queue was {pct(naive.precision)}. {TERM_HELP.precision}</span>
         </article>
         <article className="stat">
-          <span className="kicker">False alarms</span>
+          <span className="kicker" title={TERM_HELP.falseAlarms}>False alarms</span>
           <b>{headline.false_alarms}</b>
-          <span className="muted">Queue raised {naive.fp}. False positive rate {pct(headline.false_positive_rate)}.</span>
+          <span className="muted">The rule queue raised {naive.fp}. Share of genuine payments: {pct(headline.false_positive_rate)}.</span>
         </article>
         <article className="stat">
           <span className="kicker">Genuine customers blocked</span>
           <b>{headline.genuine_customers_blocked_by_agent}</b>
-          <span className="muted">Rubber-stamping the queue would block {headline.genuine_customers_blocked_by_queue}.</span>
+          <span className="muted">Blocking every flag would stop {headline.genuine_customers_blocked_by_queue}.</span>
         </article>
       </div>
 
       <section className="panel" style={{ marginBottom: 14 }}>
-        <h2>Queue versus Halden</h2>
+        <h2>Same comparison, as rates</h2>
+        <p className="hint">Grey is the basic rule queue. Blue is Halden. Frauds caught is recall. “Right when it says fraud” is precision.</p>
         <div className="bars">
-          <Bar label="Recall" naive={naive.recall} agent={agent.recall} />
-          <Bar label="Precision" naive={naive.precision} agent={agent.precision} />
+          <Bar label="Frauds caught" naive={naive.recall} agent={agent.recall} />
+          <Bar label="Right when it says fraud" naive={naive.precision} agent={agent.precision} />
           <Bar
             label="Genuine blocked"
             naive={headline.genuine_customers_blocked_by_queue / Math.max(headline.genuine_customers_blocked_by_queue, 1)}
@@ -70,7 +96,8 @@ export function MetricsBoard() {
       </div>
 
       <section className="panel" style={{ margin: "14px 0" }}>
-        <h2>By pattern</h2>
+        <h2>By kind of fraud</h2>
+        <p className="hint">A pattern is the story Halden names. Caught is how many fraudulent payments of that kind it stopped. Named correctly means the case file used the right story.</p>
         <div className="scroll">
           <table>
             <thead>
@@ -78,14 +105,14 @@ export function MetricsBoard() {
                 <th>Pattern</th>
                 <th>Fraud payments</th>
                 <th>Caught</th>
-                <th>Recall</th>
+                <th title={TERM_HELP.recall}>Share caught</th>
                 <th>Cases named correctly</th>
               </tr>
             </thead>
             <tbody>
               {metrics.by_pattern.map((row) => (
                 <tr key={row.pattern}>
-                  <td>{patternName(row.pattern)}</td>
+                  <td>{patternName(row.pattern)}<span className="hint">{patternPlain(row.pattern)}</span></td>
                   <td>{row.fraud_transactions}</td>
                   <td>{row.caught_by_agent}</td>
                   <td>{pct(row.agent_recall)}</td>
@@ -104,16 +131,17 @@ export function MetricsBoard() {
 
       {metrics.robustness ? (
         <section className="panel" style={{ marginBottom: 14 }}>
-          <h2>Same checks, other seeds</h2>
+          <h2>The same checks on other synthetic books</h2>
+        <p className="hint">A seed is the number that rebuilds the book. These were not used to tune the demo. Recall is frauds caught. Precision is how often a fraud call was right.</p>
           <p>{metrics.robustness.note}</p>
           <div className="scroll">
             <table>
               <thead>
                 <tr>
                   <th>Seed</th>
-                  <th>Recall</th>
-                  <th>Precision</th>
-                  <th>False alarms</th>
+                  <th title={TERM_HELP.recall}>Frauds caught</th>
+                  <th title={TERM_HELP.precision}>Right when it says fraud</th>
+                  <th title={TERM_HELP.falseAlarms}>False alarms</th>
                   <th>Genuine customers blocked</th>
                   <th>Fraud cases named</th>
                   <th>Legitimate cases approved</th>
@@ -147,8 +175,8 @@ export function MetricsBoard() {
       ) : null}
 
       <section className="panel">
-        <h2>Genuine customers the queue would have stopped</h2>
-        <p>Halden approved every one of them.</p>
+        <h2>Genuine customers the rule queue would have stopped</h2>
+        <p>Halden approved every one of them. These are real-looking trips, big purchases, and ordinary spending that only looked odd to the rules.</p>
         <ul>
           {metrics.customers_wrongly_blocked.cleared_by_agent.map((customer) => (
             <li key={customer.customer_id}>
@@ -159,7 +187,7 @@ export function MetricsBoard() {
         <p>
           <a href="/api/report">Download the detection report (Markdown)</a>
           {" · "}
-          <Link href="/demo">Walk the five demo cases</Link>
+          <Link href="/demo">Walk the guided demo</Link>
         </p>
       </section>
     </>
@@ -207,13 +235,13 @@ function Matrix({ title, row }: { title: string; row: Metrics["agent"] }) {
         <thead>
           <tr>
             <th></th>
-            <th>Predicted legitimate</th>
-            <th>Predicted fraud</th>
+            <th>Called genuine</th>
+            <th>Called fraud</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td>Actually legitimate</td>
+            <td>Actually genuine</td>
             <td>{row.tn}</td>
             <td>{row.fp}</td>
           </tr>
@@ -224,7 +252,7 @@ function Matrix({ title, row }: { title: string; row: Metrics["agent"] }) {
           </tr>
         </tbody>
       </table>
-      <p className="note">False positive rate {pct(row.fpr)} · F1 {pct(row.f1)}</p>
+      <p className="note">False alarms as a share of genuine payments: {pct(row.fpr)}. F1, a blend of frauds caught and precision: {pct(row.f1)}.</p>
     </section>
   );
 }

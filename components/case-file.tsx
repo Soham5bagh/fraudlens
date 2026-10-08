@@ -5,7 +5,9 @@ import { useParams, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { NetworkGraph } from "@/components/network-graph";
 import { ACTIONS, loadDecisions, saveDecision } from "@/lib/decisions";
+import { VerdictBanner } from "@/components/verdict-banner";
 import { actionLabel, money, patternName, when } from "@/lib/format";
+import { actionPlain, patternPlain, statusPlain, TERM_HELP } from "@/lib/glossary";
 import type { Action, AnalystDecision, CaseFile, JudgeEntry } from "@/lib/types";
 
 export function CaseFileView() {
@@ -102,11 +104,18 @@ export function CaseFileView() {
       ) : null}
       <div className="case-grid">
         <div className="stack">
+          <VerdictBanner
+            score={file.risk_score}
+            action={file.action}
+            pattern={file.pattern}
+            patternLabel={file.pattern_label}
+            why={file.summary}
+          />
           <section className="panel">
             <div className="row-title">
-              <span className={`pill ${file.action}`}>{actionLabel(file.action)}</span>
-              <span className="pill">{file.pattern_label}</span>
-              <span className="pill">{file.confidence} confidence</span>
+              <span className={`pill ${file.action}`} title={actionPlain(file.action)}>{actionLabel(file.action)}</span>
+              <span className="pill" title={patternPlain(file.pattern)}>{file.pattern_label}</span>
+              <span className="pill" title="How sure Halden is about the pattern name. The risk score is separate.">{file.confidence} confidence</span>
             </div>
             <h1 style={{ fontSize: "clamp(28px, 4vw, 42px)" }}>{file.customer.name}</h1>
             <p className="lede" style={{ marginBottom: 0 }}>
@@ -137,7 +146,8 @@ export function CaseFileView() {
           </section>
 
           <section className="panel">
-            <h2>How the file was worked</h2>
+            <h2>Evidence, step by step</h2>
+            <p className="hint">Each step is one check. The label says whether that check was fine, worth a look, or a problem. {TERM_HELP.riskScore}</p>
             <ol className="timeline">
               {file.timeline.map((step, index) => (
                 <li key={step.id}>
@@ -148,7 +158,7 @@ export function CaseFileView() {
                   <div className="step">
                     <div className="row-title">
                       <h3>{step.title}</h3>
-                      <span className={`pill ${step.status}`}>{step.status}</span>
+                      <span className={`pill ${step.status}`}>{statusPlain(step.status)}</span>
                     </div>
                     <p className="meta">{when(step.started_at)} · {step.duration_ms} ms</p>
                     <p>{step.finding}</p>
@@ -167,7 +177,8 @@ export function CaseFileView() {
           </section>
 
           <section className="panel">
-            <h2>Payments in the episode</h2>
+            <h2>Payments Halden looked at</h2>
+            <p className="hint">The burst of activity around the flagged payment, not the customer&apos;s whole history.</p>
             <div className="scroll">
               <table>
                 <thead>
@@ -199,15 +210,16 @@ export function CaseFileView() {
 
         <aside className="sticky-side">
           <section className="panel">
-            <p className="kicker">Suggested action</p>
-            <h2 style={{ textTransform: "capitalize" }}>{file.action}</h2>
+            <p className="kicker">Your decision</p>
+            <h2 style={{ textTransform: "capitalize" }}>{actionLabel(file.action)}</h2>
             <p>{file.action_rationale}</p>
-            <p className="note">Halden does not apply this. You do.</p>
+            <p className="hint">{actionPlain(file.action)} Halden does not apply this. You do.</p>
             <div className="actions" style={{ marginTop: 12 }}>
               {ACTIONS.map((option) => (
                 <button
                   key={option}
                   type="button"
+                  title={actionPlain(option)}
                   className={`${option === action ? "chosen" : ""} pill ${option}`}
                   onClick={() => {
                     setAction(option);
@@ -238,26 +250,32 @@ export function CaseFileView() {
           </section>
 
           <section className="panel">
-            <h2>Linked entities</h2>
+            <h2>Who is connected</h2>
+            <p className="hint">Customers, devices, and shops tied to this payment.</p>
             <NetworkGraph graph={file.graph} />
           </section>
 
           <section className="panel">
-            <h2>Held-out label</h2>
-            <p className="note">The investigator never saw this. It is only for the scorecard.</p>
+            <h2>What was actually planted</h2>
+            <p className="hint">Hidden from Halden. Open it only after you have decided, to see if the recommendation was right.</p>
             {truth ? (
               <p>
-                {truth.is_fraud ? `Fraud · ${patternName(truth.pattern)}` : "Legitimate"}.
+                {truth.is_fraud ? `Fraud · ${patternName(truth.pattern)}. ${patternPlain(truth.pattern)}` : "A genuine customer."}
                 {" "}Halden said {patternName(truth.predicted_pattern)} and {truth.action}.
-                {" "}{truth.correct_action ? "Action matches the label." : "Action does not match the label."}
+                {" "}{truth.correct_action ? "The recommendation matches the planted label." : "The recommendation does not match the planted label."}
               </p>
             ) : (
-              <button className="ghost" type="button" onClick={reveal}>Reveal ground truth</button>
+              <div className="button-row">
+                <button className="ghost" type="button" onClick={reveal}>Show the planted answer</button>
+                <button className="ghost" type="button" onClick={download}>Download case report</button>
+              </div>
             )}
             {truthError ? <p className="note">{truthError}</p> : null}
-            <button className="ghost" type="button" onClick={download} style={{ marginLeft: 8 }}>
-              Download case report
-            </button>
+            {truth ? (
+              <div className="button-row">
+                <button className="ghost" type="button" onClick={download}>Download case report</button>
+              </div>
+            ) : null}
           </section>
         </aside>
       </div>

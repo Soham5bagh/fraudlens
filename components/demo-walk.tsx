@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { actionLabel } from "@/lib/format";
+import { patternPlain } from "@/lib/glossary";
 import type { DemoStep } from "@/lib/types";
 
 export function DemoWalk() {
@@ -21,24 +22,28 @@ export function DemoWalk() {
 
   return (
     <>
-      <p className="kicker">Three to five minutes</p>
-      <h1>Open these five files, in order.</h1>
+      <p className="kicker">About three minutes</p>
+      <h1>Watch Halden work through {steps.length} payments.</h1>
       <p className="lede">
-        Three fraud patterns, a fourth if you have a minute, then a genuine customer the queue got wrong.
-        Record a decision on the last one so the room sees that a person still has to approve it.
+        Open them in order. Each one is a file from the queue: what was flagged, what Halden found, and what it recommends.
+        {steps[steps.length - 1]?.slot === "legitimate"
+          ? " The last one is a genuine customer a basic rule queue would have blocked."
+          : ""}
+        {" "}Record a decision so you can see that a person still has to approve it.
       </p>
       <div className="stack">
         {steps.map((step, index) => (
           <article key={step.case_id} className="panel">
             <p className="kicker">Step {index + 1}</p>
             <h2>{step.title}</h2>
+            <p className="hint">{patternPlain(step.slot)}</p>
             <p>{step.say}</p>
             <p className="meta">
-              {step.customer_name} · {step.amount} · risk {step.risk_score} · suggest {actionLabel(step.action)}
+              {step.customer_name} · {step.amount} · risk score {step.risk_score} out of 100 · recommends {actionLabel(step.action)}
             </p>
             <p>{step.summary}</p>
             <Link href={`/cases/${step.case_id}?demo=1`} className="primary" style={{ display: "inline-block", width: "auto", padding: "10px 14px" }}>
-              Open {step.case_id}
+              Open this payment
             </Link>
           </article>
         ))}
