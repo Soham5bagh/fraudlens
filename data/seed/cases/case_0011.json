@@ -1,0 +1,706 @@
+{
+  "case_id": "case_0011",
+  "lead_transaction_id": "txn_005278",
+  "customer_id": "cus_0059",
+  "covered_transaction_ids": [
+    "txn_005264",
+    "txn_005265",
+    "txn_005266",
+    "txn_005267",
+    "txn_005268",
+    "txn_005269",
+    "txn_005270",
+    "txn_005271",
+    "txn_005272",
+    "txn_005273",
+    "txn_005274",
+    "txn_005275",
+    "txn_005276",
+    "txn_005277",
+    "txn_005278"
+  ],
+  "flag_reasons": [
+    {
+      "code": "new_device",
+      "text": "Device has never been used by this customer before"
+    },
+    {
+      "code": "foreign_ip",
+      "text": "IP country does not match the customer's home country"
+    },
+    {
+      "code": "isolation_forest",
+      "text": "The payment's shape is an outlier for the whole book"
+    },
+    {
+      "code": "velocity_1h",
+      "text": "Five or more payments in the past hour"
+    }
+  ],
+  "risk_score": 94,
+  "pattern": "card_testing",
+  "pattern_label": "Card testing",
+  "pattern_detail": "probe_then_charge",
+  "action": "block",
+  "action_rationale": "Block the card. Testing already landed a larger charge, and further attempts will follow the same device.",
+  "confidence": "high",
+  "summary": "Card testing on Samir Rossi: tiny probes, then $234.00 on a new device.",
+  "narrative": "A burst of tiny amounts, many merchants, declines, and a device that is new to the customer. Block the card. Testing already landed a larger charge, and further attempts will follow the same device. Lead payment txn_005278 is $234.00 approved at Parcel Gift Cards on 06 Aug 2026 02:49 UTC, card \u2022\u20229491, device dev_0344. Before this episode, Samir Rossi had 14 payments with a median of $15.91. Between 02:26 UTC and 02:49 UTC there were 15 attempts, 10 declined, across Nimbus Cloud Apps, Sable Coffee, Kinfolk Streaming, Dayrate Parking, Paperwhites Books.",
+  "signals": [
+    {
+      "name": "Case opened",
+      "points": 4,
+      "detail": "Every queued payment starts with a small residual score."
+    },
+    {
+      "name": "Probe burst",
+      "points": 48,
+      "detail": "15 payments, median $3.58, 8 merchants."
+    },
+    {
+      "name": "Declines",
+      "points": 14,
+      "detail": "10 declined attempts in the burst."
+    },
+    {
+      "name": "Unfamiliar device",
+      "points": 18,
+      "detail": "dev_0344"
+    },
+    {
+      "name": "Datacenter IP",
+      "points": 10,
+      "detail": "The IP is in a hosting range, not a household connection."
+    }
+  ],
+  "timeline": [
+    {
+      "id": "open_case",
+      "title": "Open the flagged payment",
+      "status": "watch",
+      "started_at": "2026-08-11T15:00:00Z",
+      "duration_ms": 420,
+      "finding": "Queue sent txn_005278 for Samir Rossi: $234.00 at Parcel Gift Cards on 06 Aug 2026 02:49 UTC. The flagger's reasons were: Device has never been used by this customer before; IP country does not match the customer's home country; The payment's shape is an outlier for the whole book; Five or more payments in the past hour.",
+      "evidence": [
+        {
+          "label": "Transaction",
+          "value": "txn_005278"
+        },
+        {
+          "label": "Amount",
+          "value": "$234.00"
+        },
+        {
+          "label": "Customer",
+          "value": "Samir Rossi (cus_0059)"
+        },
+        {
+          "label": "Why it was queued",
+          "value": "new_device, foreign_ip, isolation_forest, velocity_1h"
+        }
+      ]
+    },
+    {
+      "id": "customer_baseline",
+      "title": "Customer history and baseline",
+      "status": "clear",
+      "started_at": "2026-08-11T15:00:00Z",
+      "duration_ms": 680,
+      "finding": "Samir Rossi has 14 prior payments before this episode, median $15.91. Account acct_0059 is 2193 days old. Usual devices: dev_0117, dev_0118. Countries already seen: NL.",
+      "evidence": [
+        {
+          "label": "Account age",
+          "value": "2193 days"
+        },
+        {
+          "label": "Prior payments",
+          "value": "14"
+        },
+        {
+          "label": "Median amount",
+          "value": "$15.91"
+        },
+        {
+          "label": "Home",
+          "value": "Amsterdam, NL"
+        }
+      ]
+    },
+    {
+      "id": "velocity",
+      "title": "Payment velocity",
+      "status": "alert",
+      "started_at": "2026-08-11T15:00:01Z",
+      "duration_ms": 540,
+      "finding": "The episode around txn_005278 holds 15 payments across 23 minutes. The busiest hour contains 15. 10 declines in the episode. Merchants touched: Nimbus Cloud Apps, Sable Coffee, Kinfolk Streaming, Dayrate Parking, Paperwhites Books, Quarter Pharmacy and 2 more.",
+      "evidence": [
+        {
+          "label": "Payments in episode",
+          "value": "15"
+        },
+        {
+          "label": "Busiest hour",
+          "value": "15"
+        },
+        {
+          "label": "Declines",
+          "value": "10"
+        },
+        {
+          "label": "Distinct merchants",
+          "value": "8"
+        }
+      ]
+    },
+    {
+      "id": "amount",
+      "title": "Amount versus baseline",
+      "status": "alert",
+      "started_at": "2026-08-11T15:00:02Z",
+      "duration_ms": 480,
+      "finding": "Episode amounts run from $1.19 to $234.00, median $3.58. The peak is 14.7\u00d7 the baseline median of $15.91.",
+      "evidence": [
+        {
+          "label": "Episode median",
+          "value": "$3.58"
+        },
+        {
+          "label": "Episode peak",
+          "value": "$234.00"
+        },
+        {
+          "label": "Baseline median",
+          "value": "$15.91"
+        },
+        {
+          "label": "Peak vs baseline",
+          "value": "14.7\u00d7"
+        }
+      ]
+    },
+    {
+      "id": "device_ip",
+      "title": "Device and IP linkage",
+      "status": "alert",
+      "started_at": "2026-08-11T15:00:03Z",
+      "duration_ms": 730,
+      "finding": "Devices in the episode: dev_0344 (Windows laptop \u00b7 Windows 11 \u00b7 Chrome, new to this customer). IPs: 198.51.100.94 \u00b7 Ashburn, US, datacenter. Home country is NL. The episode is outside that country.",
+      "evidence": [
+        {
+          "label": "New devices",
+          "value": "dev_0344"
+        },
+        {
+          "label": "Mature devices reused",
+          "value": "none"
+        },
+        {
+          "label": "Countries",
+          "value": "US"
+        },
+        {
+          "label": "Datacenter or VPN",
+          "value": "yes"
+        }
+      ]
+    },
+    {
+      "id": "network",
+      "title": "Linked accounts and money flow",
+      "status": "clear",
+      "started_at": "2026-08-11T15:00:04Z",
+      "duration_ms": 860,
+      "finding": "Devices in the episode are also used by no other customer. Inbound transfers $0.00, outbound $0.00. No cash-out path leaves this account in the six-day money graph.",
+      "evidence": [
+        {
+          "label": "Linked customers",
+          "value": "0"
+        },
+        {
+          "label": "Household pattern",
+          "value": "no"
+        },
+        {
+          "label": "Reaches cash-out",
+          "value": "no"
+        },
+        {
+          "label": "Pass-through",
+          "value": "no inbound"
+        }
+      ]
+    },
+    {
+      "id": "merchant",
+      "title": "Merchant check",
+      "status": "clear",
+      "started_at": "2026-08-11T15:00:05Z",
+      "duration_ms": 640,
+      "finding": "Parcel Gift Cards (gift_card, Seattle) has 10 payments in the past 14 days from 6 customers. 0% of those customers are under 45 days old. 0% of the amounts are round (multiples of $50, at least $200). Devices shared by two or more buyers: none.",
+      "evidence": [
+        {
+          "label": "Category",
+          "value": "gift_card"
+        },
+        {
+          "label": "Recent buyers",
+          "value": "6"
+        },
+        {
+          "label": "Young-account share",
+          "value": "0%"
+        },
+        {
+          "label": "Round-amount share",
+          "value": "0%"
+        }
+      ]
+    },
+    {
+      "id": "classify",
+      "title": "Pattern classification",
+      "status": "alert",
+      "started_at": "2026-08-11T15:00:06Z",
+      "duration_ms": 390,
+      "finding": "Card testing. A burst of tiny amounts, many merchants, declines, and a device that is new to the customer.",
+      "evidence": [
+        {
+          "label": "Pattern",
+          "value": "Card testing"
+        },
+        {
+          "label": "Detail",
+          "value": "probe then charge"
+        }
+      ]
+    },
+    {
+      "id": "recommend",
+      "title": "Suggested action",
+      "status": "alert",
+      "started_at": "2026-08-11T15:00:07Z",
+      "duration_ms": 360,
+      "finding": "Suggest block. Risk score 94/100. Block the card. Testing already landed a larger charge, and further attempts will follow the same device. A person still has to confirm this; the agent does not apply it.",
+      "evidence": [
+        {
+          "label": "Suggested action",
+          "value": "block"
+        },
+        {
+          "label": "Risk score",
+          "value": "94/100"
+        },
+        {
+          "label": "Who decides",
+          "value": "human analyst"
+        }
+      ]
+    }
+  ],
+  "graph": {
+    "nodes": [
+      {
+        "id": "cus_0059",
+        "type": "customer",
+        "label": "Samir Rossi",
+        "sublabel": "cus_0059",
+        "x": 0.1335,
+        "y": 0.7305,
+        "emphasis": true
+      },
+      {
+        "id": "acct_0059",
+        "type": "account",
+        "label": "Account",
+        "sublabel": "acct_0059",
+        "x": 0.492,
+        "y": 0.5045,
+        "emphasis": true
+      },
+      {
+        "id": "dev_0344",
+        "type": "device",
+        "label": "Windows laptop",
+        "sublabel": "dev_0344",
+        "x": 0.92,
+        "y": 0.5877,
+        "emphasis": true
+      },
+      {
+        "id": "ip_0343",
+        "type": "ip",
+        "label": "Ashburn",
+        "sublabel": "198.51.100.94",
+        "x": 0.6053,
+        "y": 0.08,
+        "emphasis": true
+      },
+      {
+        "id": "mer_028",
+        "type": "merchant",
+        "label": "Nimbus Cloud Apps",
+        "sublabel": "digital_goods",
+        "x": 0.8194,
+        "y": 0.2961,
+        "emphasis": false
+      },
+      {
+        "id": "mer_007",
+        "type": "merchant",
+        "label": "Sable Coffee",
+        "sublabel": "coffee",
+        "x": 0.7218,
+        "y": 0.8618,
+        "emphasis": false
+      },
+      {
+        "id": "mer_011",
+        "type": "merchant",
+        "label": "Kinfolk Streaming",
+        "sublabel": "streaming",
+        "x": 0.2738,
+        "y": 0.1401,
+        "emphasis": false
+      },
+      {
+        "id": "mer_027",
+        "type": "merchant",
+        "label": "Dayrate Parking",
+        "sublabel": "parking",
+        "x": 0.3999,
+        "y": 0.92,
+        "emphasis": false
+      },
+      {
+        "id": "mer_024",
+        "type": "merchant",
+        "label": "Paperwhites Books",
+        "sublabel": "books",
+        "x": 0.08,
+        "y": 0.406,
+        "emphasis": false
+      }
+    ],
+    "edges": [
+      {
+        "source": "cus_0059",
+        "target": "acct_0059",
+        "kind": "owns",
+        "label": "owns"
+      },
+      {
+        "source": "acct_0059",
+        "target": "dev_0344",
+        "kind": "device",
+        "label": "used"
+      },
+      {
+        "source": "acct_0059",
+        "target": "ip_0343",
+        "kind": "ip",
+        "label": "from"
+      },
+      {
+        "source": "acct_0059",
+        "target": "mer_028",
+        "kind": "paid",
+        "label": "paid"
+      },
+      {
+        "source": "acct_0059",
+        "target": "mer_007",
+        "kind": "paid",
+        "label": "paid"
+      },
+      {
+        "source": "acct_0059",
+        "target": "mer_011",
+        "kind": "paid",
+        "label": "paid"
+      },
+      {
+        "source": "acct_0059",
+        "target": "mer_027",
+        "kind": "paid",
+        "label": "paid"
+      },
+      {
+        "source": "acct_0059",
+        "target": "mer_024",
+        "kind": "paid",
+        "label": "paid"
+      }
+    ],
+    "caption": "New device dev_0344 sits next to the account. The customer's older devices are not in this episode."
+  },
+  "related_transactions": [
+    {
+      "id": "txn_005264",
+      "occurred_at": "2026-08-06T02:26:00Z",
+      "ts": 1785983160,
+      "amount_cents": 353,
+      "status": "declined",
+      "type": "card_purchase",
+      "merchant_name": "Nimbus Cloud Apps",
+      "merchant_category": "digital_goods",
+      "device_id": "dev_0344",
+      "ip": "198.51.100.94 \u00b7 Ashburn, US, datacenter",
+      "ip_country": "US",
+      "city": "Ashburn",
+      "flagged": true,
+      "counterparty_account_id": null
+    },
+    {
+      "id": "txn_005265",
+      "occurred_at": "2026-08-06T02:28:00Z",
+      "ts": 1785983280,
+      "amount_cents": 119,
+      "status": "declined",
+      "type": "card_purchase",
+      "merchant_name": "Sable Coffee",
+      "merchant_category": "coffee",
+      "device_id": "dev_0344",
+      "ip": "198.51.100.94 \u00b7 Ashburn, US, datacenter",
+      "ip_country": "US",
+      "city": "Ashburn",
+      "flagged": true,
+      "counterparty_account_id": null
+    },
+    {
+      "id": "txn_005266",
+      "occurred_at": "2026-08-06T02:30:00Z",
+      "ts": 1785983400,
+      "amount_cents": 309,
+      "status": "declined",
+      "type": "card_purchase",
+      "merchant_name": "Kinfolk Streaming",
+      "merchant_category": "streaming",
+      "device_id": "dev_0344",
+      "ip": "198.51.100.94 \u00b7 Ashburn, US, datacenter",
+      "ip_country": "US",
+      "city": "Ashburn",
+      "flagged": true,
+      "counterparty_account_id": null
+    },
+    {
+      "id": "txn_005267",
+      "occurred_at": "2026-08-06T02:31:00Z",
+      "ts": 1785983460,
+      "amount_cents": 396,
+      "status": "declined",
+      "type": "card_purchase",
+      "merchant_name": "Dayrate Parking",
+      "merchant_category": "parking",
+      "device_id": "dev_0344",
+      "ip": "198.51.100.94 \u00b7 Ashburn, US, datacenter",
+      "ip_country": "US",
+      "city": "Ashburn",
+      "flagged": true,
+      "counterparty_account_id": null
+    },
+    {
+      "id": "txn_005268",
+      "occurred_at": "2026-08-06T02:32:00Z",
+      "ts": 1785983520,
+      "amount_cents": 441,
+      "status": "declined",
+      "type": "card_purchase",
+      "merchant_name": "Paperwhites Books",
+      "merchant_category": "books",
+      "device_id": "dev_0344",
+      "ip": "198.51.100.94 \u00b7 Ashburn, US, datacenter",
+      "ip_country": "US",
+      "city": "Ashburn",
+      "flagged": true,
+      "counterparty_account_id": null
+    },
+    {
+      "id": "txn_005269",
+      "occurred_at": "2026-08-06T02:33:00Z",
+      "ts": 1785983580,
+      "amount_cents": 214,
+      "status": "declined",
+      "type": "card_purchase",
+      "merchant_name": "Quarter Pharmacy",
+      "merchant_category": "pharmacy",
+      "device_id": "dev_0344",
+      "ip": "198.51.100.94 \u00b7 Ashburn, US, datacenter",
+      "ip_country": "US",
+      "city": "Ashburn",
+      "flagged": true,
+      "counterparty_account_id": null
+    },
+    {
+      "id": "txn_005270",
+      "occurred_at": "2026-08-06T02:35:00Z",
+      "ts": 1785983700,
+      "amount_cents": 328,
+      "status": "declined",
+      "type": "card_purchase",
+      "merchant_name": "Parcel Gift Cards",
+      "merchant_category": "gift_card",
+      "device_id": "dev_0344",
+      "ip": "198.51.100.94 \u00b7 Ashburn, US, datacenter",
+      "ip_country": "US",
+      "city": "Ashburn",
+      "flagged": true,
+      "counterparty_account_id": null
+    },
+    {
+      "id": "txn_005271",
+      "occurred_at": "2026-08-06T02:37:00Z",
+      "ts": 1785983820,
+      "amount_cents": 358,
+      "status": "declined",
+      "type": "card_purchase",
+      "merchant_name": "Hearth Gift Co",
+      "merchant_category": "gift_card",
+      "device_id": "dev_0344",
+      "ip": "198.51.100.94 \u00b7 Ashburn, US, datacenter",
+      "ip_country": "US",
+      "city": "Ashburn",
+      "flagged": true,
+      "counterparty_account_id": null
+    },
+    {
+      "id": "txn_005272",
+      "occurred_at": "2026-08-06T02:38:00Z",
+      "ts": 1785983880,
+      "amount_cents": 413,
+      "status": "declined",
+      "type": "card_purchase",
+      "merchant_name": "Nimbus Cloud Apps",
+      "merchant_category": "digital_goods",
+      "device_id": "dev_0344",
+      "ip": "198.51.100.94 \u00b7 Ashburn, US, datacenter",
+      "ip_country": "US",
+      "city": "Ashburn",
+      "flagged": true,
+      "counterparty_account_id": null
+    },
+    {
+      "id": "txn_005273",
+      "occurred_at": "2026-08-06T02:40:00Z",
+      "ts": 1785984000,
+      "amount_cents": 145,
+      "status": "declined",
+      "type": "card_purchase",
+      "merchant_name": "Sable Coffee",
+      "merchant_category": "coffee",
+      "device_id": "dev_0344",
+      "ip": "198.51.100.94 \u00b7 Ashburn, US, datacenter",
+      "ip_country": "US",
+      "city": "Ashburn",
+      "flagged": true,
+      "counterparty_account_id": null
+    },
+    {
+      "id": "txn_005274",
+      "occurred_at": "2026-08-06T02:42:00Z",
+      "ts": 1785984120,
+      "amount_cents": 438,
+      "status": "approved",
+      "type": "card_purchase",
+      "merchant_name": "Kinfolk Streaming",
+      "merchant_category": "streaming",
+      "device_id": "dev_0344",
+      "ip": "198.51.100.94 \u00b7 Ashburn, US, datacenter",
+      "ip_country": "US",
+      "city": "Ashburn",
+      "flagged": true,
+      "counterparty_account_id": null
+    },
+    {
+      "id": "txn_005275",
+      "occurred_at": "2026-08-06T02:43:00Z",
+      "ts": 1785984180,
+      "amount_cents": 402,
+      "status": "approved",
+      "type": "card_purchase",
+      "merchant_name": "Dayrate Parking",
+      "merchant_category": "parking",
+      "device_id": "dev_0344",
+      "ip": "198.51.100.94 \u00b7 Ashburn, US, datacenter",
+      "ip_country": "US",
+      "city": "Ashburn",
+      "flagged": true,
+      "counterparty_account_id": null
+    },
+    {
+      "id": "txn_005276",
+      "occurred_at": "2026-08-06T02:45:00Z",
+      "ts": 1785984300,
+      "amount_cents": 395,
+      "status": "approved",
+      "type": "card_purchase",
+      "merchant_name": "Paperwhites Books",
+      "merchant_category": "books",
+      "device_id": "dev_0344",
+      "ip": "198.51.100.94 \u00b7 Ashburn, US, datacenter",
+      "ip_country": "US",
+      "city": "Ashburn",
+      "flagged": true,
+      "counterparty_account_id": null
+    },
+    {
+      "id": "txn_005277",
+      "occurred_at": "2026-08-06T02:46:00Z",
+      "ts": 1785984360,
+      "amount_cents": 159,
+      "status": "approved",
+      "type": "card_purchase",
+      "merchant_name": "Quarter Pharmacy",
+      "merchant_category": "pharmacy",
+      "device_id": "dev_0344",
+      "ip": "198.51.100.94 \u00b7 Ashburn, US, datacenter",
+      "ip_country": "US",
+      "city": "Ashburn",
+      "flagged": true,
+      "counterparty_account_id": null
+    },
+    {
+      "id": "txn_005278",
+      "occurred_at": "2026-08-06T02:49:00Z",
+      "ts": 1785984540,
+      "amount_cents": 23400,
+      "status": "approved",
+      "type": "card_purchase",
+      "merchant_name": "Parcel Gift Cards",
+      "merchant_category": "gift_card",
+      "device_id": "dev_0344",
+      "ip": "198.51.100.94 \u00b7 Ashburn, US, datacenter",
+      "ip_country": "US",
+      "city": "Ashburn",
+      "flagged": true,
+      "counterparty_account_id": null
+    }
+  ],
+  "customer": {
+    "id": "cus_0059",
+    "name": "Samir Rossi",
+    "email": "samir.rossi.58@example.com",
+    "home_city": "Amsterdam",
+    "home_country": "NL",
+    "segment": "student",
+    "customer_since": "2020-08-04T00:00:00Z",
+    "account_id": "acct_0059",
+    "account_age_days": 2193
+  },
+  "lead": {
+    "id": "txn_005278",
+    "occurred_at": "2026-08-06T02:49:00Z",
+    "amount_cents": 23400,
+    "status": "approved",
+    "type": "card_purchase",
+    "merchant_name": "Parcel Gift Cards",
+    "merchant_category": "gift_card",
+    "device_id": "dev_0344",
+    "device_label": "Windows laptop \u00b7 Windows 11 \u00b7 Chrome",
+    "ip": "198.51.100.94 \u00b7 Ashburn, US, datacenter",
+    "ip_city": "Ashburn",
+    "ip_country": "US",
+    "card_last4": "9491"
+  },
+  "report_markdown": "# Halden case case_0011\n\n**Customer.** Samir Rossi (cus_0059), Amsterdam, NL.\n**Lead payment.** txn_005278 \u00b7 $234.00 \u00b7 Parcel Gift Cards \u00b7 2026-08-06T02:49:00Z.\n**Pattern.** Card testing (probe then charge).\n**Risk score.** 94 / 100.\n**Suggested action.** block \u2014 a human still has to confirm it.\n\n## Summary\n\nA burst of tiny amounts, many merchants, declines, and a device that is new to the customer. Block the card. Testing already landed a larger charge, and further attempts will follow the same device. Lead payment txn_005278 is $234.00 approved at Parcel Gift Cards on 06 Aug 2026 02:49 UTC, card \u2022\u20229491, device dev_0344. Before this episode, Samir Rossi had 14 payments with a median of $15.91. Between 02:26 UTC and 02:49 UTC there were 15 attempts, 10 declined, across Nimbus Cloud Apps, Sable Coffee, Kinfolk Streaming, Dayrate Parking, Paperwhites Books.\n\n## Why this score\n\n- **Case opened** (+4): Every queued payment starts with a small residual score.\n- **Probe burst** (+48): 15 payments, median $3.58, 8 merchants.\n- **Declines** (+14): 10 declined attempts in the burst.\n- **Unfamiliar device** (+18): dev_0344\n- **Datacenter IP** (+10): The IP is in a hosting range, not a household connection.\n\n## What the agent checked\n\n### Open the flagged payment (watch)\n\nQueue sent txn_005278 for Samir Rossi: $234.00 at Parcel Gift Cards on 06 Aug 2026 02:49 UTC. The flagger's reasons were: Device has never been used by this customer before; IP country does not match the customer's home country; The payment's shape is an outlier for the whole book; Five or more payments in the past hour.\n\n- Transaction: txn_005278\n- Amount: $234.00\n- Customer: Samir Rossi (cus_0059)\n- Why it was queued: new_device, foreign_ip, isolation_forest, velocity_1h\n\n### Customer history and baseline (clear)\n\nSamir Rossi has 14 prior payments before this episode, median $15.91. Account acct_0059 is 2193 days old. Usual devices: dev_0117, dev_0118. Countries already seen: NL.\n\n- Account age: 2193 days\n- Prior payments: 14\n- Median amount: $15.91\n- Home: Amsterdam, NL\n\n### Payment velocity (alert)\n\nThe episode around txn_005278 holds 15 payments across 23 minutes. The busiest hour contains 15. 10 declines in the episode. Merchants touched: Nimbus Cloud Apps, Sable Coffee, Kinfolk Streaming, Dayrate Parking, Paperwhites Books, Quarter Pharmacy and 2 more.\n\n- Payments in episode: 15\n- Busiest hour: 15\n- Declines: 10\n- Distinct merchants: 8\n\n### Amount versus baseline (alert)\n\nEpisode amounts run from $1.19 to $234.00, median $3.58. The peak is 14.7\u00d7 the baseline median of $15.91.\n\n- Episode median: $3.58\n- Episode peak: $234.00\n- Baseline median: $15.91\n- Peak vs baseline: 14.7\u00d7\n\n### Device and IP linkage (alert)\n\nDevices in the episode: dev_0344 (Windows laptop \u00b7 Windows 11 \u00b7 Chrome, new to this customer). IPs: 198.51.100.94 \u00b7 Ashburn, US, datacenter. Home country is NL. The episode is outside that country.\n\n- New devices: dev_0344\n- Mature devices reused: none\n- Countries: US\n- Datacenter or VPN: yes\n\n### Linked accounts and money flow (clear)\n\nDevices in the episode are also used by no other customer. Inbound transfers $0.00, outbound $0.00. No cash-out path leaves this account in the six-day money graph.\n\n- Linked customers: 0\n- Household pattern: no\n- Reaches cash-out: no\n- Pass-through: no inbound\n\n### Merchant check (clear)\n\nParcel Gift Cards (gift_card, Seattle) has 10 payments in the past 14 days from 6 customers. 0% of those customers are under 45 days old. 0% of the amounts are round (multiples of $50, at least $200). Devices shared by two or more buyers: none.\n\n- Category: gift_card\n- Recent buyers: 6\n- Young-account share: 0%\n- Round-amount share: 0%\n\n### Pattern classification (alert)\n\nCard testing. A burst of tiny amounts, many merchants, declines, and a device that is new to the customer.\n\n- Pattern: Card testing\n- Detail: probe then charge\n\n### Suggested action (alert)\n\nSuggest block. Risk score 94/100. Block the card. Testing already landed a larger charge, and further attempts will follow the same device. A person still has to confirm this; the agent does not apply it.\n\n- Suggested action: block\n- Risk score: 94/100\n- Who decides: human analyst\n\n## Payments in the episode\n\n| When | Id | Amount | Status | Merchant | Device |\n| --- | --- | --- | --- | --- | --- |\n| 2026-08-06T02:26:00Z | txn_005264 | $3.53 | declined | Nimbus Cloud Apps | dev_0344 |\n| 2026-08-06T02:28:00Z | txn_005265 | $1.19 | declined | Sable Coffee | dev_0344 |\n| 2026-08-06T02:30:00Z | txn_005266 | $3.09 | declined | Kinfolk Streaming | dev_0344 |\n| 2026-08-06T02:31:00Z | txn_005267 | $3.96 | declined | Dayrate Parking | dev_0344 |\n| 2026-08-06T02:32:00Z | txn_005268 | $4.41 | declined | Paperwhites Books | dev_0344 |\n| 2026-08-06T02:33:00Z | txn_005269 | $2.14 | declined | Quarter Pharmacy | dev_0344 |\n| 2026-08-06T02:35:00Z | txn_005270 | $3.28 | declined | Parcel Gift Cards | dev_0344 |\n| 2026-08-06T02:37:00Z | txn_005271 | $3.58 | declined | Hearth Gift Co | dev_0344 |\n| 2026-08-06T02:38:00Z | txn_005272 | $4.13 | declined | Nimbus Cloud Apps | dev_0344 |\n| 2026-08-06T02:40:00Z | txn_005273 | $1.45 | declined | Sable Coffee | dev_0344 |\n| 2026-08-06T02:42:00Z | txn_005274 | $4.38 | approved | Kinfolk Streaming | dev_0344 |\n| 2026-08-06T02:43:00Z | txn_005275 | $4.02 | approved | Dayrate Parking | dev_0344 |\n| 2026-08-06T02:45:00Z | txn_005276 | $3.95 | approved | Paperwhites Books | dev_0344 |\n| 2026-08-06T02:46:00Z | txn_005277 | $1.59 | approved | Quarter Pharmacy | dev_0344 |\n| 2026-08-06T02:49:00Z | txn_005278 | $234.00 | approved | Parcel Gift Cards | dev_0344 |\n\n## Action rationale\n\nBlock the card. Testing already landed a larger charge, and further attempts will follow the same device.\n\n## Held-out label\n\nThis section is joined after the investigation. The agent did not see it.\n\n- Fraud: yes\n- Pattern: card_testing\n\n*Halden suggests. An analyst decides.*\n",
+  "showcase": null
+}

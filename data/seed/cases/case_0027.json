@@ -1,0 +1,394 @@
+{
+  "case_id": "case_0027",
+  "lead_transaction_id": "txn_005309",
+  "customer_id": "cus_0082",
+  "covered_transaction_ids": [
+    "txn_005309"
+  ],
+  "flag_reasons": [
+    {
+      "code": "amount_outlier",
+      "text": "Amount is far above this customer's own baseline"
+    }
+  ],
+  "risk_score": 76,
+  "pattern": "mule_chain",
+  "pattern_label": "Mule-account chain",
+  "pattern_detail": "pass_through",
+  "action": "escalate",
+  "action_rationale": "Escalate the chain. The receiving accounts need to be frozen together, which is a desk lead's call.",
+  "confidence": "high",
+  "summary": "Mule flow touching Jonas Sato: funds move onward to a cash-out the same day.",
+  "narrative": "Money reaches a cash-out through freshly linked accounts, with little of it staying put. Escalate the chain. The receiving accounts need to be frozen together, which is a desk lead's call. Lead payment txn_005309 is $1,420.00 approved at peer-to-peer transfer on 09 Aug 2026 13:22 UTC, card \u2022\u20227176, device dev_0163. Before this episode, Jonas Sato had 23 payments with a median of $45.79.",
+  "signals": [
+    {
+      "name": "Case opened",
+      "points": 4,
+      "detail": "Every queued payment starts with a small residual score."
+    },
+    {
+      "name": "Cash-out path",
+      "points": 40,
+      "detail": "Jonas Sato (acct_0082) \u2192 Leila Moreau (acct_0173) \u2192 Hugo Keller (acct_0174) \u2192 Keystone Crypto Desk"
+    },
+    {
+      "name": "Shared infrastructure",
+      "points": 8,
+      "detail": "0 other customer(s) on the episode devices."
+    },
+    {
+      "name": "Funds do not stay",
+      "points": 16,
+      "detail": "Inbound $0.00, outbound $1,420.00."
+    }
+  ],
+  "timeline": [
+    {
+      "id": "open_case",
+      "title": "Open the flagged payment",
+      "status": "watch",
+      "started_at": "2026-08-11T15:00:00Z",
+      "duration_ms": 420,
+      "finding": "Queue sent txn_005309 for Jonas Sato: $1,420.00 at peer-to-peer transfer on 09 Aug 2026 13:22 UTC. The flagger's reasons were: Amount is far above this customer's own baseline.",
+      "evidence": [
+        {
+          "label": "Transaction",
+          "value": "txn_005309"
+        },
+        {
+          "label": "Amount",
+          "value": "$1,420.00"
+        },
+        {
+          "label": "Customer",
+          "value": "Jonas Sato (cus_0082)"
+        },
+        {
+          "label": "Why it was queued",
+          "value": "amount_outlier"
+        }
+      ]
+    },
+    {
+      "id": "customer_baseline",
+      "title": "Customer history and baseline",
+      "status": "clear",
+      "started_at": "2026-08-11T15:00:00Z",
+      "duration_ms": 680,
+      "finding": "Jonas Sato has 23 prior payments before this episode, median $45.79. Account acct_0082 is 1639 days old. Usual devices: dev_0163. Countries already seen: US.",
+      "evidence": [
+        {
+          "label": "Account age",
+          "value": "1639 days"
+        },
+        {
+          "label": "Prior payments",
+          "value": "23"
+        },
+        {
+          "label": "Median amount",
+          "value": "$45.79"
+        },
+        {
+          "label": "Home",
+          "value": "Seattle, US"
+        }
+      ]
+    },
+    {
+      "id": "velocity",
+      "title": "Payment velocity",
+      "status": "clear",
+      "started_at": "2026-08-11T15:00:01Z",
+      "duration_ms": 540,
+      "finding": "The episode around txn_005309 holds 1 payment across 0 minutes. The busiest hour contains 1. 0 declines in the episode. Merchants touched: P2P transfer.",
+      "evidence": [
+        {
+          "label": "Payments in episode",
+          "value": "1"
+        },
+        {
+          "label": "Busiest hour",
+          "value": "1"
+        },
+        {
+          "label": "Declines",
+          "value": "0"
+        },
+        {
+          "label": "Distinct merchants",
+          "value": "1"
+        }
+      ]
+    },
+    {
+      "id": "amount",
+      "title": "Amount versus baseline",
+      "status": "alert",
+      "started_at": "2026-08-11T15:00:02Z",
+      "duration_ms": 480,
+      "finding": "Episode amounts run from $1,420.00 to $1,420.00, median $1,420.00. The peak is 31.0\u00d7 the baseline median of $45.79.",
+      "evidence": [
+        {
+          "label": "Episode median",
+          "value": "$1,420.00"
+        },
+        {
+          "label": "Episode peak",
+          "value": "$1,420.00"
+        },
+        {
+          "label": "Baseline median",
+          "value": "$45.79"
+        },
+        {
+          "label": "Peak vs baseline",
+          "value": "31.0\u00d7"
+        }
+      ]
+    },
+    {
+      "id": "device_ip",
+      "title": "Device and IP linkage",
+      "status": "clear",
+      "started_at": "2026-08-11T15:00:03Z",
+      "duration_ms": 730,
+      "finding": "Devices in the episode: dev_0163 (MacBook \u00b7 macOS 15 \u00b7 Safari, already on file). IPs: 203.0.113.164 \u00b7 Seattle, US. Home country is US. The episode stays in the home country.",
+      "evidence": [
+        {
+          "label": "New devices",
+          "value": "none"
+        },
+        {
+          "label": "Mature devices reused",
+          "value": "dev_0163"
+        },
+        {
+          "label": "Countries",
+          "value": "US"
+        },
+        {
+          "label": "Datacenter or VPN",
+          "value": "no"
+        }
+      ]
+    },
+    {
+      "id": "network",
+      "title": "Linked accounts and money flow",
+      "status": "alert",
+      "started_at": "2026-08-11T15:00:04Z",
+      "duration_ms": 860,
+      "finding": "Devices in the episode are also used by no other customer. Inbound transfers $0.00, outbound $1,420.00. Funds from acct_0082 reach a cash-out inside the graph (Jonas Sato (acct_0082) \u2192 Leila Moreau (acct_0173) \u2192 Hugo Keller (acct_0174) \u2192 Keystone Crypto Desk).",
+      "evidence": [
+        {
+          "label": "Linked customers",
+          "value": "0"
+        },
+        {
+          "label": "Household pattern",
+          "value": "no"
+        },
+        {
+          "label": "Reaches cash-out",
+          "value": "yes"
+        },
+        {
+          "label": "Pass-through",
+          "value": "no inbound"
+        }
+      ]
+    },
+    {
+      "id": "merchant",
+      "title": "Merchant check",
+      "status": "watch",
+      "started_at": "2026-08-11T15:00:05Z",
+      "duration_ms": 300,
+      "finding": "The lead movement is a transfer, not a card purchase, so there is no merchant to underwrite. The money-flow step carries that evidence.",
+      "evidence": [
+        {
+          "label": "Merchant",
+          "value": "none (transfer)"
+        }
+      ]
+    },
+    {
+      "id": "classify",
+      "title": "Pattern classification",
+      "status": "alert",
+      "started_at": "2026-08-11T15:00:06Z",
+      "duration_ms": 390,
+      "finding": "Mule-account chain. Money reaches a cash-out through freshly linked accounts, with little of it staying put.",
+      "evidence": [
+        {
+          "label": "Pattern",
+          "value": "Mule-account chain"
+        },
+        {
+          "label": "Detail",
+          "value": "pass through"
+        }
+      ]
+    },
+    {
+      "id": "recommend",
+      "title": "Suggested action",
+      "status": "alert",
+      "started_at": "2026-08-11T15:00:07Z",
+      "duration_ms": 360,
+      "finding": "Suggest escalate. Risk score 76/100. Escalate the chain. The receiving accounts need to be frozen together, which is a desk lead's call. A person still has to confirm this; the agent does not apply it.",
+      "evidence": [
+        {
+          "label": "Suggested action",
+          "value": "escalate"
+        },
+        {
+          "label": "Risk score",
+          "value": "76/100"
+        },
+        {
+          "label": "Who decides",
+          "value": "human analyst"
+        }
+      ]
+    }
+  ],
+  "graph": {
+    "nodes": [
+      {
+        "id": "cus_0082",
+        "type": "customer",
+        "label": "Jonas Sato",
+        "sublabel": "cus_0082",
+        "x": 0.2351,
+        "y": 0.92,
+        "emphasis": true
+      },
+      {
+        "id": "acct_0082",
+        "type": "account",
+        "label": "Account",
+        "sublabel": "acct_0082",
+        "x": 0.5678,
+        "y": 0.5575,
+        "emphasis": true
+      },
+      {
+        "id": "dev_0163",
+        "type": "device",
+        "label": "MacBook",
+        "sublabel": "dev_0163",
+        "x": 0.92,
+        "y": 0.545,
+        "emphasis": false
+      },
+      {
+        "id": "ip_0163",
+        "type": "ip",
+        "label": "Seattle",
+        "sublabel": "203.0.113.164",
+        "x": 0.5922,
+        "y": 0.08,
+        "emphasis": false
+      },
+      {
+        "id": "cus_0173",
+        "type": "customer",
+        "label": "Leila Moreau",
+        "sublabel": "cus_0173",
+        "x": 0.08,
+        "y": 0.5857,
+        "emphasis": true
+      },
+      {
+        "id": "acct_0173",
+        "type": "account",
+        "label": "Account",
+        "sublabel": "acct_0173",
+        "x": 0.3818,
+        "y": 0.7766,
+        "emphasis": true
+      }
+    ],
+    "edges": [
+      {
+        "source": "cus_0082",
+        "target": "acct_0082",
+        "kind": "owns",
+        "label": "owns"
+      },
+      {
+        "source": "acct_0082",
+        "target": "dev_0163",
+        "kind": "device",
+        "label": "used"
+      },
+      {
+        "source": "acct_0082",
+        "target": "ip_0163",
+        "kind": "ip",
+        "label": "from"
+      },
+      {
+        "source": "acct_0082",
+        "target": "acct_0173",
+        "kind": "p2p",
+        "label": "$1,420.00"
+      },
+      {
+        "source": "cus_0173",
+        "target": "acct_0173",
+        "kind": "owns",
+        "label": "owns"
+      }
+    ],
+    "caption": "Money path: Jonas Sato (acct_0082) \u2192 Leila Moreau (acct_0173) \u2192 Hugo Keller (acct_0174) \u2192 Keystone Crypto Desk"
+  },
+  "related_transactions": [
+    {
+      "id": "txn_005309",
+      "occurred_at": "2026-08-09T13:22:00Z",
+      "ts": 1786281720,
+      "amount_cents": 142000,
+      "status": "approved",
+      "type": "p2p_out",
+      "merchant_name": "P2P transfer",
+      "merchant_category": "transfer",
+      "device_id": "dev_0163",
+      "ip": "203.0.113.164 \u00b7 Seattle, US",
+      "ip_country": "US",
+      "city": "Seattle",
+      "flagged": true,
+      "counterparty_account_id": "acct_0173"
+    }
+  ],
+  "customer": {
+    "id": "cus_0082",
+    "name": "Jonas Sato",
+    "email": "jonas.sato.81@example.com",
+    "home_city": "Seattle",
+    "home_country": "US",
+    "segment": "everyday",
+    "customer_since": "2022-02-12T00:00:00Z",
+    "account_id": "acct_0082",
+    "account_age_days": 1639
+  },
+  "lead": {
+    "id": "txn_005309",
+    "occurred_at": "2026-08-09T13:22:00Z",
+    "amount_cents": 142000,
+    "status": "approved",
+    "type": "p2p_out",
+    "merchant_name": "peer-to-peer transfer",
+    "merchant_category": "transfer",
+    "device_id": "dev_0163",
+    "device_label": "MacBook \u00b7 macOS 15 \u00b7 Safari",
+    "ip": "203.0.113.164 \u00b7 Seattle, US",
+    "ip_city": "Seattle",
+    "ip_country": "US",
+    "card_last4": "7176"
+  },
+  "report_markdown": "# Halden case case_0027\n\n**Customer.** Jonas Sato (cus_0082), Seattle, US.\n**Lead payment.** txn_005309 \u00b7 $1,420.00 \u00b7 peer-to-peer transfer \u00b7 2026-08-09T13:22:00Z.\n**Pattern.** Mule-account chain (pass through).\n**Risk score.** 76 / 100.\n**Suggested action.** escalate \u2014 a human still has to confirm it.\n\n## Summary\n\nMoney reaches a cash-out through freshly linked accounts, with little of it staying put. Escalate the chain. The receiving accounts need to be frozen together, which is a desk lead's call. Lead payment txn_005309 is $1,420.00 approved at peer-to-peer transfer on 09 Aug 2026 13:22 UTC, card \u2022\u20227176, device dev_0163. Before this episode, Jonas Sato had 23 payments with a median of $45.79.\n\n## Why this score\n\n- **Case opened** (+4): Every queued payment starts with a small residual score.\n- **Cash-out path** (+40): Jonas Sato (acct_0082) \u2192 Leila Moreau (acct_0173) \u2192 Hugo Keller (acct_0174) \u2192 Keystone Crypto Desk\n- **Shared infrastructure** (+8): 0 other customer(s) on the episode devices.\n- **Funds do not stay** (+16): Inbound $0.00, outbound $1,420.00.\n\n## What the agent checked\n\n### Open the flagged payment (watch)\n\nQueue sent txn_005309 for Jonas Sato: $1,420.00 at peer-to-peer transfer on 09 Aug 2026 13:22 UTC. The flagger's reasons were: Amount is far above this customer's own baseline.\n\n- Transaction: txn_005309\n- Amount: $1,420.00\n- Customer: Jonas Sato (cus_0082)\n- Why it was queued: amount_outlier\n\n### Customer history and baseline (clear)\n\nJonas Sato has 23 prior payments before this episode, median $45.79. Account acct_0082 is 1639 days old. Usual devices: dev_0163. Countries already seen: US.\n\n- Account age: 1639 days\n- Prior payments: 23\n- Median amount: $45.79\n- Home: Seattle, US\n\n### Payment velocity (clear)\n\nThe episode around txn_005309 holds 1 payment across 0 minutes. The busiest hour contains 1. 0 declines in the episode. Merchants touched: P2P transfer.\n\n- Payments in episode: 1\n- Busiest hour: 1\n- Declines: 0\n- Distinct merchants: 1\n\n### Amount versus baseline (alert)\n\nEpisode amounts run from $1,420.00 to $1,420.00, median $1,420.00. The peak is 31.0\u00d7 the baseline median of $45.79.\n\n- Episode median: $1,420.00\n- Episode peak: $1,420.00\n- Baseline median: $45.79\n- Peak vs baseline: 31.0\u00d7\n\n### Device and IP linkage (clear)\n\nDevices in the episode: dev_0163 (MacBook \u00b7 macOS 15 \u00b7 Safari, already on file). IPs: 203.0.113.164 \u00b7 Seattle, US. Home country is US. The episode stays in the home country.\n\n- New devices: none\n- Mature devices reused: dev_0163\n- Countries: US\n- Datacenter or VPN: no\n\n### Linked accounts and money flow (alert)\n\nDevices in the episode are also used by no other customer. Inbound transfers $0.00, outbound $1,420.00. Funds from acct_0082 reach a cash-out inside the graph (Jonas Sato (acct_0082) \u2192 Leila Moreau (acct_0173) \u2192 Hugo Keller (acct_0174) \u2192 Keystone Crypto Desk).\n\n- Linked customers: 0\n- Household pattern: no\n- Reaches cash-out: yes\n- Pass-through: no inbound\n\n### Merchant check (watch)\n\nThe lead movement is a transfer, not a card purchase, so there is no merchant to underwrite. The money-flow step carries that evidence.\n\n- Merchant: none (transfer)\n\n### Pattern classification (alert)\n\nMule-account chain. Money reaches a cash-out through freshly linked accounts, with little of it staying put.\n\n- Pattern: Mule-account chain\n- Detail: pass through\n\n### Suggested action (alert)\n\nSuggest escalate. Risk score 76/100. Escalate the chain. The receiving accounts need to be frozen together, which is a desk lead's call. A person still has to confirm this; the agent does not apply it.\n\n- Suggested action: escalate\n- Risk score: 76/100\n- Who decides: human analyst\n\n## Payments in the episode\n\n| When | Id | Amount | Status | Merchant | Device |\n| --- | --- | --- | --- | --- | --- |\n| 2026-08-09T13:22:00Z | txn_005309 | $1,420.00 | approved | P2P transfer | dev_0163 |\n\n## Action rationale\n\nEscalate the chain. The receiving accounts need to be frozen together, which is a desk lead's call.\n\n## Held-out label\n\nThis section is joined after the investigation. The agent did not see it.\n\n- Fraud: yes\n- Pattern: mule_chain\n\n*Halden suggests. An analyst decides.*\n",
+  "showcase": null
+}

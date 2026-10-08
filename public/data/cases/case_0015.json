@@ -1,0 +1,504 @@
+{
+  "case_id": "case_0015",
+  "lead_transaction_id": "txn_005288",
+  "customer_id": "cus_0062",
+  "covered_transaction_ids": [
+    "txn_005287",
+    "txn_005288",
+    "txn_005289",
+    "txn_005290"
+  ],
+  "flag_reasons": [
+    {
+      "code": "amount_outlier",
+      "text": "Amount is far above this customer's own baseline"
+    },
+    {
+      "code": "new_device",
+      "text": "Device has never been used by this customer before"
+    },
+    {
+      "code": "foreign_ip",
+      "text": "IP country does not match the customer's home country"
+    },
+    {
+      "code": "isolation_forest",
+      "text": "The payment's shape is an outlier for the whole book"
+    }
+  ],
+  "risk_score": 94,
+  "pattern": "account_takeover",
+  "pattern_label": "Account takeover",
+  "pattern_detail": "new_device_foreign_spike",
+  "action": "block",
+  "action_rationale": "Block and force a step-up with the real customer. The session does not match the device or the country on file.",
+  "confidence": "high",
+  "summary": "Account takeover on Helen Petrov: new device, new country, spend at 26\u00d7 baseline.",
+  "narrative": "A new device in a new country spends far above baseline at gift cards, electronics, or crypto. Block and force a step-up with the real customer. The session does not match the device or the country on file. Lead payment txn_005288 is $920.00 approved at Hearth Gift Co on 06 Aug 2026 20:44 UTC, card \u2022\u20227530, device dev_0347. Before this episode, Helen Petrov had 34 payments with a median of $35.65.",
+  "signals": [
+    {
+      "name": "Case opened",
+      "points": 4,
+      "detail": "Every queued payment starts with a small residual score."
+    },
+    {
+      "name": "New device abroad",
+      "points": 36,
+      "detail": "Device dev_0347 in AE."
+    },
+    {
+      "name": "Spend spike",
+      "points": 28,
+      "detail": "Peak $920.00 against a median of $35.65."
+    },
+    {
+      "name": "Risky merchants",
+      "points": 18,
+      "detail": "Gift cards, electronics, or crypto, rather than travel."
+    },
+    {
+      "name": "VPN",
+      "points": 8,
+      "detail": "The session is coming through a VPN."
+    }
+  ],
+  "timeline": [
+    {
+      "id": "open_case",
+      "title": "Open the flagged payment",
+      "status": "watch",
+      "started_at": "2026-08-11T15:00:00Z",
+      "duration_ms": 420,
+      "finding": "Queue sent txn_005288 for Helen Petrov: $920.00 at Hearth Gift Co on 06 Aug 2026 20:44 UTC. The flagger's reasons were: Amount is far above this customer's own baseline; Device has never been used by this customer before; IP country does not match the customer's home country; The payment's shape is an outlier for the whole book.",
+      "evidence": [
+        {
+          "label": "Transaction",
+          "value": "txn_005288"
+        },
+        {
+          "label": "Amount",
+          "value": "$920.00"
+        },
+        {
+          "label": "Customer",
+          "value": "Helen Petrov (cus_0062)"
+        },
+        {
+          "label": "Why it was queued",
+          "value": "amount_outlier, new_device, foreign_ip, isolation_forest"
+        }
+      ]
+    },
+    {
+      "id": "customer_baseline",
+      "title": "Customer history and baseline",
+      "status": "clear",
+      "started_at": "2026-08-11T15:00:00Z",
+      "duration_ms": 680,
+      "finding": "Helen Petrov has 34 prior payments before this episode, median $35.65. Account acct_0062 is 1023 days old. Usual devices: dev_0123, dev_0124. Countries already seen: GB.",
+      "evidence": [
+        {
+          "label": "Account age",
+          "value": "1023 days"
+        },
+        {
+          "label": "Prior payments",
+          "value": "34"
+        },
+        {
+          "label": "Median amount",
+          "value": "$35.65"
+        },
+        {
+          "label": "Home",
+          "value": "Manchester, GB"
+        }
+      ]
+    },
+    {
+      "id": "velocity",
+      "title": "Payment velocity",
+      "status": "clear",
+      "started_at": "2026-08-11T15:00:01Z",
+      "duration_ms": 540,
+      "finding": "The episode around txn_005288 holds 4 payments across 40 minutes. The busiest hour contains 4. 0 declines in the episode. Merchants touched: Keystone Crypto Desk, Hearth Gift Co, Parcel Gift Cards, Lumen Electronics.",
+      "evidence": [
+        {
+          "label": "Payments in episode",
+          "value": "4"
+        },
+        {
+          "label": "Busiest hour",
+          "value": "4"
+        },
+        {
+          "label": "Declines",
+          "value": "0"
+        },
+        {
+          "label": "Distinct merchants",
+          "value": "4"
+        }
+      ]
+    },
+    {
+      "id": "amount",
+      "title": "Amount versus baseline",
+      "status": "alert",
+      "started_at": "2026-08-11T15:00:02Z",
+      "duration_ms": 480,
+      "finding": "Episode amounts run from $295.00 to $920.00, median $560.00. The peak is 25.8\u00d7 the baseline median of $35.65.",
+      "evidence": [
+        {
+          "label": "Episode median",
+          "value": "$560.00"
+        },
+        {
+          "label": "Episode peak",
+          "value": "$920.00"
+        },
+        {
+          "label": "Baseline median",
+          "value": "$35.65"
+        },
+        {
+          "label": "Peak vs baseline",
+          "value": "25.8\u00d7"
+        }
+      ]
+    },
+    {
+      "id": "device_ip",
+      "title": "Device and IP linkage",
+      "status": "alert",
+      "started_at": "2026-08-11T15:00:03Z",
+      "duration_ms": 730,
+      "finding": "Devices in the episode: dev_0347 (Pixel 8 \u00b7 Android 15 \u00b7 Chrome, new to this customer). IPs: 198.51.100.97 \u00b7 Dubai, AE, VPN. Home country is GB. The episode is outside that country.",
+      "evidence": [
+        {
+          "label": "New devices",
+          "value": "dev_0347"
+        },
+        {
+          "label": "Mature devices reused",
+          "value": "none"
+        },
+        {
+          "label": "Countries",
+          "value": "AE"
+        },
+        {
+          "label": "Datacenter or VPN",
+          "value": "yes"
+        }
+      ]
+    },
+    {
+      "id": "network",
+      "title": "Linked accounts and money flow",
+      "status": "clear",
+      "started_at": "2026-08-11T15:00:04Z",
+      "duration_ms": 860,
+      "finding": "Devices in the episode are also used by no other customer. Inbound transfers $0.00, outbound $0.00. No cash-out path leaves this account in the six-day money graph.",
+      "evidence": [
+        {
+          "label": "Linked customers",
+          "value": "0"
+        },
+        {
+          "label": "Household pattern",
+          "value": "no"
+        },
+        {
+          "label": "Reaches cash-out",
+          "value": "no"
+        },
+        {
+          "label": "Pass-through",
+          "value": "no inbound"
+        }
+      ]
+    },
+    {
+      "id": "merchant",
+      "title": "Merchant check",
+      "status": "clear",
+      "started_at": "2026-08-11T15:00:05Z",
+      "duration_ms": 640,
+      "finding": "Hearth Gift Co (gift_card, Toronto) has 8 payments in the past 14 days from 6 customers. 0% of those customers are under 45 days old. 0% of the amounts are round (multiples of $50, at least $200). Devices shared by two or more buyers: none.",
+      "evidence": [
+        {
+          "label": "Category",
+          "value": "gift_card"
+        },
+        {
+          "label": "Recent buyers",
+          "value": "6"
+        },
+        {
+          "label": "Young-account share",
+          "value": "0%"
+        },
+        {
+          "label": "Round-amount share",
+          "value": "0%"
+        }
+      ]
+    },
+    {
+      "id": "classify",
+      "title": "Pattern classification",
+      "status": "alert",
+      "started_at": "2026-08-11T15:00:06Z",
+      "duration_ms": 390,
+      "finding": "Account takeover. A new device in a new country spends far above baseline at gift cards, electronics, or crypto.",
+      "evidence": [
+        {
+          "label": "Pattern",
+          "value": "Account takeover"
+        },
+        {
+          "label": "Detail",
+          "value": "new device foreign spike"
+        }
+      ]
+    },
+    {
+      "id": "recommend",
+      "title": "Suggested action",
+      "status": "alert",
+      "started_at": "2026-08-11T15:00:07Z",
+      "duration_ms": 360,
+      "finding": "Suggest block. Risk score 94/100. Block and force a step-up with the real customer. The session does not match the device or the country on file. A person still has to confirm this; the agent does not apply it.",
+      "evidence": [
+        {
+          "label": "Suggested action",
+          "value": "block"
+        },
+        {
+          "label": "Risk score",
+          "value": "94/100"
+        },
+        {
+          "label": "Who decides",
+          "value": "human analyst"
+        }
+      ]
+    }
+  ],
+  "graph": {
+    "nodes": [
+      {
+        "id": "cus_0062",
+        "type": "customer",
+        "label": "Helen Petrov",
+        "sublabel": "cus_0062",
+        "x": 0.103,
+        "y": 0.7052,
+        "emphasis": true
+      },
+      {
+        "id": "acct_0062",
+        "type": "account",
+        "label": "Account",
+        "sublabel": "acct_0062",
+        "x": 0.4837,
+        "y": 0.4944,
+        "emphasis": true
+      },
+      {
+        "id": "dev_0347",
+        "type": "device",
+        "label": "Pixel 8",
+        "sublabel": "dev_0347",
+        "x": 0.92,
+        "y": 0.4675,
+        "emphasis": true
+      },
+      {
+        "id": "ip_0346",
+        "type": "ip",
+        "label": "Dubai",
+        "sublabel": "198.51.100.97",
+        "x": 0.7341,
+        "y": 0.1411,
+        "emphasis": true
+      },
+      {
+        "id": "mer_022",
+        "type": "merchant",
+        "label": "Keystone Crypto Desk",
+        "sublabel": "crypto",
+        "x": 0.08,
+        "y": 0.3314,
+        "emphasis": true
+      },
+      {
+        "id": "mer_021",
+        "type": "merchant",
+        "label": "Hearth Gift Co",
+        "sublabel": "gift_card",
+        "x": 0.7765,
+        "y": 0.8144,
+        "emphasis": true
+      },
+      {
+        "id": "mer_020",
+        "type": "merchant",
+        "label": "Parcel Gift Cards",
+        "sublabel": "gift_card",
+        "x": 0.3608,
+        "y": 0.08,
+        "emphasis": true
+      },
+      {
+        "id": "mer_013",
+        "type": "merchant",
+        "label": "Lumen Electronics",
+        "sublabel": "electronics",
+        "x": 0.4132,
+        "y": 0.92,
+        "emphasis": false
+      }
+    ],
+    "edges": [
+      {
+        "source": "cus_0062",
+        "target": "acct_0062",
+        "kind": "owns",
+        "label": "owns"
+      },
+      {
+        "source": "acct_0062",
+        "target": "dev_0347",
+        "kind": "device",
+        "label": "used"
+      },
+      {
+        "source": "acct_0062",
+        "target": "ip_0346",
+        "kind": "ip",
+        "label": "from"
+      },
+      {
+        "source": "acct_0062",
+        "target": "mer_022",
+        "kind": "paid",
+        "label": "paid"
+      },
+      {
+        "source": "acct_0062",
+        "target": "mer_021",
+        "kind": "paid",
+        "label": "paid"
+      },
+      {
+        "source": "acct_0062",
+        "target": "mer_020",
+        "kind": "paid",
+        "label": "paid"
+      },
+      {
+        "source": "acct_0062",
+        "target": "mer_013",
+        "kind": "paid",
+        "label": "paid"
+      }
+    ],
+    "caption": "New device dev_0347 sits next to the account. The customer's older devices are not in this episode."
+  },
+  "related_transactions": [
+    {
+      "id": "txn_005287",
+      "occurred_at": "2026-08-06T20:29:00Z",
+      "ts": 1786048140,
+      "amount_cents": 45000,
+      "status": "approved",
+      "type": "card_purchase",
+      "merchant_name": "Keystone Crypto Desk",
+      "merchant_category": "crypto",
+      "device_id": "dev_0347",
+      "ip": "198.51.100.97 \u00b7 Dubai, AE, VPN",
+      "ip_country": "AE",
+      "city": "Dubai",
+      "flagged": true,
+      "counterparty_account_id": null
+    },
+    {
+      "id": "txn_005288",
+      "occurred_at": "2026-08-06T20:44:00Z",
+      "ts": 1786049040,
+      "amount_cents": 92000,
+      "status": "approved",
+      "type": "card_purchase",
+      "merchant_name": "Hearth Gift Co",
+      "merchant_category": "gift_card",
+      "device_id": "dev_0347",
+      "ip": "198.51.100.97 \u00b7 Dubai, AE, VPN",
+      "ip_country": "AE",
+      "city": "Dubai",
+      "flagged": true,
+      "counterparty_account_id": null
+    },
+    {
+      "id": "txn_005289",
+      "occurred_at": "2026-08-06T21:01:00Z",
+      "ts": 1786050060,
+      "amount_cents": 29500,
+      "status": "approved",
+      "type": "card_purchase",
+      "merchant_name": "Parcel Gift Cards",
+      "merchant_category": "gift_card",
+      "device_id": "dev_0347",
+      "ip": "198.51.100.97 \u00b7 Dubai, AE, VPN",
+      "ip_country": "AE",
+      "city": "Dubai",
+      "flagged": true,
+      "counterparty_account_id": null
+    },
+    {
+      "id": "txn_005290",
+      "occurred_at": "2026-08-06T21:09:00Z",
+      "ts": 1786050540,
+      "amount_cents": 67000,
+      "status": "approved",
+      "type": "card_purchase",
+      "merchant_name": "Lumen Electronics",
+      "merchant_category": "electronics",
+      "device_id": "dev_0347",
+      "ip": "198.51.100.97 \u00b7 Dubai, AE, VPN",
+      "ip_country": "AE",
+      "city": "Dubai",
+      "flagged": true,
+      "counterparty_account_id": null
+    }
+  ],
+  "customer": {
+    "id": "cus_0062",
+    "name": "Helen Petrov",
+    "email": "helen.petrov.61@example.com",
+    "home_city": "Manchester",
+    "home_country": "GB",
+    "segment": "everyday",
+    "customer_since": "2023-10-18T00:00:00Z",
+    "account_id": "acct_0062",
+    "account_age_days": 1023
+  },
+  "lead": {
+    "id": "txn_005288",
+    "occurred_at": "2026-08-06T20:44:00Z",
+    "amount_cents": 92000,
+    "status": "approved",
+    "type": "card_purchase",
+    "merchant_name": "Hearth Gift Co",
+    "merchant_category": "gift_card",
+    "device_id": "dev_0347",
+    "device_label": "Pixel 8 \u00b7 Android 15 \u00b7 Chrome",
+    "ip": "198.51.100.97 \u00b7 Dubai, AE, VPN",
+    "ip_city": "Dubai",
+    "ip_country": "AE",
+    "card_last4": "7530"
+  },
+  "report_markdown": "# Halden case case_0015\n\n**Customer.** Helen Petrov (cus_0062), Manchester, GB.\n**Lead payment.** txn_005288 \u00b7 $920.00 \u00b7 Hearth Gift Co \u00b7 2026-08-06T20:44:00Z.\n**Pattern.** Account takeover (new device foreign spike).\n**Risk score.** 94 / 100.\n**Suggested action.** block \u2014 a human still has to confirm it.\n\n## Summary\n\nA new device in a new country spends far above baseline at gift cards, electronics, or crypto. Block and force a step-up with the real customer. The session does not match the device or the country on file. Lead payment txn_005288 is $920.00 approved at Hearth Gift Co on 06 Aug 2026 20:44 UTC, card \u2022\u20227530, device dev_0347. Before this episode, Helen Petrov had 34 payments with a median of $35.65.\n\n## Why this score\n\n- **Case opened** (+4): Every queued payment starts with a small residual score.\n- **New device abroad** (+36): Device dev_0347 in AE.\n- **Spend spike** (+28): Peak $920.00 against a median of $35.65.\n- **Risky merchants** (+18): Gift cards, electronics, or crypto, rather than travel.\n- **VPN** (+8): The session is coming through a VPN.\n\n## What the agent checked\n\n### Open the flagged payment (watch)\n\nQueue sent txn_005288 for Helen Petrov: $920.00 at Hearth Gift Co on 06 Aug 2026 20:44 UTC. The flagger's reasons were: Amount is far above this customer's own baseline; Device has never been used by this customer before; IP country does not match the customer's home country; The payment's shape is an outlier for the whole book.\n\n- Transaction: txn_005288\n- Amount: $920.00\n- Customer: Helen Petrov (cus_0062)\n- Why it was queued: amount_outlier, new_device, foreign_ip, isolation_forest\n\n### Customer history and baseline (clear)\n\nHelen Petrov has 34 prior payments before this episode, median $35.65. Account acct_0062 is 1023 days old. Usual devices: dev_0123, dev_0124. Countries already seen: GB.\n\n- Account age: 1023 days\n- Prior payments: 34\n- Median amount: $35.65\n- Home: Manchester, GB\n\n### Payment velocity (clear)\n\nThe episode around txn_005288 holds 4 payments across 40 minutes. The busiest hour contains 4. 0 declines in the episode. Merchants touched: Keystone Crypto Desk, Hearth Gift Co, Parcel Gift Cards, Lumen Electronics.\n\n- Payments in episode: 4\n- Busiest hour: 4\n- Declines: 0\n- Distinct merchants: 4\n\n### Amount versus baseline (alert)\n\nEpisode amounts run from $295.00 to $920.00, median $560.00. The peak is 25.8\u00d7 the baseline median of $35.65.\n\n- Episode median: $560.00\n- Episode peak: $920.00\n- Baseline median: $35.65\n- Peak vs baseline: 25.8\u00d7\n\n### Device and IP linkage (alert)\n\nDevices in the episode: dev_0347 (Pixel 8 \u00b7 Android 15 \u00b7 Chrome, new to this customer). IPs: 198.51.100.97 \u00b7 Dubai, AE, VPN. Home country is GB. The episode is outside that country.\n\n- New devices: dev_0347\n- Mature devices reused: none\n- Countries: AE\n- Datacenter or VPN: yes\n\n### Linked accounts and money flow (clear)\n\nDevices in the episode are also used by no other customer. Inbound transfers $0.00, outbound $0.00. No cash-out path leaves this account in the six-day money graph.\n\n- Linked customers: 0\n- Household pattern: no\n- Reaches cash-out: no\n- Pass-through: no inbound\n\n### Merchant check (clear)\n\nHearth Gift Co (gift_card, Toronto) has 8 payments in the past 14 days from 6 customers. 0% of those customers are under 45 days old. 0% of the amounts are round (multiples of $50, at least $200). Devices shared by two or more buyers: none.\n\n- Category: gift_card\n- Recent buyers: 6\n- Young-account share: 0%\n- Round-amount share: 0%\n\n### Pattern classification (alert)\n\nAccount takeover. A new device in a new country spends far above baseline at gift cards, electronics, or crypto.\n\n- Pattern: Account takeover\n- Detail: new device foreign spike\n\n### Suggested action (alert)\n\nSuggest block. Risk score 94/100. Block and force a step-up with the real customer. The session does not match the device or the country on file. A person still has to confirm this; the agent does not apply it.\n\n- Suggested action: block\n- Risk score: 94/100\n- Who decides: human analyst\n\n## Payments in the episode\n\n| When | Id | Amount | Status | Merchant | Device |\n| --- | --- | --- | --- | --- | --- |\n| 2026-08-06T20:29:00Z | txn_005287 | $450.00 | approved | Keystone Crypto Desk | dev_0347 |\n| 2026-08-06T20:44:00Z | txn_005288 | $920.00 | approved | Hearth Gift Co | dev_0347 |\n| 2026-08-06T21:01:00Z | txn_005289 | $295.00 | approved | Parcel Gift Cards | dev_0347 |\n| 2026-08-06T21:09:00Z | txn_005290 | $670.00 | approved | Lumen Electronics | dev_0347 |\n\n## Action rationale\n\nBlock and force a step-up with the real customer. The session does not match the device or the country on file.\n\n## Held-out label\n\nThis section is joined after the investigation. The agent did not see it.\n\n- Fraud: yes\n- Pattern: account_takeover\n\n*Halden suggests. An analyst decides.*\n",
+  "showcase": null
+}

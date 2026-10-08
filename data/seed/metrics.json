@@ -1,0 +1,237 @@
+{
+  "population": {
+    "transactions": 5346,
+    "fraud_transactions": 98,
+    "legitimate_transactions": 5248,
+    "customers": 181,
+    "cases": 30
+  },
+  "naive": {
+    "tp": 98,
+    "fp": 19,
+    "tn": 5229,
+    "fn": 0,
+    "precision": 0.8376,
+    "recall": 1.0,
+    "fpr": 0.0036,
+    "f1": 0.9116,
+    "predicted_positive": 117,
+    "predicted_negative": 5229
+  },
+  "agent": {
+    "tp": 98,
+    "fp": 0,
+    "tn": 5248,
+    "fn": 0,
+    "precision": 1.0,
+    "recall": 1.0,
+    "fpr": 0.0,
+    "f1": 1.0,
+    "predicted_positive": 98,
+    "predicted_negative": 5248
+  },
+  "customers_wrongly_blocked": {
+    "naive": 8,
+    "agent_block": 0,
+    "agent_any_intervention": 0,
+    "naive_customers": [
+      {
+        "customer_id": "cus_0003",
+        "name": "Priya Keller",
+        "payments": 1
+      },
+      {
+        "customer_id": "cus_0005",
+        "name": "Marcus Costa",
+        "payments": 6
+      },
+      {
+        "customer_id": "cus_0008",
+        "name": "Sofia Fischer",
+        "payments": 1
+      },
+      {
+        "customer_id": "cus_0012",
+        "name": "Maya Hassan",
+        "payments": 6
+      },
+      {
+        "customer_id": "cus_0016",
+        "name": "Aisha Diaz",
+        "payments": 1
+      },
+      {
+        "customer_id": "cus_0019",
+        "name": "Samir Hughes",
+        "payments": 1
+      },
+      {
+        "customer_id": "cus_0022",
+        "name": "Helen Silva",
+        "payments": 2
+      },
+      {
+        "customer_id": "cus_0169",
+        "name": "Ruth Hart",
+        "payments": 1
+      }
+    ],
+    "agent_block_customers": [],
+    "agent_intervention_customers": [],
+    "cleared_by_agent": [
+      {
+        "customer_id": "cus_0003",
+        "name": "Priya Keller",
+        "payments": 1
+      },
+      {
+        "customer_id": "cus_0005",
+        "name": "Marcus Costa",
+        "payments": 6
+      },
+      {
+        "customer_id": "cus_0008",
+        "name": "Sofia Fischer",
+        "payments": 1
+      },
+      {
+        "customer_id": "cus_0012",
+        "name": "Maya Hassan",
+        "payments": 6
+      },
+      {
+        "customer_id": "cus_0016",
+        "name": "Aisha Diaz",
+        "payments": 1
+      },
+      {
+        "customer_id": "cus_0019",
+        "name": "Samir Hughes",
+        "payments": 1
+      },
+      {
+        "customer_id": "cus_0022",
+        "name": "Helen Silva",
+        "payments": 2
+      },
+      {
+        "customer_id": "cus_0169",
+        "name": "Ruth Hart",
+        "payments": 1
+      }
+    ]
+  },
+  "by_pattern": [
+    {
+      "pattern": "card_testing",
+      "fraud_transactions": 42,
+      "flagged_by_naive": 42,
+      "caught_by_agent": 42,
+      "naive_recall": 1.0,
+      "agent_recall": 1.0,
+      "cases_with_pattern": 3,
+      "cases_named_correctly": 3
+    },
+    {
+      "pattern": "account_takeover",
+      "fraud_transactions": 12,
+      "flagged_by_naive": 12,
+      "caught_by_agent": 12,
+      "naive_recall": 1.0,
+      "agent_recall": 1.0,
+      "cases_with_pattern": 3,
+      "cases_named_correctly": 3
+    },
+    {
+      "pattern": "mule_chain",
+      "fraud_transactions": 20,
+      "flagged_by_naive": 20,
+      "caught_by_agent": 20,
+      "naive_recall": 1.0,
+      "agent_recall": 1.0,
+      "cases_with_pattern": 10,
+      "cases_named_correctly": 10
+    },
+    {
+      "pattern": "merchant_collusion",
+      "fraud_transactions": 24,
+      "flagged_by_naive": 24,
+      "caught_by_agent": 24,
+      "naive_recall": 1.0,
+      "agent_recall": 1.0,
+      "cases_with_pattern": 6,
+      "cases_named_correctly": 6
+    }
+  ],
+  "flag_reason_counts": {
+    "new_device": 9,
+    "foreign_ip": 66,
+    "isolation_forest": 84,
+    "velocity_1h": 32,
+    "new_account_amount": 40,
+    "shared_device": 23,
+    "amount_outlier": 15
+  },
+  "queue": {
+    "cases": 30,
+    "by_action": {
+      "block": 6,
+      "escalate": 16,
+      "approve": 8
+    },
+    "by_pattern": {
+      "card_testing": 3,
+      "merchant_collusion": 6,
+      "legitimate": 8,
+      "account_takeover": 3,
+      "mule_chain": 10
+    },
+    "fraud_cases": 22,
+    "fraud_cases_caught": 22,
+    "fraud_cases_named_correctly": 22,
+    "legitimate_cases": 8,
+    "legitimate_cases_approved": 8
+  },
+  "narrative": "The flagger queued 117 payments, catching 100% of fraud transactions and also pulling in 8 genuine customers. Halden, reviewing only that queue, caught 100% of fraud transactions at 100% precision and would have blocked 0 genuine customers. It cleared 8 genuine customers the queue would otherwise have stopped.",
+  "case_ids_in_flag_order": [
+    "case_0001",
+    "case_0002",
+    "case_0003",
+    "case_0004",
+    "case_0005",
+    "case_0006",
+    "case_0007",
+    "case_0008",
+    "case_0009",
+    "case_0010",
+    "case_0011",
+    "case_0012",
+    "case_0013",
+    "case_0014",
+    "case_0015",
+    "case_0016",
+    "case_0017",
+    "case_0018",
+    "case_0019",
+    "case_0020",
+    "case_0021",
+    "case_0022",
+    "case_0023",
+    "case_0024",
+    "case_0025",
+    "case_0026",
+    "case_0027",
+    "case_0028",
+    "case_0029",
+    "case_0030"
+  ],
+  "headline": {
+    "frauds_caught_recall": 1.0,
+    "precision": 1.0,
+    "false_alarms": 0,
+    "false_positive_rate": 0.0,
+    "genuine_customers_blocked_by_queue": 8,
+    "genuine_customers_blocked_by_agent": 0,
+    "genuine_customers_cleared": 8
+  }
+}

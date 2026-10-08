@@ -1,0 +1,394 @@
+{
+  "case_id": "case_0020",
+  "lead_transaction_id": "txn_005294",
+  "customer_id": "cus_0071",
+  "covered_transaction_ids": [
+    "txn_005294"
+  ],
+  "flag_reasons": [
+    {
+      "code": "amount_outlier",
+      "text": "Amount is far above this customer's own baseline"
+    }
+  ],
+  "risk_score": 76,
+  "pattern": "mule_chain",
+  "pattern_label": "Mule-account chain",
+  "pattern_detail": "pass_through",
+  "action": "escalate",
+  "action_rationale": "Escalate the chain. The receiving accounts need to be frozen together, which is a desk lead's call.",
+  "confidence": "high",
+  "summary": "Mule flow touching Colin Clarke: funds move onward to a cash-out the same day.",
+  "narrative": "Money reaches a cash-out through freshly linked accounts, with little of it staying put. Escalate the chain. The receiving accounts need to be frozen together, which is a desk lead's call. Lead payment txn_005294 is $1,200.00 approved at peer-to-peer transfer on 08 Aug 2026 13:00 UTC, card \u2022\u20223915, device dev_0141. Before this episode, Colin Clarke had 42 payments with a median of $43.31.",
+  "signals": [
+    {
+      "name": "Case opened",
+      "points": 4,
+      "detail": "Every queued payment starts with a small residual score."
+    },
+    {
+      "name": "Cash-out path",
+      "points": 40,
+      "detail": "Colin Clarke (acct_0071) \u2192 Idris Bennett (acct_0170) \u2192 Nora Almeida (acct_0171) \u2192 Keystone Crypto Desk"
+    },
+    {
+      "name": "Shared infrastructure",
+      "points": 8,
+      "detail": "0 other customer(s) on the episode devices."
+    },
+    {
+      "name": "Funds do not stay",
+      "points": 16,
+      "detail": "Inbound $0.00, outbound $1,200.00."
+    }
+  ],
+  "timeline": [
+    {
+      "id": "open_case",
+      "title": "Open the flagged payment",
+      "status": "watch",
+      "started_at": "2026-08-11T15:00:00Z",
+      "duration_ms": 420,
+      "finding": "Queue sent txn_005294 for Colin Clarke: $1,200.00 at peer-to-peer transfer on 08 Aug 2026 13:00 UTC. The flagger's reasons were: Amount is far above this customer's own baseline.",
+      "evidence": [
+        {
+          "label": "Transaction",
+          "value": "txn_005294"
+        },
+        {
+          "label": "Amount",
+          "value": "$1,200.00"
+        },
+        {
+          "label": "Customer",
+          "value": "Colin Clarke (cus_0071)"
+        },
+        {
+          "label": "Why it was queued",
+          "value": "amount_outlier"
+        }
+      ]
+    },
+    {
+      "id": "customer_baseline",
+      "title": "Customer history and baseline",
+      "status": "clear",
+      "started_at": "2026-08-11T15:00:00Z",
+      "duration_ms": 680,
+      "finding": "Colin Clarke has 42 prior payments before this episode, median $43.31. Account acct_0071 is 1204 days old. Usual devices: dev_0141, dev_0142. Countries already seen: FR.",
+      "evidence": [
+        {
+          "label": "Account age",
+          "value": "1204 days"
+        },
+        {
+          "label": "Prior payments",
+          "value": "42"
+        },
+        {
+          "label": "Median amount",
+          "value": "$43.31"
+        },
+        {
+          "label": "Home",
+          "value": "Paris, FR"
+        }
+      ]
+    },
+    {
+      "id": "velocity",
+      "title": "Payment velocity",
+      "status": "clear",
+      "started_at": "2026-08-11T15:00:01Z",
+      "duration_ms": 540,
+      "finding": "The episode around txn_005294 holds 1 payment across 0 minutes. The busiest hour contains 1. 0 declines in the episode. Merchants touched: P2P transfer.",
+      "evidence": [
+        {
+          "label": "Payments in episode",
+          "value": "1"
+        },
+        {
+          "label": "Busiest hour",
+          "value": "1"
+        },
+        {
+          "label": "Declines",
+          "value": "0"
+        },
+        {
+          "label": "Distinct merchants",
+          "value": "1"
+        }
+      ]
+    },
+    {
+      "id": "amount",
+      "title": "Amount versus baseline",
+      "status": "alert",
+      "started_at": "2026-08-11T15:00:02Z",
+      "duration_ms": 480,
+      "finding": "Episode amounts run from $1,200.00 to $1,200.00, median $1,200.00. The peak is 27.7\u00d7 the baseline median of $43.31.",
+      "evidence": [
+        {
+          "label": "Episode median",
+          "value": "$1,200.00"
+        },
+        {
+          "label": "Episode peak",
+          "value": "$1,200.00"
+        },
+        {
+          "label": "Baseline median",
+          "value": "$43.31"
+        },
+        {
+          "label": "Peak vs baseline",
+          "value": "27.7\u00d7"
+        }
+      ]
+    },
+    {
+      "id": "device_ip",
+      "title": "Device and IP linkage",
+      "status": "clear",
+      "started_at": "2026-08-11T15:00:03Z",
+      "duration_ms": 730,
+      "finding": "Devices in the episode: dev_0141 (iPhone \u00b7 iOS 18 \u00b7 Safari, already on file). IPs: 203.0.113.142 \u00b7 Paris, FR. Home country is FR. The episode stays in the home country.",
+      "evidence": [
+        {
+          "label": "New devices",
+          "value": "none"
+        },
+        {
+          "label": "Mature devices reused",
+          "value": "dev_0141"
+        },
+        {
+          "label": "Countries",
+          "value": "FR"
+        },
+        {
+          "label": "Datacenter or VPN",
+          "value": "no"
+        }
+      ]
+    },
+    {
+      "id": "network",
+      "title": "Linked accounts and money flow",
+      "status": "alert",
+      "started_at": "2026-08-11T15:00:04Z",
+      "duration_ms": 860,
+      "finding": "Devices in the episode are also used by no other customer. Inbound transfers $0.00, outbound $1,200.00. Funds from acct_0071 reach a cash-out inside the graph (Colin Clarke (acct_0071) \u2192 Idris Bennett (acct_0170) \u2192 Nora Almeida (acct_0171) \u2192 Keystone Crypto Desk).",
+      "evidence": [
+        {
+          "label": "Linked customers",
+          "value": "0"
+        },
+        {
+          "label": "Household pattern",
+          "value": "no"
+        },
+        {
+          "label": "Reaches cash-out",
+          "value": "yes"
+        },
+        {
+          "label": "Pass-through",
+          "value": "no inbound"
+        }
+      ]
+    },
+    {
+      "id": "merchant",
+      "title": "Merchant check",
+      "status": "watch",
+      "started_at": "2026-08-11T15:00:05Z",
+      "duration_ms": 300,
+      "finding": "The lead movement is a transfer, not a card purchase, so there is no merchant to underwrite. The money-flow step carries that evidence.",
+      "evidence": [
+        {
+          "label": "Merchant",
+          "value": "none (transfer)"
+        }
+      ]
+    },
+    {
+      "id": "classify",
+      "title": "Pattern classification",
+      "status": "alert",
+      "started_at": "2026-08-11T15:00:06Z",
+      "duration_ms": 390,
+      "finding": "Mule-account chain. Money reaches a cash-out through freshly linked accounts, with little of it staying put.",
+      "evidence": [
+        {
+          "label": "Pattern",
+          "value": "Mule-account chain"
+        },
+        {
+          "label": "Detail",
+          "value": "pass through"
+        }
+      ]
+    },
+    {
+      "id": "recommend",
+      "title": "Suggested action",
+      "status": "alert",
+      "started_at": "2026-08-11T15:00:07Z",
+      "duration_ms": 360,
+      "finding": "Suggest escalate. Risk score 76/100. Escalate the chain. The receiving accounts need to be frozen together, which is a desk lead's call. A person still has to confirm this; the agent does not apply it.",
+      "evidence": [
+        {
+          "label": "Suggested action",
+          "value": "escalate"
+        },
+        {
+          "label": "Risk score",
+          "value": "76/100"
+        },
+        {
+          "label": "Who decides",
+          "value": "human analyst"
+        }
+      ]
+    }
+  ],
+  "graph": {
+    "nodes": [
+      {
+        "id": "cus_0071",
+        "type": "customer",
+        "label": "Colin Clarke",
+        "sublabel": "cus_0071",
+        "x": 0.2351,
+        "y": 0.92,
+        "emphasis": true
+      },
+      {
+        "id": "acct_0071",
+        "type": "account",
+        "label": "Account",
+        "sublabel": "acct_0071",
+        "x": 0.5678,
+        "y": 0.5575,
+        "emphasis": true
+      },
+      {
+        "id": "dev_0141",
+        "type": "device",
+        "label": "iPhone",
+        "sublabel": "dev_0141",
+        "x": 0.92,
+        "y": 0.545,
+        "emphasis": false
+      },
+      {
+        "id": "ip_0141",
+        "type": "ip",
+        "label": "Paris",
+        "sublabel": "203.0.113.142",
+        "x": 0.5922,
+        "y": 0.08,
+        "emphasis": false
+      },
+      {
+        "id": "cus_0170",
+        "type": "customer",
+        "label": "Idris Bennett",
+        "sublabel": "cus_0170",
+        "x": 0.08,
+        "y": 0.5857,
+        "emphasis": true
+      },
+      {
+        "id": "acct_0170",
+        "type": "account",
+        "label": "Account",
+        "sublabel": "acct_0170",
+        "x": 0.3818,
+        "y": 0.7766,
+        "emphasis": true
+      }
+    ],
+    "edges": [
+      {
+        "source": "cus_0071",
+        "target": "acct_0071",
+        "kind": "owns",
+        "label": "owns"
+      },
+      {
+        "source": "acct_0071",
+        "target": "dev_0141",
+        "kind": "device",
+        "label": "used"
+      },
+      {
+        "source": "acct_0071",
+        "target": "ip_0141",
+        "kind": "ip",
+        "label": "from"
+      },
+      {
+        "source": "acct_0071",
+        "target": "acct_0170",
+        "kind": "p2p",
+        "label": "$1,200.00"
+      },
+      {
+        "source": "cus_0170",
+        "target": "acct_0170",
+        "kind": "owns",
+        "label": "owns"
+      }
+    ],
+    "caption": "Money path: Colin Clarke (acct_0071) \u2192 Idris Bennett (acct_0170) \u2192 Nora Almeida (acct_0171) \u2192 Keystone Crypto Desk"
+  },
+  "related_transactions": [
+    {
+      "id": "txn_005294",
+      "occurred_at": "2026-08-08T13:00:00Z",
+      "ts": 1786194000,
+      "amount_cents": 120000,
+      "status": "approved",
+      "type": "p2p_out",
+      "merchant_name": "P2P transfer",
+      "merchant_category": "transfer",
+      "device_id": "dev_0141",
+      "ip": "203.0.113.142 \u00b7 Paris, FR",
+      "ip_country": "FR",
+      "city": "Paris",
+      "flagged": true,
+      "counterparty_account_id": "acct_0170"
+    }
+  ],
+  "customer": {
+    "id": "cus_0071",
+    "name": "Colin Clarke",
+    "email": "colin.clarke.70@example.com",
+    "home_city": "Paris",
+    "home_country": "FR",
+    "segment": "everyday",
+    "customer_since": "2023-04-22T00:00:00Z",
+    "account_id": "acct_0071",
+    "account_age_days": 1204
+  },
+  "lead": {
+    "id": "txn_005294",
+    "occurred_at": "2026-08-08T13:00:00Z",
+    "amount_cents": 120000,
+    "status": "approved",
+    "type": "p2p_out",
+    "merchant_name": "peer-to-peer transfer",
+    "merchant_category": "transfer",
+    "device_id": "dev_0141",
+    "device_label": "iPhone \u00b7 iOS 18 \u00b7 Safari",
+    "ip": "203.0.113.142 \u00b7 Paris, FR",
+    "ip_city": "Paris",
+    "ip_country": "FR",
+    "card_last4": "3915"
+  },
+  "report_markdown": "# Halden case case_0020\n\n**Customer.** Colin Clarke (cus_0071), Paris, FR.\n**Lead payment.** txn_005294 \u00b7 $1,200.00 \u00b7 peer-to-peer transfer \u00b7 2026-08-08T13:00:00Z.\n**Pattern.** Mule-account chain (pass through).\n**Risk score.** 76 / 100.\n**Suggested action.** escalate \u2014 a human still has to confirm it.\n\n## Summary\n\nMoney reaches a cash-out through freshly linked accounts, with little of it staying put. Escalate the chain. The receiving accounts need to be frozen together, which is a desk lead's call. Lead payment txn_005294 is $1,200.00 approved at peer-to-peer transfer on 08 Aug 2026 13:00 UTC, card \u2022\u20223915, device dev_0141. Before this episode, Colin Clarke had 42 payments with a median of $43.31.\n\n## Why this score\n\n- **Case opened** (+4): Every queued payment starts with a small residual score.\n- **Cash-out path** (+40): Colin Clarke (acct_0071) \u2192 Idris Bennett (acct_0170) \u2192 Nora Almeida (acct_0171) \u2192 Keystone Crypto Desk\n- **Shared infrastructure** (+8): 0 other customer(s) on the episode devices.\n- **Funds do not stay** (+16): Inbound $0.00, outbound $1,200.00.\n\n## What the agent checked\n\n### Open the flagged payment (watch)\n\nQueue sent txn_005294 for Colin Clarke: $1,200.00 at peer-to-peer transfer on 08 Aug 2026 13:00 UTC. The flagger's reasons were: Amount is far above this customer's own baseline.\n\n- Transaction: txn_005294\n- Amount: $1,200.00\n- Customer: Colin Clarke (cus_0071)\n- Why it was queued: amount_outlier\n\n### Customer history and baseline (clear)\n\nColin Clarke has 42 prior payments before this episode, median $43.31. Account acct_0071 is 1204 days old. Usual devices: dev_0141, dev_0142. Countries already seen: FR.\n\n- Account age: 1204 days\n- Prior payments: 42\n- Median amount: $43.31\n- Home: Paris, FR\n\n### Payment velocity (clear)\n\nThe episode around txn_005294 holds 1 payment across 0 minutes. The busiest hour contains 1. 0 declines in the episode. Merchants touched: P2P transfer.\n\n- Payments in episode: 1\n- Busiest hour: 1\n- Declines: 0\n- Distinct merchants: 1\n\n### Amount versus baseline (alert)\n\nEpisode amounts run from $1,200.00 to $1,200.00, median $1,200.00. The peak is 27.7\u00d7 the baseline median of $43.31.\n\n- Episode median: $1,200.00\n- Episode peak: $1,200.00\n- Baseline median: $43.31\n- Peak vs baseline: 27.7\u00d7\n\n### Device and IP linkage (clear)\n\nDevices in the episode: dev_0141 (iPhone \u00b7 iOS 18 \u00b7 Safari, already on file). IPs: 203.0.113.142 \u00b7 Paris, FR. Home country is FR. The episode stays in the home country.\n\n- New devices: none\n- Mature devices reused: dev_0141\n- Countries: FR\n- Datacenter or VPN: no\n\n### Linked accounts and money flow (alert)\n\nDevices in the episode are also used by no other customer. Inbound transfers $0.00, outbound $1,200.00. Funds from acct_0071 reach a cash-out inside the graph (Colin Clarke (acct_0071) \u2192 Idris Bennett (acct_0170) \u2192 Nora Almeida (acct_0171) \u2192 Keystone Crypto Desk).\n\n- Linked customers: 0\n- Household pattern: no\n- Reaches cash-out: yes\n- Pass-through: no inbound\n\n### Merchant check (watch)\n\nThe lead movement is a transfer, not a card purchase, so there is no merchant to underwrite. The money-flow step carries that evidence.\n\n- Merchant: none (transfer)\n\n### Pattern classification (alert)\n\nMule-account chain. Money reaches a cash-out through freshly linked accounts, with little of it staying put.\n\n- Pattern: Mule-account chain\n- Detail: pass through\n\n### Suggested action (alert)\n\nSuggest escalate. Risk score 76/100. Escalate the chain. The receiving accounts need to be frozen together, which is a desk lead's call. A person still has to confirm this; the agent does not apply it.\n\n- Suggested action: escalate\n- Risk score: 76/100\n- Who decides: human analyst\n\n## Payments in the episode\n\n| When | Id | Amount | Status | Merchant | Device |\n| --- | --- | --- | --- | --- | --- |\n| 2026-08-08T13:00:00Z | txn_005294 | $1,200.00 | approved | P2P transfer | dev_0141 |\n\n## Action rationale\n\nEscalate the chain. The receiving accounts need to be frozen together, which is a desk lead's call.\n\n## Held-out label\n\nThis section is joined after the investigation. The agent did not see it.\n\n- Fraud: yes\n- Pattern: mule_chain\n\n*Halden suggests. An analyst decides.*\n",
+  "showcase": null
+}

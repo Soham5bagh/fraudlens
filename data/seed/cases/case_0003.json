@@ -1,0 +1,584 @@
+{
+  "case_id": "case_0003",
+  "lead_transaction_id": "txn_005190",
+  "customer_id": "cus_0005",
+  "covered_transaction_ids": [
+    "txn_000150",
+    "txn_005190",
+    "txn_005191",
+    "txn_005192",
+    "txn_005193",
+    "txn_005194",
+    "txn_000151",
+    "txn_005195"
+  ],
+  "flag_reasons": [
+    {
+      "code": "foreign_ip",
+      "text": "IP country does not match the customer's home country"
+    },
+    {
+      "code": "isolation_forest",
+      "text": "The payment's shape is an outlier for the whole book"
+    }
+  ],
+  "risk_score": 16,
+  "pattern": "legitimate",
+  "pattern_label": "Legitimate activity",
+  "pattern_detail": "travel",
+  "action": "approve",
+  "action_rationale": "Approve. This is a trip on the customer's own device, not a takeover. A takeover would bring a new device and gift-card spend.",
+  "confidence": "high",
+  "summary": "Marcus Costa looks legitimate (travel). The queue flag does not survive the file.",
+  "narrative": "Foreign IP, but the device is the one this customer has used for weeks, and the merchants are travel. Approve. This is a trip on the customer's own device, not a takeover. A takeover would bring a new device and gift-card spend. Lead payment txn_005190 is $286.00 approved at Brightair on 03 Aug 2026 18:00 UTC, card \u2022\u20227956, device dev_0009. Before this episode, Marcus Costa had 17 payments with a median of $112.64. The contrast with account takeover is the device: takeover arrives on hardware the customer has never used.",
+  "signals": [
+    {
+      "name": "Case opened",
+      "points": 4,
+      "detail": "Every queued payment starts with a small residual score."
+    },
+    {
+      "name": "Trip on a known device",
+      "points": 12,
+      "detail": "Reused dev_0009 abroad at travel merchants."
+    }
+  ],
+  "timeline": [
+    {
+      "id": "open_case",
+      "title": "Open the flagged payment",
+      "status": "watch",
+      "started_at": "2026-08-11T15:00:00Z",
+      "duration_ms": 420,
+      "finding": "Queue sent txn_005190 for Marcus Costa: $286.00 at Brightair on 03 Aug 2026 18:00 UTC. The flagger's reasons were: IP country does not match the customer's home country; The payment's shape is an outlier for the whole book.",
+      "evidence": [
+        {
+          "label": "Transaction",
+          "value": "txn_005190"
+        },
+        {
+          "label": "Amount",
+          "value": "$286.00"
+        },
+        {
+          "label": "Customer",
+          "value": "Marcus Costa (cus_0005)"
+        },
+        {
+          "label": "Why it was queued",
+          "value": "foreign_ip, isolation_forest"
+        }
+      ]
+    },
+    {
+      "id": "customer_baseline",
+      "title": "Customer history and baseline",
+      "status": "clear",
+      "started_at": "2026-08-11T15:00:00Z",
+      "duration_ms": 680,
+      "finding": "Marcus Costa has 17 prior payments before this episode, median $112.64. Account acct_0005 is 1586 days old. Usual devices: dev_0009, dev_0010. Countries already seen: US.",
+      "evidence": [
+        {
+          "label": "Account age",
+          "value": "1586 days"
+        },
+        {
+          "label": "Prior payments",
+          "value": "17"
+        },
+        {
+          "label": "Median amount",
+          "value": "$112.64"
+        },
+        {
+          "label": "Home",
+          "value": "Chicago, US"
+        }
+      ]
+    },
+    {
+      "id": "velocity",
+      "title": "Payment velocity",
+      "status": "clear",
+      "started_at": "2026-08-11T15:00:01Z",
+      "duration_ms": 540,
+      "finding": "The episode around txn_005190 holds 8 payments across 2449 minutes. The busiest hour contains 2. 0 declines in the episode. Merchants touched: Cityline Transit, Brightair, Staywright Hotels, Copper Kettle, Metro Card, Sable Coffee and 1 more.",
+      "evidence": [
+        {
+          "label": "Payments in episode",
+          "value": "8"
+        },
+        {
+          "label": "Busiest hour",
+          "value": "2"
+        },
+        {
+          "label": "Declines",
+          "value": "0"
+        },
+        {
+          "label": "Distinct merchants",
+          "value": "7"
+        }
+      ]
+    },
+    {
+      "id": "amount",
+      "title": "Amount versus baseline",
+      "status": "clear",
+      "started_at": "2026-08-11T15:00:02Z",
+      "duration_ms": 480,
+      "finding": "Episode amounts run from $9.00 to $286.00, median $114.12. The peak is in line with a baseline median of $112.64 (peak is 2.5\u00d7).",
+      "evidence": [
+        {
+          "label": "Episode median",
+          "value": "$114.12"
+        },
+        {
+          "label": "Episode peak",
+          "value": "$286.00"
+        },
+        {
+          "label": "Baseline median",
+          "value": "$112.64"
+        },
+        {
+          "label": "Peak vs baseline",
+          "value": "2.5\u00d7"
+        }
+      ]
+    },
+    {
+      "id": "device_ip",
+      "title": "Device and IP linkage",
+      "status": "watch",
+      "started_at": "2026-08-11T15:00:03Z",
+      "duration_ms": 730,
+      "finding": "Devices in the episode: dev_0009 (iPhone \u00b7 iOS 18 \u00b7 Safari, already on file). IPs: 198.51.100.88 \u00b7 Lisbon, PT; 203.0.113.10 \u00b7 Chicago, US. Home country is US. The episode is outside that country.",
+      "evidence": [
+        {
+          "label": "New devices",
+          "value": "none"
+        },
+        {
+          "label": "Mature devices reused",
+          "value": "dev_0009"
+        },
+        {
+          "label": "Countries",
+          "value": "US, PT"
+        },
+        {
+          "label": "Datacenter or VPN",
+          "value": "no"
+        }
+      ]
+    },
+    {
+      "id": "network",
+      "title": "Linked accounts and money flow",
+      "status": "clear",
+      "started_at": "2026-08-11T15:00:04Z",
+      "duration_ms": 860,
+      "finding": "Devices in the episode are also used by no other customer. Inbound transfers $0.00, outbound $0.00. No cash-out path leaves this account in the six-day money graph.",
+      "evidence": [
+        {
+          "label": "Linked customers",
+          "value": "0"
+        },
+        {
+          "label": "Household pattern",
+          "value": "no"
+        },
+        {
+          "label": "Reaches cash-out",
+          "value": "no"
+        },
+        {
+          "label": "Pass-through",
+          "value": "no inbound"
+        }
+      ]
+    },
+    {
+      "id": "merchant",
+      "title": "Merchant check",
+      "status": "clear",
+      "started_at": "2026-08-11T15:00:05Z",
+      "duration_ms": 640,
+      "finding": "Brightair (airline, Madrid) has 2 payments in the past 14 days from 2 customers. 0% of those customers are under 45 days old. 0% of the amounts are round (multiples of $50, at least $200). Devices shared by two or more buyers: none.",
+      "evidence": [
+        {
+          "label": "Category",
+          "value": "airline"
+        },
+        {
+          "label": "Recent buyers",
+          "value": "2"
+        },
+        {
+          "label": "Young-account share",
+          "value": "0%"
+        },
+        {
+          "label": "Round-amount share",
+          "value": "0%"
+        }
+      ]
+    },
+    {
+      "id": "classify",
+      "title": "Pattern classification",
+      "status": "clear",
+      "started_at": "2026-08-11T15:00:06Z",
+      "duration_ms": 390,
+      "finding": "Legitimate activity. Foreign IP, but the device is the one this customer has used for weeks, and the merchants are travel.",
+      "evidence": [
+        {
+          "label": "Pattern",
+          "value": "Legitimate activity"
+        },
+        {
+          "label": "Detail",
+          "value": "travel"
+        }
+      ]
+    },
+    {
+      "id": "recommend",
+      "title": "Suggested action",
+      "status": "clear",
+      "started_at": "2026-08-11T15:00:07Z",
+      "duration_ms": 360,
+      "finding": "Suggest approve. Risk score 16/100. Approve. This is a trip on the customer's own device, not a takeover. A takeover would bring a new device and gift-card spend. A person still has to confirm this; the agent does not apply it.",
+      "evidence": [
+        {
+          "label": "Suggested action",
+          "value": "approve"
+        },
+        {
+          "label": "Risk score",
+          "value": "16/100"
+        },
+        {
+          "label": "Who decides",
+          "value": "human analyst"
+        }
+      ]
+    }
+  ],
+  "graph": {
+    "nodes": [
+      {
+        "id": "cus_0005",
+        "type": "customer",
+        "label": "Marcus Costa",
+        "sublabel": "cus_0005",
+        "x": 0.218,
+        "y": 0.8115,
+        "emphasis": true
+      },
+      {
+        "id": "acct_0005",
+        "type": "account",
+        "label": "Account",
+        "sublabel": "acct_0005",
+        "x": 0.5018,
+        "y": 0.4896,
+        "emphasis": true
+      },
+      {
+        "id": "dev_0009",
+        "type": "device",
+        "label": "iPhone",
+        "sublabel": "dev_0009",
+        "x": 0.92,
+        "y": 0.5768,
+        "emphasis": false
+      },
+      {
+        "id": "ip_0009",
+        "type": "ip",
+        "label": "Chicago",
+        "sublabel": "203.0.113.10",
+        "x": 0.6588,
+        "y": 0.0882,
+        "emphasis": false
+      },
+      {
+        "id": "ip_0337",
+        "type": "ip",
+        "label": "Lisbon",
+        "sublabel": "198.51.100.88",
+        "x": 0.08,
+        "y": 0.5519,
+        "emphasis": false
+      },
+      {
+        "id": "mer_009",
+        "type": "merchant",
+        "label": "Cityline Transit",
+        "sublabel": "transit",
+        "x": 0.7654,
+        "y": 0.8271,
+        "emphasis": false
+      },
+      {
+        "id": "mer_016",
+        "type": "merchant",
+        "label": "Brightair",
+        "sublabel": "airline",
+        "x": 0.3672,
+        "y": 0.08,
+        "emphasis": false
+      },
+      {
+        "id": "mer_018",
+        "type": "merchant",
+        "label": "Staywright Hotels",
+        "sublabel": "hotel",
+        "x": 0.489,
+        "y": 0.92,
+        "emphasis": false
+      },
+      {
+        "id": "mer_005",
+        "type": "merchant",
+        "label": "Copper Kettle",
+        "sublabel": "restaurant",
+        "x": 0.1381,
+        "y": 0.2627,
+        "emphasis": false
+      },
+      {
+        "id": "mer_010",
+        "type": "merchant",
+        "label": "Metro Card",
+        "sublabel": "transit",
+        "x": 0.8764,
+        "y": 0.2847,
+        "emphasis": false
+      }
+    ],
+    "edges": [
+      {
+        "source": "cus_0005",
+        "target": "acct_0005",
+        "kind": "owns",
+        "label": "owns"
+      },
+      {
+        "source": "acct_0005",
+        "target": "dev_0009",
+        "kind": "device",
+        "label": "used"
+      },
+      {
+        "source": "acct_0005",
+        "target": "ip_0009",
+        "kind": "ip",
+        "label": "from"
+      },
+      {
+        "source": "acct_0005",
+        "target": "ip_0337",
+        "kind": "ip",
+        "label": "from"
+      },
+      {
+        "source": "acct_0005",
+        "target": "mer_009",
+        "kind": "paid",
+        "label": "paid"
+      },
+      {
+        "source": "acct_0005",
+        "target": "mer_016",
+        "kind": "paid",
+        "label": "paid"
+      },
+      {
+        "source": "acct_0005",
+        "target": "mer_018",
+        "kind": "paid",
+        "label": "paid"
+      },
+      {
+        "source": "acct_0005",
+        "target": "mer_005",
+        "kind": "paid",
+        "label": "paid"
+      },
+      {
+        "source": "acct_0005",
+        "target": "mer_010",
+        "kind": "paid",
+        "label": "paid"
+      }
+    ],
+    "caption": "The episode stays on devices and a country already associated with this customer."
+  },
+  "related_transactions": [
+    {
+      "id": "txn_000150",
+      "occurred_at": "2026-08-03T17:10:40Z",
+      "ts": 1785777040,
+      "amount_cents": 12960,
+      "status": "approved",
+      "type": "card_purchase",
+      "merchant_name": "Cityline Transit",
+      "merchant_category": "transit",
+      "device_id": "dev_0009",
+      "ip": "203.0.113.10 \u00b7 Chicago, US",
+      "ip_country": "US",
+      "city": "Chicago",
+      "flagged": false,
+      "counterparty_account_id": null
+    },
+    {
+      "id": "txn_005190",
+      "occurred_at": "2026-08-03T18:00:00Z",
+      "ts": 1785780000,
+      "amount_cents": 28600,
+      "status": "approved",
+      "type": "card_purchase",
+      "merchant_name": "Brightair",
+      "merchant_category": "airline",
+      "device_id": "dev_0009",
+      "ip": "198.51.100.88 \u00b7 Lisbon, PT",
+      "ip_country": "PT",
+      "city": "Lisbon",
+      "flagged": true,
+      "counterparty_account_id": null
+    },
+    {
+      "id": "txn_005191",
+      "occurred_at": "2026-08-04T02:00:00Z",
+      "ts": 1785808800,
+      "amount_cents": 24200,
+      "status": "approved",
+      "type": "card_purchase",
+      "merchant_name": "Staywright Hotels",
+      "merchant_category": "hotel",
+      "device_id": "dev_0009",
+      "ip": "198.51.100.88 \u00b7 Lisbon, PT",
+      "ip_country": "PT",
+      "city": "Lisbon",
+      "flagged": true,
+      "counterparty_account_id": null
+    },
+    {
+      "id": "txn_005192",
+      "occurred_at": "2026-08-04T10:00:00Z",
+      "ts": 1785837600,
+      "amount_cents": 6400,
+      "status": "approved",
+      "type": "card_purchase",
+      "merchant_name": "Copper Kettle",
+      "merchant_category": "restaurant",
+      "device_id": "dev_0009",
+      "ip": "198.51.100.88 \u00b7 Lisbon, PT",
+      "ip_country": "PT",
+      "city": "Lisbon",
+      "flagged": true,
+      "counterparty_account_id": null
+    },
+    {
+      "id": "txn_005193",
+      "occurred_at": "2026-08-04T18:00:00Z",
+      "ts": 1785866400,
+      "amount_cents": 1800,
+      "status": "approved",
+      "type": "card_purchase",
+      "merchant_name": "Metro Card",
+      "merchant_category": "transit",
+      "device_id": "dev_0009",
+      "ip": "198.51.100.88 \u00b7 Lisbon, PT",
+      "ip_country": "PT",
+      "city": "Lisbon",
+      "flagged": true,
+      "counterparty_account_id": null
+    },
+    {
+      "id": "txn_005194",
+      "occurred_at": "2026-08-05T01:00:00Z",
+      "ts": 1785891600,
+      "amount_cents": 900,
+      "status": "approved",
+      "type": "card_purchase",
+      "merchant_name": "Sable Coffee",
+      "merchant_category": "coffee",
+      "device_id": "dev_0009",
+      "ip": "198.51.100.88 \u00b7 Lisbon, PT",
+      "ip_country": "PT",
+      "city": "Lisbon",
+      "flagged": true,
+      "counterparty_account_id": null
+    },
+    {
+      "id": "txn_000151",
+      "occurred_at": "2026-08-05T06:35:53Z",
+      "ts": 1785911753,
+      "amount_cents": 9865,
+      "status": "approved",
+      "type": "card_purchase",
+      "merchant_name": "Copper Kettle",
+      "merchant_category": "restaurant",
+      "device_id": "dev_0009",
+      "ip": "203.0.113.10 \u00b7 Chicago, US",
+      "ip_country": "US",
+      "city": "Chicago",
+      "flagged": false,
+      "counterparty_account_id": null
+    },
+    {
+      "id": "txn_005195",
+      "occurred_at": "2026-08-05T10:00:00Z",
+      "ts": 1785924000,
+      "amount_cents": 19800,
+      "status": "approved",
+      "type": "card_purchase",
+      "merchant_name": "Lantern Inns",
+      "merchant_category": "hotel",
+      "device_id": "dev_0009",
+      "ip": "198.51.100.88 \u00b7 Lisbon, PT",
+      "ip_country": "PT",
+      "city": "Lisbon",
+      "flagged": true,
+      "counterparty_account_id": null
+    }
+  ],
+  "customer": {
+    "id": "cus_0005",
+    "name": "Marcus Costa",
+    "email": "marcus.costa.4@example.com",
+    "home_city": "Chicago",
+    "home_country": "US",
+    "segment": "affluent",
+    "customer_since": "2022-03-31T00:00:00Z",
+    "account_id": "acct_0005",
+    "account_age_days": 1586
+  },
+  "lead": {
+    "id": "txn_005190",
+    "occurred_at": "2026-08-03T18:00:00Z",
+    "amount_cents": 28600,
+    "status": "approved",
+    "type": "card_purchase",
+    "merchant_name": "Brightair",
+    "merchant_category": "airline",
+    "device_id": "dev_0009",
+    "device_label": "iPhone \u00b7 iOS 18 \u00b7 Safari",
+    "ip": "198.51.100.88 \u00b7 Lisbon, PT",
+    "ip_city": "Lisbon",
+    "ip_country": "PT",
+    "card_last4": "7956"
+  },
+  "report_markdown": "# Halden case case_0003\n\n**Customer.** Marcus Costa (cus_0005), Chicago, US.\n**Lead payment.** txn_005190 \u00b7 $286.00 \u00b7 Brightair \u00b7 2026-08-03T18:00:00Z.\n**Pattern.** Legitimate activity (travel).\n**Risk score.** 16 / 100.\n**Suggested action.** approve \u2014 a human still has to confirm it.\n\n## Summary\n\nForeign IP, but the device is the one this customer has used for weeks, and the merchants are travel. Approve. This is a trip on the customer's own device, not a takeover. A takeover would bring a new device and gift-card spend. Lead payment txn_005190 is $286.00 approved at Brightair on 03 Aug 2026 18:00 UTC, card \u2022\u20227956, device dev_0009. Before this episode, Marcus Costa had 17 payments with a median of $112.64. The contrast with account takeover is the device: takeover arrives on hardware the customer has never used.\n\n## Why this score\n\n- **Case opened** (+4): Every queued payment starts with a small residual score.\n- **Trip on a known device** (+12): Reused dev_0009 abroad at travel merchants.\n\n## What the agent checked\n\n### Open the flagged payment (watch)\n\nQueue sent txn_005190 for Marcus Costa: $286.00 at Brightair on 03 Aug 2026 18:00 UTC. The flagger's reasons were: IP country does not match the customer's home country; The payment's shape is an outlier for the whole book.\n\n- Transaction: txn_005190\n- Amount: $286.00\n- Customer: Marcus Costa (cus_0005)\n- Why it was queued: foreign_ip, isolation_forest\n\n### Customer history and baseline (clear)\n\nMarcus Costa has 17 prior payments before this episode, median $112.64. Account acct_0005 is 1586 days old. Usual devices: dev_0009, dev_0010. Countries already seen: US.\n\n- Account age: 1586 days\n- Prior payments: 17\n- Median amount: $112.64\n- Home: Chicago, US\n\n### Payment velocity (clear)\n\nThe episode around txn_005190 holds 8 payments across 2449 minutes. The busiest hour contains 2. 0 declines in the episode. Merchants touched: Cityline Transit, Brightair, Staywright Hotels, Copper Kettle, Metro Card, Sable Coffee and 1 more.\n\n- Payments in episode: 8\n- Busiest hour: 2\n- Declines: 0\n- Distinct merchants: 7\n\n### Amount versus baseline (clear)\n\nEpisode amounts run from $9.00 to $286.00, median $114.12. The peak is in line with a baseline median of $112.64 (peak is 2.5\u00d7).\n\n- Episode median: $114.12\n- Episode peak: $286.00\n- Baseline median: $112.64\n- Peak vs baseline: 2.5\u00d7\n\n### Device and IP linkage (watch)\n\nDevices in the episode: dev_0009 (iPhone \u00b7 iOS 18 \u00b7 Safari, already on file). IPs: 198.51.100.88 \u00b7 Lisbon, PT; 203.0.113.10 \u00b7 Chicago, US. Home country is US. The episode is outside that country.\n\n- New devices: none\n- Mature devices reused: dev_0009\n- Countries: US, PT\n- Datacenter or VPN: no\n\n### Linked accounts and money flow (clear)\n\nDevices in the episode are also used by no other customer. Inbound transfers $0.00, outbound $0.00. No cash-out path leaves this account in the six-day money graph.\n\n- Linked customers: 0\n- Household pattern: no\n- Reaches cash-out: no\n- Pass-through: no inbound\n\n### Merchant check (clear)\n\nBrightair (airline, Madrid) has 2 payments in the past 14 days from 2 customers. 0% of those customers are under 45 days old. 0% of the amounts are round (multiples of $50, at least $200). Devices shared by two or more buyers: none.\n\n- Category: airline\n- Recent buyers: 2\n- Young-account share: 0%\n- Round-amount share: 0%\n\n### Pattern classification (clear)\n\nLegitimate activity. Foreign IP, but the device is the one this customer has used for weeks, and the merchants are travel.\n\n- Pattern: Legitimate activity\n- Detail: travel\n\n### Suggested action (clear)\n\nSuggest approve. Risk score 16/100. Approve. This is a trip on the customer's own device, not a takeover. A takeover would bring a new device and gift-card spend. A person still has to confirm this; the agent does not apply it.\n\n- Suggested action: approve\n- Risk score: 16/100\n- Who decides: human analyst\n\n## Payments in the episode\n\n| When | Id | Amount | Status | Merchant | Device |\n| --- | --- | --- | --- | --- | --- |\n| 2026-08-03T17:10:40Z | txn_000150 | $129.60 | approved | Cityline Transit | dev_0009 |\n| 2026-08-03T18:00:00Z | txn_005190 | $286.00 | approved | Brightair | dev_0009 |\n| 2026-08-04T02:00:00Z | txn_005191 | $242.00 | approved | Staywright Hotels | dev_0009 |\n| 2026-08-04T10:00:00Z | txn_005192 | $64.00 | approved | Copper Kettle | dev_0009 |\n| 2026-08-04T18:00:00Z | txn_005193 | $18.00 | approved | Metro Card | dev_0009 |\n| 2026-08-05T01:00:00Z | txn_005194 | $9.00 | approved | Sable Coffee | dev_0009 |\n| 2026-08-05T06:35:53Z | txn_000151 | $98.65 | approved | Copper Kettle | dev_0009 |\n| 2026-08-05T10:00:00Z | txn_005195 | $198.00 | approved | Lantern Inns | dev_0009 |\n\n## Action rationale\n\nApprove. This is a trip on the customer's own device, not a takeover. A takeover would bring a new device and gift-card spend.\n\n## Held-out label\n\nThis section is joined after the investigation. The agent did not see it.\n\n- Fraud: no\n- Pattern: legitimate\n\n*Halden suggests. An analyst decides.*\n",
+  "showcase": {
+    "slot": "legitimate",
+    "order": 5,
+    "title": "Genuine customer",
+    "say": "This one was queued. Halden reads the file and approves it. This is the false alarm the rubber-stamp desk would have blocked."
+  }
+}

@@ -1,0 +1,381 @@
+{
+  "case_id": "case_0013",
+  "lead_transaction_id": "txn_005211",
+  "customer_id": "cus_0016",
+  "covered_transaction_ids": [
+    "txn_005211"
+  ],
+  "flag_reasons": [
+    {
+      "code": "new_device",
+      "text": "Device has never been used by this customer before"
+    }
+  ],
+  "risk_score": 18,
+  "pattern": "legitimate",
+  "pattern_label": "Legitimate activity",
+  "pattern_detail": "new_device_at_home",
+  "action": "approve",
+  "action_rationale": "Approve. A replacement phone at home, spending like the customer always does, is not an account takeover.",
+  "confidence": "high",
+  "summary": "Aisha Diaz looks legitimate (new device at home). The queue flag does not survive the file.",
+  "narrative": "The only new thing is the device. It is at home, and the amount matches the customer's groceries. Approve. A replacement phone at home, spending like the customer always does, is not an account takeover. Lead payment txn_005211 is $36.50 approved at Greenmarket Co-op on 06 Aug 2026 18:40 UTC, card \u2022\u20224823, device dev_0338. Before this episode, Aisha Diaz had 29 payments with a median of $35.38.",
+  "signals": [
+    {
+      "name": "Case opened",
+      "points": 4,
+      "detail": "Every queued payment starts with a small residual score."
+    },
+    {
+      "name": "New device at home",
+      "points": 14,
+      "detail": "New hardware, household IP, amount inside the baseline."
+    }
+  ],
+  "timeline": [
+    {
+      "id": "open_case",
+      "title": "Open the flagged payment",
+      "status": "watch",
+      "started_at": "2026-08-11T15:00:00Z",
+      "duration_ms": 420,
+      "finding": "Queue sent txn_005211 for Aisha Diaz: $36.50 at Greenmarket Co-op on 06 Aug 2026 18:40 UTC. The flagger's reasons were: Device has never been used by this customer before.",
+      "evidence": [
+        {
+          "label": "Transaction",
+          "value": "txn_005211"
+        },
+        {
+          "label": "Amount",
+          "value": "$36.50"
+        },
+        {
+          "label": "Customer",
+          "value": "Aisha Diaz (cus_0016)"
+        },
+        {
+          "label": "Why it was queued",
+          "value": "new_device"
+        }
+      ]
+    },
+    {
+      "id": "customer_baseline",
+      "title": "Customer history and baseline",
+      "status": "clear",
+      "started_at": "2026-08-11T15:00:00Z",
+      "duration_ms": 680,
+      "finding": "Aisha Diaz has 29 prior payments before this episode, median $35.38. Account acct_0016 is 1712 days old. Usual devices: dev_0031. Countries already seen: GB.",
+      "evidence": [
+        {
+          "label": "Account age",
+          "value": "1712 days"
+        },
+        {
+          "label": "Prior payments",
+          "value": "29"
+        },
+        {
+          "label": "Median amount",
+          "value": "$35.38"
+        },
+        {
+          "label": "Home",
+          "value": "London, GB"
+        }
+      ]
+    },
+    {
+      "id": "velocity",
+      "title": "Payment velocity",
+      "status": "clear",
+      "started_at": "2026-08-11T15:00:01Z",
+      "duration_ms": 540,
+      "finding": "The episode around txn_005211 holds 1 payment across 0 minutes. The busiest hour contains 1. 0 declines in the episode. Merchants touched: Greenmarket Co-op.",
+      "evidence": [
+        {
+          "label": "Payments in episode",
+          "value": "1"
+        },
+        {
+          "label": "Busiest hour",
+          "value": "1"
+        },
+        {
+          "label": "Declines",
+          "value": "0"
+        },
+        {
+          "label": "Distinct merchants",
+          "value": "1"
+        }
+      ]
+    },
+    {
+      "id": "amount",
+      "title": "Amount versus baseline",
+      "status": "clear",
+      "started_at": "2026-08-11T15:00:02Z",
+      "duration_ms": 480,
+      "finding": "Episode amounts run from $36.50 to $36.50, median $36.50. The peak is in line with a baseline median of $35.38 (peak is 1.0\u00d7).",
+      "evidence": [
+        {
+          "label": "Episode median",
+          "value": "$36.50"
+        },
+        {
+          "label": "Episode peak",
+          "value": "$36.50"
+        },
+        {
+          "label": "Baseline median",
+          "value": "$35.38"
+        },
+        {
+          "label": "Peak vs baseline",
+          "value": "1.0\u00d7"
+        }
+      ]
+    },
+    {
+      "id": "device_ip",
+      "title": "Device and IP linkage",
+      "status": "watch",
+      "started_at": "2026-08-11T15:00:03Z",
+      "duration_ms": 730,
+      "finding": "Devices in the episode: dev_0338 (iPhone \u00b7 iOS 18 \u00b7 Safari, new to this customer). IPs: 203.0.113.32 \u00b7 London, GB. Home country is GB. The episode stays in the home country.",
+      "evidence": [
+        {
+          "label": "New devices",
+          "value": "dev_0338"
+        },
+        {
+          "label": "Mature devices reused",
+          "value": "none"
+        },
+        {
+          "label": "Countries",
+          "value": "GB"
+        },
+        {
+          "label": "Datacenter or VPN",
+          "value": "no"
+        }
+      ]
+    },
+    {
+      "id": "network",
+      "title": "Linked accounts and money flow",
+      "status": "clear",
+      "started_at": "2026-08-11T15:00:04Z",
+      "duration_ms": 860,
+      "finding": "Devices in the episode are also used by no other customer. Inbound transfers $0.00, outbound $0.00. No cash-out path leaves this account in the six-day money graph.",
+      "evidence": [
+        {
+          "label": "Linked customers",
+          "value": "0"
+        },
+        {
+          "label": "Household pattern",
+          "value": "no"
+        },
+        {
+          "label": "Reaches cash-out",
+          "value": "no"
+        },
+        {
+          "label": "Pass-through",
+          "value": "no inbound"
+        }
+      ]
+    },
+    {
+      "id": "merchant",
+      "title": "Merchant check",
+      "status": "clear",
+      "started_at": "2026-08-11T15:00:05Z",
+      "duration_ms": 640,
+      "finding": "Greenmarket Co-op (grocery, Madrid) has 53 payments in the past 14 days from 43 customers. 0% of those customers are under 45 days old. 0% of the amounts are round (multiples of $50, at least $200). Devices shared by two or more buyers: none.",
+      "evidence": [
+        {
+          "label": "Category",
+          "value": "grocery"
+        },
+        {
+          "label": "Recent buyers",
+          "value": "43"
+        },
+        {
+          "label": "Young-account share",
+          "value": "0%"
+        },
+        {
+          "label": "Round-amount share",
+          "value": "0%"
+        }
+      ]
+    },
+    {
+      "id": "classify",
+      "title": "Pattern classification",
+      "status": "clear",
+      "started_at": "2026-08-11T15:00:06Z",
+      "duration_ms": 390,
+      "finding": "Legitimate activity. The only new thing is the device. It is at home, and the amount matches the customer's groceries.",
+      "evidence": [
+        {
+          "label": "Pattern",
+          "value": "Legitimate activity"
+        },
+        {
+          "label": "Detail",
+          "value": "new device at home"
+        }
+      ]
+    },
+    {
+      "id": "recommend",
+      "title": "Suggested action",
+      "status": "clear",
+      "started_at": "2026-08-11T15:00:07Z",
+      "duration_ms": 360,
+      "finding": "Suggest approve. Risk score 18/100. Approve. A replacement phone at home, spending like the customer always does, is not an account takeover. A person still has to confirm this; the agent does not apply it.",
+      "evidence": [
+        {
+          "label": "Suggested action",
+          "value": "approve"
+        },
+        {
+          "label": "Risk score",
+          "value": "18/100"
+        },
+        {
+          "label": "Who decides",
+          "value": "human analyst"
+        }
+      ]
+    }
+  ],
+  "graph": {
+    "nodes": [
+      {
+        "id": "cus_0016",
+        "type": "customer",
+        "label": "Aisha Diaz",
+        "sublabel": "cus_0016",
+        "x": 0.2976,
+        "y": 0.92,
+        "emphasis": true
+      },
+      {
+        "id": "acct_0016",
+        "type": "account",
+        "label": "Account",
+        "sublabel": "acct_0016",
+        "x": 0.4997,
+        "y": 0.5002,
+        "emphasis": true
+      },
+      {
+        "id": "dev_0338",
+        "type": "device",
+        "label": "iPhone",
+        "sublabel": "dev_0338",
+        "x": 0.92,
+        "y": 0.7029,
+        "emphasis": true
+      },
+      {
+        "id": "ip_0031",
+        "type": "ip",
+        "label": "London",
+        "sublabel": "203.0.113.32",
+        "x": 0.7021,
+        "y": 0.08,
+        "emphasis": false
+      },
+      {
+        "id": "mer_002",
+        "type": "merchant",
+        "label": "Greenmarket Co-op",
+        "sublabel": "grocery",
+        "x": 0.08,
+        "y": 0.2982,
+        "emphasis": false
+      }
+    ],
+    "edges": [
+      {
+        "source": "cus_0016",
+        "target": "acct_0016",
+        "kind": "owns",
+        "label": "owns"
+      },
+      {
+        "source": "acct_0016",
+        "target": "dev_0338",
+        "kind": "device",
+        "label": "used"
+      },
+      {
+        "source": "acct_0016",
+        "target": "ip_0031",
+        "kind": "ip",
+        "label": "from"
+      },
+      {
+        "source": "acct_0016",
+        "target": "mer_002",
+        "kind": "paid",
+        "label": "paid"
+      }
+    ],
+    "caption": "New device dev_0338 sits next to the account. The customer's older devices are not in this episode."
+  },
+  "related_transactions": [
+    {
+      "id": "txn_005211",
+      "occurred_at": "2026-08-06T18:40:00Z",
+      "ts": 1786041600,
+      "amount_cents": 3650,
+      "status": "approved",
+      "type": "card_purchase",
+      "merchant_name": "Greenmarket Co-op",
+      "merchant_category": "grocery",
+      "device_id": "dev_0338",
+      "ip": "203.0.113.32 \u00b7 London, GB",
+      "ip_country": "GB",
+      "city": "London",
+      "flagged": true,
+      "counterparty_account_id": null
+    }
+  ],
+  "customer": {
+    "id": "cus_0016",
+    "name": "Aisha Diaz",
+    "email": "aisha.diaz.15@example.com",
+    "home_city": "London",
+    "home_country": "GB",
+    "segment": "everyday",
+    "customer_since": "2021-11-28T00:00:00Z",
+    "account_id": "acct_0016",
+    "account_age_days": 1712
+  },
+  "lead": {
+    "id": "txn_005211",
+    "occurred_at": "2026-08-06T18:40:00Z",
+    "amount_cents": 3650,
+    "status": "approved",
+    "type": "card_purchase",
+    "merchant_name": "Greenmarket Co-op",
+    "merchant_category": "grocery",
+    "device_id": "dev_0338",
+    "device_label": "iPhone \u00b7 iOS 18 \u00b7 Safari",
+    "ip": "203.0.113.32 \u00b7 London, GB",
+    "ip_city": "London",
+    "ip_country": "GB",
+    "card_last4": "4823"
+  },
+  "report_markdown": "# Halden case case_0013\n\n**Customer.** Aisha Diaz (cus_0016), London, GB.\n**Lead payment.** txn_005211 \u00b7 $36.50 \u00b7 Greenmarket Co-op \u00b7 2026-08-06T18:40:00Z.\n**Pattern.** Legitimate activity (new device at home).\n**Risk score.** 18 / 100.\n**Suggested action.** approve \u2014 a human still has to confirm it.\n\n## Summary\n\nThe only new thing is the device. It is at home, and the amount matches the customer's groceries. Approve. A replacement phone at home, spending like the customer always does, is not an account takeover. Lead payment txn_005211 is $36.50 approved at Greenmarket Co-op on 06 Aug 2026 18:40 UTC, card \u2022\u20224823, device dev_0338. Before this episode, Aisha Diaz had 29 payments with a median of $35.38.\n\n## Why this score\n\n- **Case opened** (+4): Every queued payment starts with a small residual score.\n- **New device at home** (+14): New hardware, household IP, amount inside the baseline.\n\n## What the agent checked\n\n### Open the flagged payment (watch)\n\nQueue sent txn_005211 for Aisha Diaz: $36.50 at Greenmarket Co-op on 06 Aug 2026 18:40 UTC. The flagger's reasons were: Device has never been used by this customer before.\n\n- Transaction: txn_005211\n- Amount: $36.50\n- Customer: Aisha Diaz (cus_0016)\n- Why it was queued: new_device\n\n### Customer history and baseline (clear)\n\nAisha Diaz has 29 prior payments before this episode, median $35.38. Account acct_0016 is 1712 days old. Usual devices: dev_0031. Countries already seen: GB.\n\n- Account age: 1712 days\n- Prior payments: 29\n- Median amount: $35.38\n- Home: London, GB\n\n### Payment velocity (clear)\n\nThe episode around txn_005211 holds 1 payment across 0 minutes. The busiest hour contains 1. 0 declines in the episode. Merchants touched: Greenmarket Co-op.\n\n- Payments in episode: 1\n- Busiest hour: 1\n- Declines: 0\n- Distinct merchants: 1\n\n### Amount versus baseline (clear)\n\nEpisode amounts run from $36.50 to $36.50, median $36.50. The peak is in line with a baseline median of $35.38 (peak is 1.0\u00d7).\n\n- Episode median: $36.50\n- Episode peak: $36.50\n- Baseline median: $35.38\n- Peak vs baseline: 1.0\u00d7\n\n### Device and IP linkage (watch)\n\nDevices in the episode: dev_0338 (iPhone \u00b7 iOS 18 \u00b7 Safari, new to this customer). IPs: 203.0.113.32 \u00b7 London, GB. Home country is GB. The episode stays in the home country.\n\n- New devices: dev_0338\n- Mature devices reused: none\n- Countries: GB\n- Datacenter or VPN: no\n\n### Linked accounts and money flow (clear)\n\nDevices in the episode are also used by no other customer. Inbound transfers $0.00, outbound $0.00. No cash-out path leaves this account in the six-day money graph.\n\n- Linked customers: 0\n- Household pattern: no\n- Reaches cash-out: no\n- Pass-through: no inbound\n\n### Merchant check (clear)\n\nGreenmarket Co-op (grocery, Madrid) has 53 payments in the past 14 days from 43 customers. 0% of those customers are under 45 days old. 0% of the amounts are round (multiples of $50, at least $200). Devices shared by two or more buyers: none.\n\n- Category: grocery\n- Recent buyers: 43\n- Young-account share: 0%\n- Round-amount share: 0%\n\n### Pattern classification (clear)\n\nLegitimate activity. The only new thing is the device. It is at home, and the amount matches the customer's groceries.\n\n- Pattern: Legitimate activity\n- Detail: new device at home\n\n### Suggested action (clear)\n\nSuggest approve. Risk score 18/100. Approve. A replacement phone at home, spending like the customer always does, is not an account takeover. A person still has to confirm this; the agent does not apply it.\n\n- Suggested action: approve\n- Risk score: 18/100\n- Who decides: human analyst\n\n## Payments in the episode\n\n| When | Id | Amount | Status | Merchant | Device |\n| --- | --- | --- | --- | --- | --- |\n| 2026-08-06T18:40:00Z | txn_005211 | $36.50 | approved | Greenmarket Co-op | dev_0338 |\n\n## Action rationale\n\nApprove. A replacement phone at home, spending like the customer always does, is not an account takeover.\n\n## Held-out label\n\nThis section is joined after the investigation. The agent did not see it.\n\n- Fraud: no\n- Pattern: legitimate\n\n*Halden suggests. An analyst decides.*\n",
+  "showcase": null
+}

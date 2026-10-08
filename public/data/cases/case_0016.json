@@ -1,0 +1,485 @@
+{
+  "case_id": "case_0016",
+  "lead_transaction_id": "txn_005209",
+  "customer_id": "cus_0022",
+  "covered_transaction_ids": [
+    "txn_005204",
+    "txn_005205",
+    "txn_005206",
+    "txn_005207",
+    "txn_005208",
+    "txn_005209"
+  ],
+  "flag_reasons": [
+    {
+      "code": "velocity_1h",
+      "text": "Five or more payments in the past hour"
+    },
+    {
+      "code": "isolation_forest",
+      "text": "The payment's shape is an outlier for the whole book"
+    }
+  ],
+  "risk_score": 12,
+  "pattern": "legitimate",
+  "pattern_label": "Legitimate activity",
+  "pattern_detail": "flash_sale",
+  "action": "approve",
+  "action_rationale": "Approve. Velocity without declines, probes, or a new device is a shopping burst, not card testing.",
+  "confidence": "high",
+  "summary": "Helen Silva looks legitimate (flash sale). The queue flag does not survive the file.",
+  "narrative": "The hour is busy, but every payment cleared, on a known device, at one or two ordinary shops. Approve. Velocity without declines, probes, or a new device is a shopping burst, not card testing. Lead payment txn_005209 is $52.08 approved at Field & Wire on 07 Aug 2026 11:43 UTC, card \u2022\u20225150, device dev_0043. Before this episode, Helen Silva had 37 payments with a median of $44.20.",
+  "signals": [
+    {
+      "name": "Case opened",
+      "points": 4,
+      "detail": "Every queued payment starts with a small residual score."
+    },
+    {
+      "name": "Busy hour, ordinary tickets",
+      "points": 8,
+      "detail": "Several cleared purchases, known device, one or two shops."
+    }
+  ],
+  "timeline": [
+    {
+      "id": "open_case",
+      "title": "Open the flagged payment",
+      "status": "watch",
+      "started_at": "2026-08-11T15:00:00Z",
+      "duration_ms": 420,
+      "finding": "Queue sent txn_005209 for Helen Silva: $52.08 at Field & Wire on 07 Aug 2026 11:43 UTC. The flagger's reasons were: Five or more payments in the past hour; The payment's shape is an outlier for the whole book.",
+      "evidence": [
+        {
+          "label": "Transaction",
+          "value": "txn_005209"
+        },
+        {
+          "label": "Amount",
+          "value": "$52.08"
+        },
+        {
+          "label": "Customer",
+          "value": "Helen Silva (cus_0022)"
+        },
+        {
+          "label": "Why it was queued",
+          "value": "velocity_1h, isolation_forest"
+        }
+      ]
+    },
+    {
+      "id": "customer_baseline",
+      "title": "Customer history and baseline",
+      "status": "clear",
+      "started_at": "2026-08-11T15:00:00Z",
+      "duration_ms": 680,
+      "finding": "Helen Silva has 37 prior payments before this episode, median $44.20. Account acct_0022 is 1224 days old. Usual devices: dev_0043, dev_0044. Countries already seen: US.",
+      "evidence": [
+        {
+          "label": "Account age",
+          "value": "1224 days"
+        },
+        {
+          "label": "Prior payments",
+          "value": "37"
+        },
+        {
+          "label": "Median amount",
+          "value": "$44.20"
+        },
+        {
+          "label": "Home",
+          "value": "Seattle, US"
+        }
+      ]
+    },
+    {
+      "id": "velocity",
+      "title": "Payment velocity",
+      "status": "alert",
+      "started_at": "2026-08-11T15:00:01Z",
+      "duration_ms": 540,
+      "finding": "The episode around txn_005209 holds 6 payments across 32 minutes. The busiest hour contains 6. 0 declines in the episode. Merchants touched: Field & Wire, Atelier Hale.",
+      "evidence": [
+        {
+          "label": "Payments in episode",
+          "value": "6"
+        },
+        {
+          "label": "Busiest hour",
+          "value": "6"
+        },
+        {
+          "label": "Declines",
+          "value": "0"
+        },
+        {
+          "label": "Distinct merchants",
+          "value": "2"
+        }
+      ]
+    },
+    {
+      "id": "amount",
+      "title": "Amount versus baseline",
+      "status": "clear",
+      "started_at": "2026-08-11T15:00:02Z",
+      "duration_ms": 480,
+      "finding": "Episode amounts run from $33.64 to $52.08, median $36.91. The peak is in line with a baseline median of $44.20 (peak is 1.2\u00d7).",
+      "evidence": [
+        {
+          "label": "Episode median",
+          "value": "$36.91"
+        },
+        {
+          "label": "Episode peak",
+          "value": "$52.08"
+        },
+        {
+          "label": "Baseline median",
+          "value": "$44.20"
+        },
+        {
+          "label": "Peak vs baseline",
+          "value": "1.2\u00d7"
+        }
+      ]
+    },
+    {
+      "id": "device_ip",
+      "title": "Device and IP linkage",
+      "status": "clear",
+      "started_at": "2026-08-11T15:00:03Z",
+      "duration_ms": 730,
+      "finding": "Devices in the episode: dev_0043 (iPad \u00b7 iPadOS 18 \u00b7 Safari, already on file). IPs: 203.0.113.44 \u00b7 Seattle, US. Home country is US. The episode stays in the home country.",
+      "evidence": [
+        {
+          "label": "New devices",
+          "value": "none"
+        },
+        {
+          "label": "Mature devices reused",
+          "value": "dev_0043"
+        },
+        {
+          "label": "Countries",
+          "value": "US"
+        },
+        {
+          "label": "Datacenter or VPN",
+          "value": "no"
+        }
+      ]
+    },
+    {
+      "id": "network",
+      "title": "Linked accounts and money flow",
+      "status": "clear",
+      "started_at": "2026-08-11T15:00:04Z",
+      "duration_ms": 860,
+      "finding": "Devices in the episode are also used by no other customer. Inbound transfers $0.00, outbound $0.00. No cash-out path leaves this account in the six-day money graph.",
+      "evidence": [
+        {
+          "label": "Linked customers",
+          "value": "0"
+        },
+        {
+          "label": "Household pattern",
+          "value": "no"
+        },
+        {
+          "label": "Reaches cash-out",
+          "value": "no"
+        },
+        {
+          "label": "Pass-through",
+          "value": "no inbound"
+        }
+      ]
+    },
+    {
+      "id": "merchant",
+      "title": "Merchant check",
+      "status": "clear",
+      "started_at": "2026-08-11T15:00:05Z",
+      "duration_ms": 640,
+      "finding": "Field & Wire (fashion, Madrid) has 51 payments in the past 14 days from 41 customers. 0% of those customers are under 45 days old. 0% of the amounts are round (multiples of $50, at least $200). Devices shared by two or more buyers: none.",
+      "evidence": [
+        {
+          "label": "Category",
+          "value": "fashion"
+        },
+        {
+          "label": "Recent buyers",
+          "value": "41"
+        },
+        {
+          "label": "Young-account share",
+          "value": "0%"
+        },
+        {
+          "label": "Round-amount share",
+          "value": "0%"
+        }
+      ]
+    },
+    {
+      "id": "classify",
+      "title": "Pattern classification",
+      "status": "clear",
+      "started_at": "2026-08-11T15:00:06Z",
+      "duration_ms": 390,
+      "finding": "Legitimate activity. The hour is busy, but every payment cleared, on a known device, at one or two ordinary shops.",
+      "evidence": [
+        {
+          "label": "Pattern",
+          "value": "Legitimate activity"
+        },
+        {
+          "label": "Detail",
+          "value": "flash sale"
+        }
+      ]
+    },
+    {
+      "id": "recommend",
+      "title": "Suggested action",
+      "status": "clear",
+      "started_at": "2026-08-11T15:00:07Z",
+      "duration_ms": 360,
+      "finding": "Suggest approve. Risk score 12/100. Approve. Velocity without declines, probes, or a new device is a shopping burst, not card testing. A person still has to confirm this; the agent does not apply it.",
+      "evidence": [
+        {
+          "label": "Suggested action",
+          "value": "approve"
+        },
+        {
+          "label": "Risk score",
+          "value": "12/100"
+        },
+        {
+          "label": "Who decides",
+          "value": "human analyst"
+        }
+      ]
+    }
+  ],
+  "graph": {
+    "nodes": [
+      {
+        "id": "cus_0022",
+        "type": "customer",
+        "label": "Helen Silva",
+        "sublabel": "cus_0022",
+        "x": 0.1549,
+        "y": 0.8302,
+        "emphasis": true
+      },
+      {
+        "id": "acct_0022",
+        "type": "account",
+        "label": "Account",
+        "sublabel": "acct_0022",
+        "x": 0.4763,
+        "y": 0.5195,
+        "emphasis": true
+      },
+      {
+        "id": "dev_0043",
+        "type": "device",
+        "label": "iPad",
+        "sublabel": "dev_0043",
+        "x": 0.92,
+        "y": 0.456,
+        "emphasis": false
+      },
+      {
+        "id": "ip_0043",
+        "type": "ip",
+        "label": "Seattle",
+        "sublabel": "203.0.113.44",
+        "x": 0.5529,
+        "y": 0.08,
+        "emphasis": false
+      },
+      {
+        "id": "mer_014",
+        "type": "merchant",
+        "label": "Field & Wire",
+        "sublabel": "fashion",
+        "x": 0.08,
+        "y": 0.311,
+        "emphasis": false
+      },
+      {
+        "id": "mer_015",
+        "type": "merchant",
+        "label": "Atelier Hale",
+        "sublabel": "fashion",
+        "x": 0.674,
+        "y": 0.92,
+        "emphasis": false
+      }
+    ],
+    "edges": [
+      {
+        "source": "cus_0022",
+        "target": "acct_0022",
+        "kind": "owns",
+        "label": "owns"
+      },
+      {
+        "source": "acct_0022",
+        "target": "dev_0043",
+        "kind": "device",
+        "label": "used"
+      },
+      {
+        "source": "acct_0022",
+        "target": "ip_0043",
+        "kind": "ip",
+        "label": "from"
+      },
+      {
+        "source": "acct_0022",
+        "target": "mer_014",
+        "kind": "paid",
+        "label": "paid"
+      },
+      {
+        "source": "acct_0022",
+        "target": "mer_015",
+        "kind": "paid",
+        "label": "paid"
+      }
+    ],
+    "caption": "The episode stays on devices and a country already associated with this customer."
+  },
+  "related_transactions": [
+    {
+      "id": "txn_005204",
+      "occurred_at": "2026-08-07T11:11:00Z",
+      "ts": 1786101060,
+      "amount_cents": 3571,
+      "status": "approved",
+      "type": "card_purchase",
+      "merchant_name": "Field & Wire",
+      "merchant_category": "fashion",
+      "device_id": "dev_0043",
+      "ip": "203.0.113.44 \u00b7 Seattle, US",
+      "ip_country": "US",
+      "city": "Seattle",
+      "flagged": false,
+      "counterparty_account_id": null
+    },
+    {
+      "id": "txn_005205",
+      "occurred_at": "2026-08-07T11:17:00Z",
+      "ts": 1786101420,
+      "amount_cents": 3599,
+      "status": "approved",
+      "type": "card_purchase",
+      "merchant_name": "Field & Wire",
+      "merchant_category": "fashion",
+      "device_id": "dev_0043",
+      "ip": "203.0.113.44 \u00b7 Seattle, US",
+      "ip_country": "US",
+      "city": "Seattle",
+      "flagged": false,
+      "counterparty_account_id": null
+    },
+    {
+      "id": "txn_005206",
+      "occurred_at": "2026-08-07T11:22:00Z",
+      "ts": 1786101720,
+      "amount_cents": 3364,
+      "status": "approved",
+      "type": "card_purchase",
+      "merchant_name": "Atelier Hale",
+      "merchant_category": "fashion",
+      "device_id": "dev_0043",
+      "ip": "203.0.113.44 \u00b7 Seattle, US",
+      "ip_country": "US",
+      "city": "Seattle",
+      "flagged": false,
+      "counterparty_account_id": null
+    },
+    {
+      "id": "txn_005207",
+      "occurred_at": "2026-08-07T11:29:00Z",
+      "ts": 1786102140,
+      "amount_cents": 3783,
+      "status": "approved",
+      "type": "card_purchase",
+      "merchant_name": "Atelier Hale",
+      "merchant_category": "fashion",
+      "device_id": "dev_0043",
+      "ip": "203.0.113.44 \u00b7 Seattle, US",
+      "ip_country": "US",
+      "city": "Seattle",
+      "flagged": false,
+      "counterparty_account_id": null
+    },
+    {
+      "id": "txn_005208",
+      "occurred_at": "2026-08-07T11:36:00Z",
+      "ts": 1786102560,
+      "amount_cents": 4176,
+      "status": "approved",
+      "type": "card_purchase",
+      "merchant_name": "Atelier Hale",
+      "merchant_category": "fashion",
+      "device_id": "dev_0043",
+      "ip": "203.0.113.44 \u00b7 Seattle, US",
+      "ip_country": "US",
+      "city": "Seattle",
+      "flagged": true,
+      "counterparty_account_id": null
+    },
+    {
+      "id": "txn_005209",
+      "occurred_at": "2026-08-07T11:43:00Z",
+      "ts": 1786102980,
+      "amount_cents": 5208,
+      "status": "approved",
+      "type": "card_purchase",
+      "merchant_name": "Field & Wire",
+      "merchant_category": "fashion",
+      "device_id": "dev_0043",
+      "ip": "203.0.113.44 \u00b7 Seattle, US",
+      "ip_country": "US",
+      "city": "Seattle",
+      "flagged": true,
+      "counterparty_account_id": null
+    }
+  ],
+  "customer": {
+    "id": "cus_0022",
+    "name": "Helen Silva",
+    "email": "helen.silva.21@example.com",
+    "home_city": "Seattle",
+    "home_country": "US",
+    "segment": "everyday",
+    "customer_since": "2023-04-01T00:00:00Z",
+    "account_id": "acct_0022",
+    "account_age_days": 1224
+  },
+  "lead": {
+    "id": "txn_005209",
+    "occurred_at": "2026-08-07T11:43:00Z",
+    "amount_cents": 5208,
+    "status": "approved",
+    "type": "card_purchase",
+    "merchant_name": "Field & Wire",
+    "merchant_category": "fashion",
+    "device_id": "dev_0043",
+    "device_label": "iPad \u00b7 iPadOS 18 \u00b7 Safari",
+    "ip": "203.0.113.44 \u00b7 Seattle, US",
+    "ip_city": "Seattle",
+    "ip_country": "US",
+    "card_last4": "5150"
+  },
+  "report_markdown": "# Halden case case_0016\n\n**Customer.** Helen Silva (cus_0022), Seattle, US.\n**Lead payment.** txn_005209 \u00b7 $52.08 \u00b7 Field & Wire \u00b7 2026-08-07T11:43:00Z.\n**Pattern.** Legitimate activity (flash sale).\n**Risk score.** 12 / 100.\n**Suggested action.** approve \u2014 a human still has to confirm it.\n\n## Summary\n\nThe hour is busy, but every payment cleared, on a known device, at one or two ordinary shops. Approve. Velocity without declines, probes, or a new device is a shopping burst, not card testing. Lead payment txn_005209 is $52.08 approved at Field & Wire on 07 Aug 2026 11:43 UTC, card \u2022\u20225150, device dev_0043. Before this episode, Helen Silva had 37 payments with a median of $44.20.\n\n## Why this score\n\n- **Case opened** (+4): Every queued payment starts with a small residual score.\n- **Busy hour, ordinary tickets** (+8): Several cleared purchases, known device, one or two shops.\n\n## What the agent checked\n\n### Open the flagged payment (watch)\n\nQueue sent txn_005209 for Helen Silva: $52.08 at Field & Wire on 07 Aug 2026 11:43 UTC. The flagger's reasons were: Five or more payments in the past hour; The payment's shape is an outlier for the whole book.\n\n- Transaction: txn_005209\n- Amount: $52.08\n- Customer: Helen Silva (cus_0022)\n- Why it was queued: velocity_1h, isolation_forest\n\n### Customer history and baseline (clear)\n\nHelen Silva has 37 prior payments before this episode, median $44.20. Account acct_0022 is 1224 days old. Usual devices: dev_0043, dev_0044. Countries already seen: US.\n\n- Account age: 1224 days\n- Prior payments: 37\n- Median amount: $44.20\n- Home: Seattle, US\n\n### Payment velocity (alert)\n\nThe episode around txn_005209 holds 6 payments across 32 minutes. The busiest hour contains 6. 0 declines in the episode. Merchants touched: Field & Wire, Atelier Hale.\n\n- Payments in episode: 6\n- Busiest hour: 6\n- Declines: 0\n- Distinct merchants: 2\n\n### Amount versus baseline (clear)\n\nEpisode amounts run from $33.64 to $52.08, median $36.91. The peak is in line with a baseline median of $44.20 (peak is 1.2\u00d7).\n\n- Episode median: $36.91\n- Episode peak: $52.08\n- Baseline median: $44.20\n- Peak vs baseline: 1.2\u00d7\n\n### Device and IP linkage (clear)\n\nDevices in the episode: dev_0043 (iPad \u00b7 iPadOS 18 \u00b7 Safari, already on file). IPs: 203.0.113.44 \u00b7 Seattle, US. Home country is US. The episode stays in the home country.\n\n- New devices: none\n- Mature devices reused: dev_0043\n- Countries: US\n- Datacenter or VPN: no\n\n### Linked accounts and money flow (clear)\n\nDevices in the episode are also used by no other customer. Inbound transfers $0.00, outbound $0.00. No cash-out path leaves this account in the six-day money graph.\n\n- Linked customers: 0\n- Household pattern: no\n- Reaches cash-out: no\n- Pass-through: no inbound\n\n### Merchant check (clear)\n\nField & Wire (fashion, Madrid) has 51 payments in the past 14 days from 41 customers. 0% of those customers are under 45 days old. 0% of the amounts are round (multiples of $50, at least $200). Devices shared by two or more buyers: none.\n\n- Category: fashion\n- Recent buyers: 41\n- Young-account share: 0%\n- Round-amount share: 0%\n\n### Pattern classification (clear)\n\nLegitimate activity. The hour is busy, but every payment cleared, on a known device, at one or two ordinary shops.\n\n- Pattern: Legitimate activity\n- Detail: flash sale\n\n### Suggested action (clear)\n\nSuggest approve. Risk score 12/100. Approve. Velocity without declines, probes, or a new device is a shopping burst, not card testing. A person still has to confirm this; the agent does not apply it.\n\n- Suggested action: approve\n- Risk score: 12/100\n- Who decides: human analyst\n\n## Payments in the episode\n\n| When | Id | Amount | Status | Merchant | Device |\n| --- | --- | --- | --- | --- | --- |\n| 2026-08-07T11:11:00Z | txn_005204 | $35.71 | approved | Field & Wire | dev_0043 |\n| 2026-08-07T11:17:00Z | txn_005205 | $35.99 | approved | Field & Wire | dev_0043 |\n| 2026-08-07T11:22:00Z | txn_005206 | $33.64 | approved | Atelier Hale | dev_0043 |\n| 2026-08-07T11:29:00Z | txn_005207 | $37.83 | approved | Atelier Hale | dev_0043 |\n| 2026-08-07T11:36:00Z | txn_005208 | $41.76 | approved | Atelier Hale | dev_0043 |\n| 2026-08-07T11:43:00Z | txn_005209 | $52.08 | approved | Field & Wire | dev_0043 |\n\n## Action rationale\n\nApprove. Velocity without declines, probes, or a new device is a shopping burst, not card testing.\n\n## Held-out label\n\nThis section is joined after the investigation. The agent did not see it.\n\n- Fraud: no\n- Pattern: legitimate\n\n*Halden suggests. An analyst decides.*\n",
+  "showcase": null
+}

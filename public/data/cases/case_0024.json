@@ -1,0 +1,486 @@
+{
+  "case_id": "case_0024",
+  "lead_transaction_id": "txn_005299",
+  "customer_id": "cus_0171",
+  "covered_transaction_ids": [
+    "txn_005299",
+    "txn_005300",
+    "txn_005301"
+  ],
+  "flag_reasons": [
+    {
+      "code": "shared_device",
+      "text": "Device is already linked to a different customer"
+    },
+    {
+      "code": "new_account_amount",
+      "text": "Account is under 30 days old and the amount is large"
+    },
+    {
+      "code": "isolation_forest",
+      "text": "The payment's shape is an outlier for the whole book"
+    }
+  ],
+  "risk_score": 88,
+  "pattern": "mule_chain",
+  "pattern_label": "Mule-account chain",
+  "pattern_detail": "pass_through",
+  "action": "escalate",
+  "action_rationale": "Escalate the chain. The receiving accounts need to be frozen together, which is a desk lead's call.",
+  "confidence": "high",
+  "summary": "Mule flow touching Nora Almeida: funds move onward to a cash-out the same day.",
+  "narrative": "Money reaches a cash-out through freshly linked accounts, with little of it staying put. Escalate the chain. The receiving accounts need to be frozen together, which is a desk lead's call. Lead payment txn_005299 is $1,880.00 approved at peer-to-peer transfer on 08 Aug 2026 15:10 UTC, card \u2022\u2022none, device dev_0348. Before this episode, Nora Almeida had 1 payments with a median of $5.00.",
+  "signals": [
+    {
+      "name": "Case opened",
+      "points": 4,
+      "detail": "Every queued payment starts with a small residual score."
+    },
+    {
+      "name": "Cash-out path",
+      "points": 40,
+      "detail": "Nora Almeida (acct_0171) \u2192 Keystone Crypto Desk"
+    },
+    {
+      "name": "Shared infrastructure",
+      "points": 18,
+      "detail": "1 other customer(s) on the episode devices."
+    },
+    {
+      "name": "Funds do not stay",
+      "points": 16,
+      "detail": "Inbound $1,880.00, outbound $2,204.80."
+    },
+    {
+      "name": "Young account",
+      "points": 10,
+      "detail": "Opened 17 days ago."
+    }
+  ],
+  "timeline": [
+    {
+      "id": "open_case",
+      "title": "Open the flagged payment",
+      "status": "watch",
+      "started_at": "2026-08-11T15:00:00Z",
+      "duration_ms": 420,
+      "finding": "Queue sent txn_005299 for Nora Almeida: $1,880.00 at peer-to-peer transfer on 08 Aug 2026 15:10 UTC. The flagger's reasons were: Device is already linked to a different customer; Account is under 30 days old and the amount is large; The payment's shape is an outlier for the whole book.",
+      "evidence": [
+        {
+          "label": "Transaction",
+          "value": "txn_005299"
+        },
+        {
+          "label": "Amount",
+          "value": "$1,880.00"
+        },
+        {
+          "label": "Customer",
+          "value": "Nora Almeida (cus_0171)"
+        },
+        {
+          "label": "Why it was queued",
+          "value": "shared_device, new_account_amount, isolation_forest"
+        }
+      ]
+    },
+    {
+      "id": "customer_baseline",
+      "title": "Customer history and baseline",
+      "status": "clear",
+      "started_at": "2026-08-11T15:00:00Z",
+      "duration_ms": 680,
+      "finding": "Nora Almeida has 1 prior payment before this episode, median $5.00. Account acct_0171 is 17 days old. Usual devices: dev_0355. Countries already seen: US.",
+      "evidence": [
+        {
+          "label": "Account age",
+          "value": "17 days"
+        },
+        {
+          "label": "Prior payments",
+          "value": "1"
+        },
+        {
+          "label": "Median amount",
+          "value": "$5.00"
+        },
+        {
+          "label": "Home",
+          "value": "Austin, US"
+        }
+      ]
+    },
+    {
+      "id": "velocity",
+      "title": "Payment velocity",
+      "status": "clear",
+      "started_at": "2026-08-11T15:00:01Z",
+      "duration_ms": 540,
+      "finding": "The episode around txn_005299 holds 3 payments across 950 minutes. The busiest hour contains 2. 0 declines in the episode. Merchants touched: P2P transfer, Keystone Crypto Desk.",
+      "evidence": [
+        {
+          "label": "Payments in episode",
+          "value": "3"
+        },
+        {
+          "label": "Busiest hour",
+          "value": "2"
+        },
+        {
+          "label": "Declines",
+          "value": "0"
+        },
+        {
+          "label": "Distinct merchants",
+          "value": "2"
+        }
+      ]
+    },
+    {
+      "id": "amount",
+      "title": "Amount versus baseline",
+      "status": "alert",
+      "started_at": "2026-08-11T15:00:02Z",
+      "duration_ms": 480,
+      "finding": "Episode amounts run from $400.00 to $1,880.00, median $1,804.80. The peak is 376.0\u00d7 the baseline median of $5.00.",
+      "evidence": [
+        {
+          "label": "Episode median",
+          "value": "$1,804.80"
+        },
+        {
+          "label": "Episode peak",
+          "value": "$1,880.00"
+        },
+        {
+          "label": "Baseline median",
+          "value": "$5.00"
+        },
+        {
+          "label": "Peak vs baseline",
+          "value": "376.0\u00d7"
+        }
+      ]
+    },
+    {
+      "id": "device_ip",
+      "title": "Device and IP linkage",
+      "status": "clear",
+      "started_at": "2026-08-11T15:00:03Z",
+      "duration_ms": 730,
+      "finding": "Devices in the episode: dev_0348 (Windows laptop \u00b7 Windows 11 \u00b7 Chrome, already on file). IPs: 198.51.100.103 \u00b7 Austin, US, datacenter. Home country is US. The episode stays in the home country.",
+      "evidence": [
+        {
+          "label": "New devices",
+          "value": "none"
+        },
+        {
+          "label": "Mature devices reused",
+          "value": "none"
+        },
+        {
+          "label": "Countries",
+          "value": "US"
+        },
+        {
+          "label": "Datacenter or VPN",
+          "value": "yes"
+        }
+      ]
+    },
+    {
+      "id": "network",
+      "title": "Linked accounts and money flow",
+      "status": "alert",
+      "started_at": "2026-08-11T15:00:04Z",
+      "duration_ms": 860,
+      "finding": "Devices in the episode are also used by Idris Bennett (cus_0170) via dev_0348. Inbound transfers $1,880.00, outbound $2,204.80, pass-through 117%. Funds from acct_0171 reach a cash-out inside the graph (Nora Almeida (acct_0171) \u2192 Keystone Crypto Desk).",
+      "evidence": [
+        {
+          "label": "Linked customers",
+          "value": "1"
+        },
+        {
+          "label": "Household pattern",
+          "value": "no"
+        },
+        {
+          "label": "Reaches cash-out",
+          "value": "yes"
+        },
+        {
+          "label": "Pass-through",
+          "value": "117%"
+        }
+      ]
+    },
+    {
+      "id": "merchant",
+      "title": "Merchant check",
+      "status": "watch",
+      "started_at": "2026-08-11T15:00:05Z",
+      "duration_ms": 300,
+      "finding": "The lead movement is a transfer, not a card purchase, so there is no merchant to underwrite. The money-flow step carries that evidence.",
+      "evidence": [
+        {
+          "label": "Merchant",
+          "value": "none (transfer)"
+        }
+      ]
+    },
+    {
+      "id": "classify",
+      "title": "Pattern classification",
+      "status": "alert",
+      "started_at": "2026-08-11T15:00:06Z",
+      "duration_ms": 390,
+      "finding": "Mule-account chain. Money reaches a cash-out through freshly linked accounts, with little of it staying put.",
+      "evidence": [
+        {
+          "label": "Pattern",
+          "value": "Mule-account chain"
+        },
+        {
+          "label": "Detail",
+          "value": "pass through"
+        }
+      ]
+    },
+    {
+      "id": "recommend",
+      "title": "Suggested action",
+      "status": "alert",
+      "started_at": "2026-08-11T15:00:07Z",
+      "duration_ms": 360,
+      "finding": "Suggest escalate. Risk score 88/100. Escalate the chain. The receiving accounts need to be frozen together, which is a desk lead's call. A person still has to confirm this; the agent does not apply it.",
+      "evidence": [
+        {
+          "label": "Suggested action",
+          "value": "escalate"
+        },
+        {
+          "label": "Risk score",
+          "value": "88/100"
+        },
+        {
+          "label": "Who decides",
+          "value": "human analyst"
+        }
+      ]
+    }
+  ],
+  "graph": {
+    "nodes": [
+      {
+        "id": "cus_0171",
+        "type": "customer",
+        "label": "Nora Almeida",
+        "sublabel": "cus_0171",
+        "x": 0.08,
+        "y": 0.6929,
+        "emphasis": true
+      },
+      {
+        "id": "acct_0171",
+        "type": "account",
+        "label": "Account",
+        "sublabel": "acct_0171",
+        "x": 0.4398,
+        "y": 0.4128,
+        "emphasis": true
+      },
+      {
+        "id": "dev_0348",
+        "type": "device",
+        "label": "Windows laptop",
+        "sublabel": "dev_0348",
+        "x": 0.8525,
+        "y": 0.2952,
+        "emphasis": false
+      },
+      {
+        "id": "ip_0352",
+        "type": "ip",
+        "label": "Austin",
+        "sublabel": "198.51.100.103",
+        "x": 0.6335,
+        "y": 0.08,
+        "emphasis": true
+      },
+      {
+        "id": "mer_022",
+        "type": "merchant",
+        "label": "Keystone Crypto Desk",
+        "sublabel": "crypto",
+        "x": 0.7067,
+        "y": 0.5613,
+        "emphasis": true
+      },
+      {
+        "id": "cus_0170",
+        "type": "customer",
+        "label": "Idris Bennett",
+        "sublabel": "cus_0170",
+        "x": 0.92,
+        "y": 0.6782,
+        "emphasis": true
+      },
+      {
+        "id": "acct_0170",
+        "type": "account",
+        "label": "Account",
+        "sublabel": "acct_0170",
+        "x": 0.679,
+        "y": 0.3388,
+        "emphasis": true
+      },
+      {
+        "id": "cus_0172",
+        "type": "customer",
+        "label": "Pavel Shah",
+        "sublabel": "cus_0172",
+        "x": 0.2527,
+        "y": 0.92,
+        "emphasis": true
+      },
+      {
+        "id": "acct_0172",
+        "type": "account",
+        "label": "Account",
+        "sublabel": "acct_0172",
+        "x": 0.1894,
+        "y": 0.5819,
+        "emphasis": true
+      }
+    ],
+    "edges": [
+      {
+        "source": "cus_0171",
+        "target": "acct_0171",
+        "kind": "owns",
+        "label": "owns"
+      },
+      {
+        "source": "acct_0171",
+        "target": "dev_0348",
+        "kind": "device",
+        "label": "used"
+      },
+      {
+        "source": "acct_0171",
+        "target": "ip_0352",
+        "kind": "ip",
+        "label": "from"
+      },
+      {
+        "source": "acct_0171",
+        "target": "mer_022",
+        "kind": "paid",
+        "label": "paid"
+      },
+      {
+        "source": "acct_0171",
+        "target": "acct_0172",
+        "kind": "p2p",
+        "label": "$400.00"
+      },
+      {
+        "source": "dev_0348",
+        "target": "acct_0170",
+        "kind": "device",
+        "label": "shared"
+      },
+      {
+        "source": "cus_0170",
+        "target": "acct_0170",
+        "kind": "owns",
+        "label": "owns"
+      },
+      {
+        "source": "cus_0172",
+        "target": "acct_0172",
+        "kind": "owns",
+        "label": "owns"
+      }
+    ],
+    "caption": "Money path: Nora Almeida (acct_0171) \u2192 Keystone Crypto Desk"
+  },
+  "related_transactions": [
+    {
+      "id": "txn_005299",
+      "occurred_at": "2026-08-08T15:10:08Z",
+      "ts": 1786201808,
+      "amount_cents": 188000,
+      "status": "approved",
+      "type": "p2p_in",
+      "merchant_name": "P2P transfer",
+      "merchant_category": "transfer",
+      "device_id": "dev_0348",
+      "ip": "198.51.100.103 \u00b7 Austin, US, datacenter",
+      "ip_country": "US",
+      "city": "Austin",
+      "flagged": true,
+      "counterparty_account_id": "acct_0170"
+    },
+    {
+      "id": "txn_005300",
+      "occurred_at": "2026-08-08T16:05:00Z",
+      "ts": 1786205100,
+      "amount_cents": 180480,
+      "status": "approved",
+      "type": "cash_out",
+      "merchant_name": "Keystone Crypto Desk",
+      "merchant_category": "crypto",
+      "device_id": "dev_0348",
+      "ip": "198.51.100.103 \u00b7 Austin, US, datacenter",
+      "ip_country": "US",
+      "city": "Austin",
+      "flagged": true,
+      "counterparty_account_id": null
+    },
+    {
+      "id": "txn_005301",
+      "occurred_at": "2026-08-09T07:00:00Z",
+      "ts": 1786258800,
+      "amount_cents": 40000,
+      "status": "approved",
+      "type": "p2p_out",
+      "merchant_name": "P2P transfer",
+      "merchant_category": "transfer",
+      "device_id": "dev_0348",
+      "ip": "198.51.100.103 \u00b7 Austin, US, datacenter",
+      "ip_country": "US",
+      "city": "Austin",
+      "flagged": true,
+      "counterparty_account_id": "acct_0172"
+    }
+  ],
+  "customer": {
+    "id": "cus_0171",
+    "name": "Nora Almeida",
+    "email": "nora.almeida.planted@example.com",
+    "home_city": "Austin",
+    "home_country": "US",
+    "segment": "student",
+    "customer_since": "2026-07-22T00:00:00Z",
+    "account_id": "acct_0171",
+    "account_age_days": 17
+  },
+  "lead": {
+    "id": "txn_005299",
+    "occurred_at": "2026-08-08T15:10:08Z",
+    "amount_cents": 188000,
+    "status": "approved",
+    "type": "p2p_in",
+    "merchant_name": "peer-to-peer transfer",
+    "merchant_category": "transfer",
+    "device_id": "dev_0348",
+    "device_label": "Windows laptop \u00b7 Windows 11 \u00b7 Chrome",
+    "ip": "198.51.100.103 \u00b7 Austin, US, datacenter",
+    "ip_city": "Austin",
+    "ip_country": "US",
+    "card_last4": null
+  },
+  "report_markdown": "# Halden case case_0024\n\n**Customer.** Nora Almeida (cus_0171), Austin, US.\n**Lead payment.** txn_005299 \u00b7 $1,880.00 \u00b7 peer-to-peer transfer \u00b7 2026-08-08T15:10:08Z.\n**Pattern.** Mule-account chain (pass through).\n**Risk score.** 88 / 100.\n**Suggested action.** escalate \u2014 a human still has to confirm it.\n\n## Summary\n\nMoney reaches a cash-out through freshly linked accounts, with little of it staying put. Escalate the chain. The receiving accounts need to be frozen together, which is a desk lead's call. Lead payment txn_005299 is $1,880.00 approved at peer-to-peer transfer on 08 Aug 2026 15:10 UTC, card \u2022\u2022none, device dev_0348. Before this episode, Nora Almeida had 1 payments with a median of $5.00.\n\n## Why this score\n\n- **Case opened** (+4): Every queued payment starts with a small residual score.\n- **Cash-out path** (+40): Nora Almeida (acct_0171) \u2192 Keystone Crypto Desk\n- **Shared infrastructure** (+18): 1 other customer(s) on the episode devices.\n- **Funds do not stay** (+16): Inbound $1,880.00, outbound $2,204.80.\n- **Young account** (+10): Opened 17 days ago.\n\n## What the agent checked\n\n### Open the flagged payment (watch)\n\nQueue sent txn_005299 for Nora Almeida: $1,880.00 at peer-to-peer transfer on 08 Aug 2026 15:10 UTC. The flagger's reasons were: Device is already linked to a different customer; Account is under 30 days old and the amount is large; The payment's shape is an outlier for the whole book.\n\n- Transaction: txn_005299\n- Amount: $1,880.00\n- Customer: Nora Almeida (cus_0171)\n- Why it was queued: shared_device, new_account_amount, isolation_forest\n\n### Customer history and baseline (clear)\n\nNora Almeida has 1 prior payment before this episode, median $5.00. Account acct_0171 is 17 days old. Usual devices: dev_0355. Countries already seen: US.\n\n- Account age: 17 days\n- Prior payments: 1\n- Median amount: $5.00\n- Home: Austin, US\n\n### Payment velocity (clear)\n\nThe episode around txn_005299 holds 3 payments across 950 minutes. The busiest hour contains 2. 0 declines in the episode. Merchants touched: P2P transfer, Keystone Crypto Desk.\n\n- Payments in episode: 3\n- Busiest hour: 2\n- Declines: 0\n- Distinct merchants: 2\n\n### Amount versus baseline (alert)\n\nEpisode amounts run from $400.00 to $1,880.00, median $1,804.80. The peak is 376.0\u00d7 the baseline median of $5.00.\n\n- Episode median: $1,804.80\n- Episode peak: $1,880.00\n- Baseline median: $5.00\n- Peak vs baseline: 376.0\u00d7\n\n### Device and IP linkage (clear)\n\nDevices in the episode: dev_0348 (Windows laptop \u00b7 Windows 11 \u00b7 Chrome, already on file). IPs: 198.51.100.103 \u00b7 Austin, US, datacenter. Home country is US. The episode stays in the home country.\n\n- New devices: none\n- Mature devices reused: none\n- Countries: US\n- Datacenter or VPN: yes\n\n### Linked accounts and money flow (alert)\n\nDevices in the episode are also used by Idris Bennett (cus_0170) via dev_0348. Inbound transfers $1,880.00, outbound $2,204.80, pass-through 117%. Funds from acct_0171 reach a cash-out inside the graph (Nora Almeida (acct_0171) \u2192 Keystone Crypto Desk).\n\n- Linked customers: 1\n- Household pattern: no\n- Reaches cash-out: yes\n- Pass-through: 117%\n\n### Merchant check (watch)\n\nThe lead movement is a transfer, not a card purchase, so there is no merchant to underwrite. The money-flow step carries that evidence.\n\n- Merchant: none (transfer)\n\n### Pattern classification (alert)\n\nMule-account chain. Money reaches a cash-out through freshly linked accounts, with little of it staying put.\n\n- Pattern: Mule-account chain\n- Detail: pass through\n\n### Suggested action (alert)\n\nSuggest escalate. Risk score 88/100. Escalate the chain. The receiving accounts need to be frozen together, which is a desk lead's call. A person still has to confirm this; the agent does not apply it.\n\n- Suggested action: escalate\n- Risk score: 88/100\n- Who decides: human analyst\n\n## Payments in the episode\n\n| When | Id | Amount | Status | Merchant | Device |\n| --- | --- | --- | --- | --- | --- |\n| 2026-08-08T15:10:08Z | txn_005299 | $1,880.00 | approved | P2P transfer | dev_0348 |\n| 2026-08-08T16:05:00Z | txn_005300 | $1,804.80 | approved | Keystone Crypto Desk | dev_0348 |\n| 2026-08-09T07:00:00Z | txn_005301 | $400.00 | approved | P2P transfer | dev_0348 |\n\n## Action rationale\n\nEscalate the chain. The receiving accounts need to be frozen together, which is a desk lead's call.\n\n## Held-out label\n\nThis section is joined after the investigation. The agent did not see it.\n\n- Fraud: yes\n- Pattern: mule_chain\n\n*Halden suggests. An analyst decides.*\n",
+  "showcase": null
+}

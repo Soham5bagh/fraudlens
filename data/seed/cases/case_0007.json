@@ -1,0 +1,509 @@
+{
+  "case_id": "case_0007",
+  "lead_transaction_id": "txn_005280",
+  "customer_id": "cus_0034",
+  "covered_transaction_ids": [
+    "txn_005279",
+    "txn_005280",
+    "txn_005281",
+    "txn_005282"
+  ],
+  "flag_reasons": [
+    {
+      "code": "amount_outlier",
+      "text": "Amount is far above this customer's own baseline"
+    },
+    {
+      "code": "new_device",
+      "text": "Device has never been used by this customer before"
+    },
+    {
+      "code": "foreign_ip",
+      "text": "IP country does not match the customer's home country"
+    },
+    {
+      "code": "isolation_forest",
+      "text": "The payment's shape is an outlier for the whole book"
+    }
+  ],
+  "risk_score": 94,
+  "pattern": "account_takeover",
+  "pattern_label": "Account takeover",
+  "pattern_detail": "new_device_foreign_spike",
+  "action": "block",
+  "action_rationale": "Block and force a step-up with the real customer. The session does not match the device or the country on file.",
+  "confidence": "high",
+  "summary": "Account takeover on Anika Nguyen: new device, new country, spend at 56\u00d7 baseline.",
+  "narrative": "A new device in a new country spends far above baseline at gift cards, electronics, or crypto. Block and force a step-up with the real customer. The session does not match the device or the country on file. Lead payment txn_005280 is $890.00 approved at Lumen Electronics on 04 Aug 2026 20:36 UTC, card \u2022\u20229209, device dev_0345. Before this episode, Anika Nguyen had 29 payments with a median of $15.87.",
+  "signals": [
+    {
+      "name": "Case opened",
+      "points": 4,
+      "detail": "Every queued payment starts with a small residual score."
+    },
+    {
+      "name": "New device abroad",
+      "points": 36,
+      "detail": "Device dev_0345 in NG."
+    },
+    {
+      "name": "Spend spike",
+      "points": 28,
+      "detail": "Peak $890.00 against a median of $15.87."
+    },
+    {
+      "name": "Risky merchants",
+      "points": 18,
+      "detail": "Gift cards, electronics, or crypto, rather than travel."
+    },
+    {
+      "name": "VPN",
+      "points": 8,
+      "detail": "The session is coming through a VPN."
+    }
+  ],
+  "timeline": [
+    {
+      "id": "open_case",
+      "title": "Open the flagged payment",
+      "status": "watch",
+      "started_at": "2026-08-11T15:00:00Z",
+      "duration_ms": 420,
+      "finding": "Queue sent txn_005280 for Anika Nguyen: $890.00 at Lumen Electronics on 04 Aug 2026 20:36 UTC. The flagger's reasons were: Amount is far above this customer's own baseline; Device has never been used by this customer before; IP country does not match the customer's home country; The payment's shape is an outlier for the whole book.",
+      "evidence": [
+        {
+          "label": "Transaction",
+          "value": "txn_005280"
+        },
+        {
+          "label": "Amount",
+          "value": "$890.00"
+        },
+        {
+          "label": "Customer",
+          "value": "Anika Nguyen (cus_0034)"
+        },
+        {
+          "label": "Why it was queued",
+          "value": "amount_outlier, new_device, foreign_ip, isolation_forest"
+        }
+      ]
+    },
+    {
+      "id": "customer_baseline",
+      "title": "Customer history and baseline",
+      "status": "clear",
+      "started_at": "2026-08-11T15:00:00Z",
+      "duration_ms": 680,
+      "finding": "Anika Nguyen has 29 prior payments before this episode, median $15.87. Account acct_0034 is 517 days old. Usual devices: dev_0067, dev_0068. Countries already seen: GB.",
+      "evidence": [
+        {
+          "label": "Account age",
+          "value": "517 days"
+        },
+        {
+          "label": "Prior payments",
+          "value": "29"
+        },
+        {
+          "label": "Median amount",
+          "value": "$15.87"
+        },
+        {
+          "label": "Home",
+          "value": "Bristol, GB"
+        }
+      ]
+    },
+    {
+      "id": "velocity",
+      "title": "Payment velocity",
+      "status": "clear",
+      "started_at": "2026-08-11T15:00:01Z",
+      "duration_ms": 540,
+      "finding": "The episode around txn_005280 holds 4 payments across 48 minutes. The busiest hour contains 4. 0 declines in the episode. Merchants touched: Parcel Gift Cards, Lumen Electronics, Keystone Crypto Desk, Hearth Gift Co.",
+      "evidence": [
+        {
+          "label": "Payments in episode",
+          "value": "4"
+        },
+        {
+          "label": "Busiest hour",
+          "value": "4"
+        },
+        {
+          "label": "Declines",
+          "value": "0"
+        },
+        {
+          "label": "Distinct merchants",
+          "value": "4"
+        }
+      ]
+    },
+    {
+      "id": "amount",
+      "title": "Amount versus baseline",
+      "status": "alert",
+      "started_at": "2026-08-11T15:00:02Z",
+      "duration_ms": 480,
+      "finding": "Episode amounts run from $265.00 to $890.00, median $530.00. The peak is 56.1\u00d7 the baseline median of $15.87.",
+      "evidence": [
+        {
+          "label": "Episode median",
+          "value": "$530.00"
+        },
+        {
+          "label": "Episode peak",
+          "value": "$890.00"
+        },
+        {
+          "label": "Baseline median",
+          "value": "$15.87"
+        },
+        {
+          "label": "Peak vs baseline",
+          "value": "56.1\u00d7"
+        }
+      ]
+    },
+    {
+      "id": "device_ip",
+      "title": "Device and IP linkage",
+      "status": "alert",
+      "started_at": "2026-08-11T15:00:03Z",
+      "duration_ms": 730,
+      "finding": "Devices in the episode: dev_0345 (Pixel 8 \u00b7 Android 15 \u00b7 Chrome, new to this customer). IPs: 198.51.100.95 \u00b7 Lagos, NG, VPN. Home country is GB. The episode is outside that country.",
+      "evidence": [
+        {
+          "label": "New devices",
+          "value": "dev_0345"
+        },
+        {
+          "label": "Mature devices reused",
+          "value": "none"
+        },
+        {
+          "label": "Countries",
+          "value": "NG"
+        },
+        {
+          "label": "Datacenter or VPN",
+          "value": "yes"
+        }
+      ]
+    },
+    {
+      "id": "network",
+      "title": "Linked accounts and money flow",
+      "status": "clear",
+      "started_at": "2026-08-11T15:00:04Z",
+      "duration_ms": 860,
+      "finding": "Devices in the episode are also used by no other customer. Inbound transfers $0.00, outbound $0.00. No cash-out path leaves this account in the six-day money graph.",
+      "evidence": [
+        {
+          "label": "Linked customers",
+          "value": "0"
+        },
+        {
+          "label": "Household pattern",
+          "value": "no"
+        },
+        {
+          "label": "Reaches cash-out",
+          "value": "no"
+        },
+        {
+          "label": "Pass-through",
+          "value": "no inbound"
+        }
+      ]
+    },
+    {
+      "id": "merchant",
+      "title": "Merchant check",
+      "status": "clear",
+      "started_at": "2026-08-11T15:00:05Z",
+      "duration_ms": 640,
+      "finding": "Lumen Electronics (electronics, Madrid) has 5 payments in the past 14 days from 5 customers. 0% of those customers are under 45 days old. 0% of the amounts are round (multiples of $50, at least $200). Devices shared by two or more buyers: none.",
+      "evidence": [
+        {
+          "label": "Category",
+          "value": "electronics"
+        },
+        {
+          "label": "Recent buyers",
+          "value": "5"
+        },
+        {
+          "label": "Young-account share",
+          "value": "0%"
+        },
+        {
+          "label": "Round-amount share",
+          "value": "0%"
+        }
+      ]
+    },
+    {
+      "id": "classify",
+      "title": "Pattern classification",
+      "status": "alert",
+      "started_at": "2026-08-11T15:00:06Z",
+      "duration_ms": 390,
+      "finding": "Account takeover. A new device in a new country spends far above baseline at gift cards, electronics, or crypto.",
+      "evidence": [
+        {
+          "label": "Pattern",
+          "value": "Account takeover"
+        },
+        {
+          "label": "Detail",
+          "value": "new device foreign spike"
+        }
+      ]
+    },
+    {
+      "id": "recommend",
+      "title": "Suggested action",
+      "status": "alert",
+      "started_at": "2026-08-11T15:00:07Z",
+      "duration_ms": 360,
+      "finding": "Suggest block. Risk score 94/100. Block and force a step-up with the real customer. The session does not match the device or the country on file. A person still has to confirm this; the agent does not apply it.",
+      "evidence": [
+        {
+          "label": "Suggested action",
+          "value": "block"
+        },
+        {
+          "label": "Risk score",
+          "value": "94/100"
+        },
+        {
+          "label": "Who decides",
+          "value": "human analyst"
+        }
+      ]
+    }
+  ],
+  "graph": {
+    "nodes": [
+      {
+        "id": "cus_0034",
+        "type": "customer",
+        "label": "Anika Nguyen",
+        "sublabel": "cus_0034",
+        "x": 0.103,
+        "y": 0.7052,
+        "emphasis": true
+      },
+      {
+        "id": "acct_0034",
+        "type": "account",
+        "label": "Account",
+        "sublabel": "acct_0034",
+        "x": 0.4837,
+        "y": 0.4944,
+        "emphasis": true
+      },
+      {
+        "id": "dev_0345",
+        "type": "device",
+        "label": "Pixel 8",
+        "sublabel": "dev_0345",
+        "x": 0.92,
+        "y": 0.4675,
+        "emphasis": true
+      },
+      {
+        "id": "ip_0344",
+        "type": "ip",
+        "label": "Lagos",
+        "sublabel": "198.51.100.95",
+        "x": 0.7341,
+        "y": 0.1411,
+        "emphasis": true
+      },
+      {
+        "id": "mer_020",
+        "type": "merchant",
+        "label": "Parcel Gift Cards",
+        "sublabel": "gift_card",
+        "x": 0.08,
+        "y": 0.3314,
+        "emphasis": true
+      },
+      {
+        "id": "mer_013",
+        "type": "merchant",
+        "label": "Lumen Electronics",
+        "sublabel": "electronics",
+        "x": 0.7765,
+        "y": 0.8144,
+        "emphasis": false
+      },
+      {
+        "id": "mer_022",
+        "type": "merchant",
+        "label": "Keystone Crypto Desk",
+        "sublabel": "crypto",
+        "x": 0.3608,
+        "y": 0.08,
+        "emphasis": true
+      },
+      {
+        "id": "mer_021",
+        "type": "merchant",
+        "label": "Hearth Gift Co",
+        "sublabel": "gift_card",
+        "x": 0.4132,
+        "y": 0.92,
+        "emphasis": true
+      }
+    ],
+    "edges": [
+      {
+        "source": "cus_0034",
+        "target": "acct_0034",
+        "kind": "owns",
+        "label": "owns"
+      },
+      {
+        "source": "acct_0034",
+        "target": "dev_0345",
+        "kind": "device",
+        "label": "used"
+      },
+      {
+        "source": "acct_0034",
+        "target": "ip_0344",
+        "kind": "ip",
+        "label": "from"
+      },
+      {
+        "source": "acct_0034",
+        "target": "mer_020",
+        "kind": "paid",
+        "label": "paid"
+      },
+      {
+        "source": "acct_0034",
+        "target": "mer_013",
+        "kind": "paid",
+        "label": "paid"
+      },
+      {
+        "source": "acct_0034",
+        "target": "mer_022",
+        "kind": "paid",
+        "label": "paid"
+      },
+      {
+        "source": "acct_0034",
+        "target": "mer_021",
+        "kind": "paid",
+        "label": "paid"
+      }
+    ],
+    "caption": "New device dev_0345 sits next to the account. The customer's older devices are not in this episode."
+  },
+  "related_transactions": [
+    {
+      "id": "txn_005279",
+      "occurred_at": "2026-08-04T20:18:00Z",
+      "ts": 1785874680,
+      "amount_cents": 42000,
+      "status": "approved",
+      "type": "card_purchase",
+      "merchant_name": "Parcel Gift Cards",
+      "merchant_category": "gift_card",
+      "device_id": "dev_0345",
+      "ip": "198.51.100.95 \u00b7 Lagos, NG, VPN",
+      "ip_country": "NG",
+      "city": "Lagos",
+      "flagged": true,
+      "counterparty_account_id": null
+    },
+    {
+      "id": "txn_005280",
+      "occurred_at": "2026-08-04T20:36:00Z",
+      "ts": 1785875760,
+      "amount_cents": 89000,
+      "status": "approved",
+      "type": "card_purchase",
+      "merchant_name": "Lumen Electronics",
+      "merchant_category": "electronics",
+      "device_id": "dev_0345",
+      "ip": "198.51.100.95 \u00b7 Lagos, NG, VPN",
+      "ip_country": "NG",
+      "city": "Lagos",
+      "flagged": true,
+      "counterparty_account_id": null
+    },
+    {
+      "id": "txn_005281",
+      "occurred_at": "2026-08-04T20:47:00Z",
+      "ts": 1785876420,
+      "amount_cents": 26500,
+      "status": "approved",
+      "type": "card_purchase",
+      "merchant_name": "Keystone Crypto Desk",
+      "merchant_category": "crypto",
+      "device_id": "dev_0345",
+      "ip": "198.51.100.95 \u00b7 Lagos, NG, VPN",
+      "ip_country": "NG",
+      "city": "Lagos",
+      "flagged": true,
+      "counterparty_account_id": null
+    },
+    {
+      "id": "txn_005282",
+      "occurred_at": "2026-08-04T21:06:00Z",
+      "ts": 1785877560,
+      "amount_cents": 64000,
+      "status": "approved",
+      "type": "card_purchase",
+      "merchant_name": "Hearth Gift Co",
+      "merchant_category": "gift_card",
+      "device_id": "dev_0345",
+      "ip": "198.51.100.95 \u00b7 Lagos, NG, VPN",
+      "ip_country": "NG",
+      "city": "Lagos",
+      "flagged": true,
+      "counterparty_account_id": null
+    }
+  ],
+  "customer": {
+    "id": "cus_0034",
+    "name": "Anika Nguyen",
+    "email": "anika.nguyen.33@example.com",
+    "home_city": "Bristol",
+    "home_country": "GB",
+    "segment": "student",
+    "customer_since": "2025-03-05T00:00:00Z",
+    "account_id": "acct_0034",
+    "account_age_days": 517
+  },
+  "lead": {
+    "id": "txn_005280",
+    "occurred_at": "2026-08-04T20:36:00Z",
+    "amount_cents": 89000,
+    "status": "approved",
+    "type": "card_purchase",
+    "merchant_name": "Lumen Electronics",
+    "merchant_category": "electronics",
+    "device_id": "dev_0345",
+    "device_label": "Pixel 8 \u00b7 Android 15 \u00b7 Chrome",
+    "ip": "198.51.100.95 \u00b7 Lagos, NG, VPN",
+    "ip_city": "Lagos",
+    "ip_country": "NG",
+    "card_last4": "9209"
+  },
+  "report_markdown": "# Halden case case_0007\n\n**Customer.** Anika Nguyen (cus_0034), Bristol, GB.\n**Lead payment.** txn_005280 \u00b7 $890.00 \u00b7 Lumen Electronics \u00b7 2026-08-04T20:36:00Z.\n**Pattern.** Account takeover (new device foreign spike).\n**Risk score.** 94 / 100.\n**Suggested action.** block \u2014 a human still has to confirm it.\n\n## Summary\n\nA new device in a new country spends far above baseline at gift cards, electronics, or crypto. Block and force a step-up with the real customer. The session does not match the device or the country on file. Lead payment txn_005280 is $890.00 approved at Lumen Electronics on 04 Aug 2026 20:36 UTC, card \u2022\u20229209, device dev_0345. Before this episode, Anika Nguyen had 29 payments with a median of $15.87.\n\n## Why this score\n\n- **Case opened** (+4): Every queued payment starts with a small residual score.\n- **New device abroad** (+36): Device dev_0345 in NG.\n- **Spend spike** (+28): Peak $890.00 against a median of $15.87.\n- **Risky merchants** (+18): Gift cards, electronics, or crypto, rather than travel.\n- **VPN** (+8): The session is coming through a VPN.\n\n## What the agent checked\n\n### Open the flagged payment (watch)\n\nQueue sent txn_005280 for Anika Nguyen: $890.00 at Lumen Electronics on 04 Aug 2026 20:36 UTC. The flagger's reasons were: Amount is far above this customer's own baseline; Device has never been used by this customer before; IP country does not match the customer's home country; The payment's shape is an outlier for the whole book.\n\n- Transaction: txn_005280\n- Amount: $890.00\n- Customer: Anika Nguyen (cus_0034)\n- Why it was queued: amount_outlier, new_device, foreign_ip, isolation_forest\n\n### Customer history and baseline (clear)\n\nAnika Nguyen has 29 prior payments before this episode, median $15.87. Account acct_0034 is 517 days old. Usual devices: dev_0067, dev_0068. Countries already seen: GB.\n\n- Account age: 517 days\n- Prior payments: 29\n- Median amount: $15.87\n- Home: Bristol, GB\n\n### Payment velocity (clear)\n\nThe episode around txn_005280 holds 4 payments across 48 minutes. The busiest hour contains 4. 0 declines in the episode. Merchants touched: Parcel Gift Cards, Lumen Electronics, Keystone Crypto Desk, Hearth Gift Co.\n\n- Payments in episode: 4\n- Busiest hour: 4\n- Declines: 0\n- Distinct merchants: 4\n\n### Amount versus baseline (alert)\n\nEpisode amounts run from $265.00 to $890.00, median $530.00. The peak is 56.1\u00d7 the baseline median of $15.87.\n\n- Episode median: $530.00\n- Episode peak: $890.00\n- Baseline median: $15.87\n- Peak vs baseline: 56.1\u00d7\n\n### Device and IP linkage (alert)\n\nDevices in the episode: dev_0345 (Pixel 8 \u00b7 Android 15 \u00b7 Chrome, new to this customer). IPs: 198.51.100.95 \u00b7 Lagos, NG, VPN. Home country is GB. The episode is outside that country.\n\n- New devices: dev_0345\n- Mature devices reused: none\n- Countries: NG\n- Datacenter or VPN: yes\n\n### Linked accounts and money flow (clear)\n\nDevices in the episode are also used by no other customer. Inbound transfers $0.00, outbound $0.00. No cash-out path leaves this account in the six-day money graph.\n\n- Linked customers: 0\n- Household pattern: no\n- Reaches cash-out: no\n- Pass-through: no inbound\n\n### Merchant check (clear)\n\nLumen Electronics (electronics, Madrid) has 5 payments in the past 14 days from 5 customers. 0% of those customers are under 45 days old. 0% of the amounts are round (multiples of $50, at least $200). Devices shared by two or more buyers: none.\n\n- Category: electronics\n- Recent buyers: 5\n- Young-account share: 0%\n- Round-amount share: 0%\n\n### Pattern classification (alert)\n\nAccount takeover. A new device in a new country spends far above baseline at gift cards, electronics, or crypto.\n\n- Pattern: Account takeover\n- Detail: new device foreign spike\n\n### Suggested action (alert)\n\nSuggest block. Risk score 94/100. Block and force a step-up with the real customer. The session does not match the device or the country on file. A person still has to confirm this; the agent does not apply it.\n\n- Suggested action: block\n- Risk score: 94/100\n- Who decides: human analyst\n\n## Payments in the episode\n\n| When | Id | Amount | Status | Merchant | Device |\n| --- | --- | --- | --- | --- | --- |\n| 2026-08-04T20:18:00Z | txn_005279 | $420.00 | approved | Parcel Gift Cards | dev_0345 |\n| 2026-08-04T20:36:00Z | txn_005280 | $890.00 | approved | Lumen Electronics | dev_0345 |\n| 2026-08-04T20:47:00Z | txn_005281 | $265.00 | approved | Keystone Crypto Desk | dev_0345 |\n| 2026-08-04T21:06:00Z | txn_005282 | $640.00 | approved | Hearth Gift Co | dev_0345 |\n\n## Action rationale\n\nBlock and force a step-up with the real customer. The session does not match the device or the country on file.\n\n## Held-out label\n\nThis section is joined after the investigation. The agent did not see it.\n\n- Fraud: yes\n- Pattern: account_takeover\n\n*Halden suggests. An analyst decides.*\n",
+  "showcase": {
+    "slot": "account_takeover",
+    "order": 2,
+    "title": "Account takeover",
+    "say": "Contrast this with the trip you will open last. Here the device is new, the country is new, and the spend is gift cards and crypto at many times the baseline."
+  }
+}

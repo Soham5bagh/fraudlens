@@ -1,0 +1,443 @@
+{
+  "case_id": "case_0028",
+  "lead_transaction_id": "txn_005311",
+  "customer_id": "cus_0173",
+  "covered_transaction_ids": [
+    "txn_005308",
+    "txn_005310",
+    "txn_005311"
+  ],
+  "flag_reasons": [
+    {
+      "code": "new_account_amount",
+      "text": "Account is under 30 days old and the amount is large"
+    },
+    {
+      "code": "isolation_forest",
+      "text": "The payment's shape is an outlier for the whole book"
+    }
+  ],
+  "risk_score": 88,
+  "pattern": "mule_chain",
+  "pattern_label": "Mule-account chain",
+  "pattern_detail": "pass_through",
+  "action": "escalate",
+  "action_rationale": "Escalate the chain. The receiving accounts need to be frozen together, which is a desk lead's call.",
+  "confidence": "high",
+  "summary": "Mule flow touching Leila Moreau: funds move onward to a cash-out the same day.",
+  "narrative": "Money reaches a cash-out through freshly linked accounts, with little of it staying put. Escalate the chain. The receiving accounts need to be frozen together, which is a desk lead's call. Lead payment txn_005311 is $2,237.20 approved at peer-to-peer transfer on 09 Aug 2026 15:10 UTC, card \u2022\u20222881, device dev_0359. Before this episode, Leila Moreau had 1 payments with a median of $4.50.",
+  "signals": [
+    {
+      "name": "Case opened",
+      "points": 4,
+      "detail": "Every queued payment starts with a small residual score."
+    },
+    {
+      "name": "Cash-out path",
+      "points": 40,
+      "detail": "Leila Moreau (acct_0173) \u2192 Hugo Keller (acct_0174) \u2192 Keystone Crypto Desk"
+    },
+    {
+      "name": "Shared infrastructure",
+      "points": 18,
+      "detail": "1 other customer(s) on the episode devices."
+    },
+    {
+      "name": "Funds do not stay",
+      "points": 16,
+      "detail": "Inbound $2,380.00, outbound $2,237.20."
+    },
+    {
+      "name": "Young account",
+      "points": 10,
+      "detail": "Opened 17 days ago."
+    }
+  ],
+  "timeline": [
+    {
+      "id": "open_case",
+      "title": "Open the flagged payment",
+      "status": "watch",
+      "started_at": "2026-08-11T15:00:00Z",
+      "duration_ms": 420,
+      "finding": "Queue sent txn_005311 for Leila Moreau: $2,237.20 at peer-to-peer transfer on 09 Aug 2026 15:10 UTC. The flagger's reasons were: Account is under 30 days old and the amount is large; The payment's shape is an outlier for the whole book.",
+      "evidence": [
+        {
+          "label": "Transaction",
+          "value": "txn_005311"
+        },
+        {
+          "label": "Amount",
+          "value": "$2,237.20"
+        },
+        {
+          "label": "Customer",
+          "value": "Leila Moreau (cus_0173)"
+        },
+        {
+          "label": "Why it was queued",
+          "value": "new_account_amount, isolation_forest"
+        }
+      ]
+    },
+    {
+      "id": "customer_baseline",
+      "title": "Customer history and baseline",
+      "status": "clear",
+      "started_at": "2026-08-11T15:00:00Z",
+      "duration_ms": 680,
+      "finding": "Leila Moreau has 1 prior payment before this episode, median $4.50. Account acct_0173 is 17 days old. Usual devices: dev_0363. Countries already seen: GB.",
+      "evidence": [
+        {
+          "label": "Account age",
+          "value": "17 days"
+        },
+        {
+          "label": "Prior payments",
+          "value": "1"
+        },
+        {
+          "label": "Median amount",
+          "value": "$4.50"
+        },
+        {
+          "label": "Home",
+          "value": "Bristol, GB"
+        }
+      ]
+    },
+    {
+      "id": "velocity",
+      "title": "Payment velocity",
+      "status": "clear",
+      "started_at": "2026-08-11T15:00:01Z",
+      "duration_ms": 540,
+      "finding": "The episode around txn_005311 holds 3 payments across 130 minutes. The busiest hour contains 2. 0 declines in the episode. Merchants touched: P2P transfer.",
+      "evidence": [
+        {
+          "label": "Payments in episode",
+          "value": "3"
+        },
+        {
+          "label": "Busiest hour",
+          "value": "2"
+        },
+        {
+          "label": "Declines",
+          "value": "0"
+        },
+        {
+          "label": "Distinct merchants",
+          "value": "1"
+        }
+      ]
+    },
+    {
+      "id": "amount",
+      "title": "Amount versus baseline",
+      "status": "alert",
+      "started_at": "2026-08-11T15:00:02Z",
+      "duration_ms": 480,
+      "finding": "Episode amounts run from $960.00 to $2,237.20, median $1,420.00. The peak is 497.2\u00d7 the baseline median of $4.50.",
+      "evidence": [
+        {
+          "label": "Episode median",
+          "value": "$1,420.00"
+        },
+        {
+          "label": "Episode peak",
+          "value": "$2,237.20"
+        },
+        {
+          "label": "Baseline median",
+          "value": "$4.50"
+        },
+        {
+          "label": "Peak vs baseline",
+          "value": "497.2\u00d7"
+        }
+      ]
+    },
+    {
+      "id": "device_ip",
+      "title": "Device and IP linkage",
+      "status": "clear",
+      "started_at": "2026-08-11T15:00:03Z",
+      "duration_ms": 730,
+      "finding": "Devices in the episode: dev_0359 (Windows laptop \u00b7 Windows 11 \u00b7 Chrome, already on file). IPs: 198.51.100.109 \u00b7 Bristol, GB, datacenter. Home country is GB. The episode stays in the home country.",
+      "evidence": [
+        {
+          "label": "New devices",
+          "value": "none"
+        },
+        {
+          "label": "Mature devices reused",
+          "value": "none"
+        },
+        {
+          "label": "Countries",
+          "value": "GB"
+        },
+        {
+          "label": "Datacenter or VPN",
+          "value": "yes"
+        }
+      ]
+    },
+    {
+      "id": "network",
+      "title": "Linked accounts and money flow",
+      "status": "alert",
+      "started_at": "2026-08-11T15:00:04Z",
+      "duration_ms": 860,
+      "finding": "Devices in the episode are also used by Hugo Keller (cus_0174) via dev_0359. Inbound transfers $2,380.00, outbound $2,237.20, pass-through 94%. Funds from acct_0173 reach a cash-out inside the graph (Leila Moreau (acct_0173) \u2192 Hugo Keller (acct_0174) \u2192 Keystone Crypto Desk).",
+      "evidence": [
+        {
+          "label": "Linked customers",
+          "value": "1"
+        },
+        {
+          "label": "Household pattern",
+          "value": "no"
+        },
+        {
+          "label": "Reaches cash-out",
+          "value": "yes"
+        },
+        {
+          "label": "Pass-through",
+          "value": "94%"
+        }
+      ]
+    },
+    {
+      "id": "merchant",
+      "title": "Merchant check",
+      "status": "watch",
+      "started_at": "2026-08-11T15:00:05Z",
+      "duration_ms": 300,
+      "finding": "The lead movement is a transfer, not a card purchase, so there is no merchant to underwrite. The money-flow step carries that evidence.",
+      "evidence": [
+        {
+          "label": "Merchant",
+          "value": "none (transfer)"
+        }
+      ]
+    },
+    {
+      "id": "classify",
+      "title": "Pattern classification",
+      "status": "alert",
+      "started_at": "2026-08-11T15:00:06Z",
+      "duration_ms": 390,
+      "finding": "Mule-account chain. Money reaches a cash-out through freshly linked accounts, with little of it staying put.",
+      "evidence": [
+        {
+          "label": "Pattern",
+          "value": "Mule-account chain"
+        },
+        {
+          "label": "Detail",
+          "value": "pass through"
+        }
+      ]
+    },
+    {
+      "id": "recommend",
+      "title": "Suggested action",
+      "status": "alert",
+      "started_at": "2026-08-11T15:00:07Z",
+      "duration_ms": 360,
+      "finding": "Suggest escalate. Risk score 88/100. Escalate the chain. The receiving accounts need to be frozen together, which is a desk lead's call. A person still has to confirm this; the agent does not apply it.",
+      "evidence": [
+        {
+          "label": "Suggested action",
+          "value": "escalate"
+        },
+        {
+          "label": "Risk score",
+          "value": "88/100"
+        },
+        {
+          "label": "Who decides",
+          "value": "human analyst"
+        }
+      ]
+    }
+  ],
+  "graph": {
+    "nodes": [
+      {
+        "id": "cus_0173",
+        "type": "customer",
+        "label": "Leila Moreau",
+        "sublabel": "cus_0173",
+        "x": 0.2825,
+        "y": 0.92,
+        "emphasis": true
+      },
+      {
+        "id": "acct_0173",
+        "type": "account",
+        "label": "Account",
+        "sublabel": "acct_0173",
+        "x": 0.6465,
+        "y": 0.527,
+        "emphasis": true
+      },
+      {
+        "id": "dev_0359",
+        "type": "device",
+        "label": "Windows laptop",
+        "sublabel": "dev_0359",
+        "x": 0.92,
+        "y": 0.7812,
+        "emphasis": false
+      },
+      {
+        "id": "ip_0358",
+        "type": "ip",
+        "label": "Bristol",
+        "sublabel": "198.51.100.109",
+        "x": 0.7486,
+        "y": 0.08,
+        "emphasis": true
+      },
+      {
+        "id": "cus_0174",
+        "type": "customer",
+        "label": "Hugo Keller",
+        "sublabel": "cus_0174",
+        "x": 0.08,
+        "y": 0.5936,
+        "emphasis": true
+      },
+      {
+        "id": "acct_0174",
+        "type": "account",
+        "label": "Account",
+        "sublabel": "acct_0174",
+        "x": 0.5246,
+        "y": 0.7551,
+        "emphasis": true
+      }
+    ],
+    "edges": [
+      {
+        "source": "cus_0173",
+        "target": "acct_0173",
+        "kind": "owns",
+        "label": "owns"
+      },
+      {
+        "source": "acct_0173",
+        "target": "dev_0359",
+        "kind": "device",
+        "label": "used"
+      },
+      {
+        "source": "acct_0173",
+        "target": "ip_0358",
+        "kind": "ip",
+        "label": "from"
+      },
+      {
+        "source": "acct_0173",
+        "target": "acct_0174",
+        "kind": "p2p",
+        "label": "$2,237.20"
+      },
+      {
+        "source": "dev_0359",
+        "target": "acct_0174",
+        "kind": "device",
+        "label": "shared"
+      },
+      {
+        "source": "cus_0174",
+        "target": "acct_0174",
+        "kind": "owns",
+        "label": "owns"
+      }
+    ],
+    "caption": "Money path: Leila Moreau (acct_0173) \u2192 Hugo Keller (acct_0174) \u2192 Keystone Crypto Desk"
+  },
+  "related_transactions": [
+    {
+      "id": "txn_005308",
+      "occurred_at": "2026-08-09T13:00:08Z",
+      "ts": 1786280408,
+      "amount_cents": 96000,
+      "status": "approved",
+      "type": "p2p_in",
+      "merchant_name": "P2P transfer",
+      "merchant_category": "transfer",
+      "device_id": "dev_0359",
+      "ip": "198.51.100.109 \u00b7 Bristol, GB, datacenter",
+      "ip_country": "GB",
+      "city": "Bristol",
+      "flagged": true,
+      "counterparty_account_id": "acct_0081"
+    },
+    {
+      "id": "txn_005310",
+      "occurred_at": "2026-08-09T13:22:08Z",
+      "ts": 1786281728,
+      "amount_cents": 142000,
+      "status": "approved",
+      "type": "p2p_in",
+      "merchant_name": "P2P transfer",
+      "merchant_category": "transfer",
+      "device_id": "dev_0359",
+      "ip": "198.51.100.109 \u00b7 Bristol, GB, datacenter",
+      "ip_country": "GB",
+      "city": "Bristol",
+      "flagged": true,
+      "counterparty_account_id": "acct_0082"
+    },
+    {
+      "id": "txn_005311",
+      "occurred_at": "2026-08-09T15:10:00Z",
+      "ts": 1786288200,
+      "amount_cents": 223720,
+      "status": "approved",
+      "type": "p2p_out",
+      "merchant_name": "P2P transfer",
+      "merchant_category": "transfer",
+      "device_id": "dev_0359",
+      "ip": "198.51.100.109 \u00b7 Bristol, GB, datacenter",
+      "ip_country": "GB",
+      "city": "Bristol",
+      "flagged": true,
+      "counterparty_account_id": "acct_0174"
+    }
+  ],
+  "customer": {
+    "id": "cus_0173",
+    "name": "Leila Moreau",
+    "email": "leila.moreau.planted@example.com",
+    "home_city": "Bristol",
+    "home_country": "GB",
+    "segment": "student",
+    "customer_since": "2026-07-23T00:00:00Z",
+    "account_id": "acct_0173",
+    "account_age_days": 17
+  },
+  "lead": {
+    "id": "txn_005311",
+    "occurred_at": "2026-08-09T15:10:00Z",
+    "amount_cents": 223720,
+    "status": "approved",
+    "type": "p2p_out",
+    "merchant_name": "peer-to-peer transfer",
+    "merchant_category": "transfer",
+    "device_id": "dev_0359",
+    "device_label": "Windows laptop \u00b7 Windows 11 \u00b7 Chrome",
+    "ip": "198.51.100.109 \u00b7 Bristol, GB, datacenter",
+    "ip_city": "Bristol",
+    "ip_country": "GB",
+    "card_last4": "2881"
+  },
+  "report_markdown": "# Halden case case_0028\n\n**Customer.** Leila Moreau (cus_0173), Bristol, GB.\n**Lead payment.** txn_005311 \u00b7 $2,237.20 \u00b7 peer-to-peer transfer \u00b7 2026-08-09T15:10:00Z.\n**Pattern.** Mule-account chain (pass through).\n**Risk score.** 88 / 100.\n**Suggested action.** escalate \u2014 a human still has to confirm it.\n\n## Summary\n\nMoney reaches a cash-out through freshly linked accounts, with little of it staying put. Escalate the chain. The receiving accounts need to be frozen together, which is a desk lead's call. Lead payment txn_005311 is $2,237.20 approved at peer-to-peer transfer on 09 Aug 2026 15:10 UTC, card \u2022\u20222881, device dev_0359. Before this episode, Leila Moreau had 1 payments with a median of $4.50.\n\n## Why this score\n\n- **Case opened** (+4): Every queued payment starts with a small residual score.\n- **Cash-out path** (+40): Leila Moreau (acct_0173) \u2192 Hugo Keller (acct_0174) \u2192 Keystone Crypto Desk\n- **Shared infrastructure** (+18): 1 other customer(s) on the episode devices.\n- **Funds do not stay** (+16): Inbound $2,380.00, outbound $2,237.20.\n- **Young account** (+10): Opened 17 days ago.\n\n## What the agent checked\n\n### Open the flagged payment (watch)\n\nQueue sent txn_005311 for Leila Moreau: $2,237.20 at peer-to-peer transfer on 09 Aug 2026 15:10 UTC. The flagger's reasons were: Account is under 30 days old and the amount is large; The payment's shape is an outlier for the whole book.\n\n- Transaction: txn_005311\n- Amount: $2,237.20\n- Customer: Leila Moreau (cus_0173)\n- Why it was queued: new_account_amount, isolation_forest\n\n### Customer history and baseline (clear)\n\nLeila Moreau has 1 prior payment before this episode, median $4.50. Account acct_0173 is 17 days old. Usual devices: dev_0363. Countries already seen: GB.\n\n- Account age: 17 days\n- Prior payments: 1\n- Median amount: $4.50\n- Home: Bristol, GB\n\n### Payment velocity (clear)\n\nThe episode around txn_005311 holds 3 payments across 130 minutes. The busiest hour contains 2. 0 declines in the episode. Merchants touched: P2P transfer.\n\n- Payments in episode: 3\n- Busiest hour: 2\n- Declines: 0\n- Distinct merchants: 1\n\n### Amount versus baseline (alert)\n\nEpisode amounts run from $960.00 to $2,237.20, median $1,420.00. The peak is 497.2\u00d7 the baseline median of $4.50.\n\n- Episode median: $1,420.00\n- Episode peak: $2,237.20\n- Baseline median: $4.50\n- Peak vs baseline: 497.2\u00d7\n\n### Device and IP linkage (clear)\n\nDevices in the episode: dev_0359 (Windows laptop \u00b7 Windows 11 \u00b7 Chrome, already on file). IPs: 198.51.100.109 \u00b7 Bristol, GB, datacenter. Home country is GB. The episode stays in the home country.\n\n- New devices: none\n- Mature devices reused: none\n- Countries: GB\n- Datacenter or VPN: yes\n\n### Linked accounts and money flow (alert)\n\nDevices in the episode are also used by Hugo Keller (cus_0174) via dev_0359. Inbound transfers $2,380.00, outbound $2,237.20, pass-through 94%. Funds from acct_0173 reach a cash-out inside the graph (Leila Moreau (acct_0173) \u2192 Hugo Keller (acct_0174) \u2192 Keystone Crypto Desk).\n\n- Linked customers: 1\n- Household pattern: no\n- Reaches cash-out: yes\n- Pass-through: 94%\n\n### Merchant check (watch)\n\nThe lead movement is a transfer, not a card purchase, so there is no merchant to underwrite. The money-flow step carries that evidence.\n\n- Merchant: none (transfer)\n\n### Pattern classification (alert)\n\nMule-account chain. Money reaches a cash-out through freshly linked accounts, with little of it staying put.\n\n- Pattern: Mule-account chain\n- Detail: pass through\n\n### Suggested action (alert)\n\nSuggest escalate. Risk score 88/100. Escalate the chain. The receiving accounts need to be frozen together, which is a desk lead's call. A person still has to confirm this; the agent does not apply it.\n\n- Suggested action: escalate\n- Risk score: 88/100\n- Who decides: human analyst\n\n## Payments in the episode\n\n| When | Id | Amount | Status | Merchant | Device |\n| --- | --- | --- | --- | --- | --- |\n| 2026-08-09T13:00:08Z | txn_005308 | $960.00 | approved | P2P transfer | dev_0359 |\n| 2026-08-09T13:22:08Z | txn_005310 | $1,420.00 | approved | P2P transfer | dev_0359 |\n| 2026-08-09T15:10:00Z | txn_005311 | $2,237.20 | approved | P2P transfer | dev_0359 |\n\n## Action rationale\n\nEscalate the chain. The receiving accounts need to be frozen together, which is a desk lead's call.\n\n## Held-out label\n\nThis section is joined after the investigation. The agent did not see it.\n\n- Fraud: yes\n- Pattern: mule_chain\n\n*Halden suggests. An analyst decides.*\n",
+  "showcase": null
+}
