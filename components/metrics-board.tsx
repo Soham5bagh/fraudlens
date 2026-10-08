@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { patternName, pct } from "@/lib/format";
+import { countLabel, money, patternName, pct } from "@/lib/format";
 import type { Metrics } from "@/lib/types";
 
 export function MetricsBoard() {
@@ -102,13 +102,57 @@ export function MetricsBoard() {
         </p>
       </section>
 
+      {metrics.robustness ? (
+        <section className="panel" style={{ marginBottom: 14 }}>
+          <h2>Same checks, other seeds</h2>
+          <p>{metrics.robustness.note}</p>
+          <div className="scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th>Seed</th>
+                  <th>Recall</th>
+                  <th>Precision</th>
+                  <th>False alarms</th>
+                  <th>Genuine customers blocked</th>
+                  <th>Fraud cases named</th>
+                  <th>Legitimate cases approved</th>
+                </tr>
+              </thead>
+              <tbody>
+                {metrics.robustness.seeds.map((row) => (
+                  <tr key={row.seed}>
+                    <td>{row.seed}</td>
+                    <td>{pct(row.agent_recall)}</td>
+                    <td>{pct(row.agent_precision)}</td>
+                    <td>{row.agent_false_alarms}</td>
+                    <td>{row.genuine_blocked_by_agent} <span className="muted">(queue {row.genuine_blocked_by_queue})</span></td>
+                    <td>{row.fraud_cases_named_correctly} / {row.fraud_cases}</td>
+                    <td>{row.legitimate_cases_approved} / {row.legitimate_cases}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          {metrics.robustness.seeds.flatMap((row) =>
+            (row.false_alarm_examples ?? []).map((example) => (
+              <p className="note" key={`${row.seed}-${example.transaction_id}`}>
+                Seed {row.seed} counts {example.transaction_id} ({money(example.amount_cents)} at {example.merchant_name}, {example.customer_name}) with {example.case_id} ({patternName(example.predicted_pattern)}).
+                The payment is legitimate and sits inside that case&apos;s time window, so it is scored with the case.
+              </p>
+            )),
+          )}
+          <p className="note">{metrics.robustness.limitations}</p>
+        </section>
+      ) : null}
+
       <section className="panel">
         <h2>Genuine customers the queue would have stopped</h2>
         <p>Halden approved every one of them.</p>
         <ul>
           {metrics.customers_wrongly_blocked.cleared_by_agent.map((customer) => (
             <li key={customer.customer_id}>
-              {customer.name} <span className="muted">({customer.customer_id}, {customer.payments} queued payments)</span>
+              {customer.name} <span className="muted">({customer.customer_id}, {countLabel(customer.payments, "queued payment")})</span>
             </li>
           ))}
         </ul>

@@ -12,6 +12,7 @@ import sqlite3
 from pathlib import Path
 
 from engine.agent import investigate_case
+from engine.evaluate import robustness_report
 from engine.flagging import build_cases, flag_transactions
 from engine.generate import generate, public_world
 from engine.metrics import compute_metrics
@@ -79,6 +80,7 @@ def main() -> None:
         for row in metrics["case_truth"]
     }
 
+    metrics["robustness"] = robustness_report()
     report = summary_markdown(metrics, world["meta"])
     manifest = {
         **world["meta"],

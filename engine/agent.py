@@ -218,11 +218,9 @@ def velocity_check(state: dict) -> None:
         status,
         (
             f"The episode around {lead['id']} holds {plural(len(episode), 'payment')} "
-            f"across {plural(span, 'minute')}. The busiest hour contains {peak}. "
+            f"across {plural(span, 'minute')}. The busiest hour contains {plural(peak, 'payment')}. "
             f"{plural(len(declines), 'decline')} in the episode. "
-            f"Merchants touched: {', '.join(merchants[:6])}"
-            + (f" and {len(merchants) - 6} more" if len(merchants) > 6 else "")
-            + "."
+            f"Merchants touched: {_name_list(merchants)}."
         ),
         [
             {"label": "Payments in episode", "value": str(len(episode))},
@@ -335,12 +333,7 @@ def device_and_ip(state: dict) -> None:
         (
             f"Devices in the episode: {'; '.join(device_bits)}. "
             f"IPs: {'; '.join(ip_bits)}. "
-            f"Home country is {customer['home_country']}. "
-            + (
-                "The episode is outside that country."
-                if foreign
-                else "The episode stays in the home country."
-            )
+            + _country_sentence(customer["home_country"], countries, foreign)
         ),
         [
             {"label": "New devices", "value": ", ".join(new_devices) if new_devices else "none"},
@@ -457,9 +450,11 @@ def linked_accounts(state: dict) -> None:
     else:
         status = "clear"
     if deduped:
-        linked_text = ", ".join(f"{item['name']} ({item['customer_id']}) via {item['device_id']}" for item in deduped[:4])
+        linked_text = "These devices are also used by " + ", ".join(
+            f"{item['name']} ({item['customer_id']}) via {item['device_id']}" for item in deduped[:4]
+        ) + "."
     else:
-        linked_text = "no other customer"
+        linked_text = "No other customer uses the devices in this episode."
     flow_text = (
         f"Funds from {account['id']} reach a cash-out inside the graph ({' → '.join(chain_labels)})."
         if reaches_cash and chain_labels
@@ -471,10 +466,7 @@ def linked_accounts(state: dict) -> None:
         "Linked accounts and money flow",
         status,
         (
-            f"Devices in the episode are also used by {linked_text}. "
-            f"Inbound transfers {money(inbound_sum)}, outbound {money(outbound_sum)}"
-            + (f", pass-through {ratio:.0%}." if inbound_sum else ".")
-            + " "
+            f"{linked_text} {_flow_sentence(inbound_sum, outbound_sum, ratio)} "
             + flow_text
             + (
                 " The other names share a surname and city, which fits a household rather than a mule ring."
@@ -574,7 +566,7 @@ def merchant_check(state: dict) -> None:
         "Merchant check",
         "alert" if suspicious else "clear",
         (
-            f"{merchant['name']} ({merchant['category']}, {merchant['city']}) has {plural(len(recent), 'payment')} "
+            f"{merchant['name']} ({merchant['category'].replace('_', ' ')}, {merchant['city']}) has {plural(len(recent), 'payment')} "
             f"in the past 14 days from {plural(len(buyers), 'customer')}. "
             f"{young_share:.0%} of those customers are under 45 days old. "
             f"{round_share:.0%} of the amounts are round (multiples of $50, at least $200). "
@@ -588,6 +580,87 @@ def merchant_check(state: dict) -> None:
         ],
         640,
     )
+
+
+def _country_name(code: str) -> str:
+    names = {
+        "US": "the United States",
+        "GB": "the United Kingdom",
+        "NL": "the Netherlands",
+        "AE": "the United Arab Emirates",
+        "SG": "Singapore",
+        "ES": "Spain",
+        "CA": "Canada",
+        "NG": "Nigeria",
+        "BR": "Brazil",
+        "PT": "Portugal",
+        "DE": "Germany",
+        "EE": "Estonia",
+        "FR": "France",
+        "IN": "India",
+        "AU": "Australia",
+        "JP": "Japan",
+        "MX": "Mexico",
+        "IE": "Ireland",
+        "IT": "Italy",
+        "SE": "Sweden",
+    }
+    return names.get(code, code)
+
+
+def _country_sentence(home: str, countries: list[str], foreign: bool) -> str:
+    name = _country_name(home)
+    if foreign and home in countries and len(countries) > 1:
+        return (
+            f"The customer's home country is {name}. "
+            "Some payments in this episode are outside that country, and some are at home."
+        )
+    if foreign:
+        return (
+            f"The customer's home country is {name}. "
+            "Every payment in this episode is outside that country."
+        )
+    return f"The customer's home country is {name}. Every payment in this episode is there."
+
+
+def _flow_sentence(inbound_sum: int, outbound_sum: int, ratio: float) -> str:
+    if inbound_sum and outbound_sum:
+        return (
+            f"Inbound transfers {money(inbound_sum)}, outbound {money(outbound_sum)}, "
+            f"pass-through {ratio:.0%}."
+        )
+    if outbound_sum:
+        return f"No inbound transfer in this window. {money(outbound_sum)} was sent on."
+    if inbound_sum:
+        return f"Inbound transfers {money(inbound_sum)}. Nothing was sent on."
+    return "No peer-to-peer transfer or cash-out on this account in the six-day window."
+
+
+def _others_on_device(count: int) -> str:
+    if count == 0:
+        return "No other customer uses the devices in this episode."
+    if count == 1:
+        return "1 other customer uses a device in this episode."
+    return f"{count} other customers use a device in this episode."
+
+
+def _name_list(names: list[str]) -> str:
+    if not names:
+        return "none"
+    if len(names) == 1:
+        return names[0]
+    if len(names) <= 8:
+        return ", ".join(names[:-1]) + f", and {names[-1]}"
+    return ", ".join(names[:7]) + f", and {len(names) - 7} more"
+
+
+def _categories(catalog: Catalog, txns: list[dict]) -> set[str]:
+    found: set[str] = set()
+    for txn in txns:
+        merchant = catalog.merchant(txn["merchant_id"])
+        if merchant:
+            found.add(merchant["category"])
+    return found
 
 
 def classify(state: dict) -> None:
@@ -611,6 +684,15 @@ def classify(state: dict) -> None:
     risky_spend = bool(merchant_categories & RISKY_CATEGORIES)
     travel_spend = bool(merchant_categories & TRAVEL_CATEGORIES)
     peak_ratio = facts["peak_ratio"] or 0
+    # A normal purchase can fall inside the same clock window as an attack.
+    # Judge the new device on its own, instead of letting that purchase veto the pattern.
+    new_txns = [txn for txn in episode if txn["device_id"] in set(facts["new_devices"])]
+    new_categories = _categories(state["catalog"], new_txns)
+    new_peak = max((txn["amount_cents"] for txn in new_txns), default=0)
+    new_ratio = (new_peak / facts["baseline_median"]) if facts["baseline_median"] else 0
+    new_foreign = any(
+        state["catalog"].ips[txn["ip_id"]]["country"] != facts["customer"]["home_country"] for txn in new_txns
+    )
     stats = facts.get("merchant_stats") or {}
     lead = facts["lead"]
     collusion = False
@@ -634,13 +716,12 @@ def classify(state: dict) -> None:
             or (not facts["same_household"] and len(facts["linked_customers"]) >= 1 and facts["outbound_sum"] >= 20000)
         )
     ato = (
-        bool(facts["new_devices"])
-        and facts["foreign"]
-        and not facts["known_mature_devices"]
-        and peak_ratio >= 4
-        and facts["episode_peak"] >= 30000
-        and risky_spend
-        and not (travel_spend and "airline" in merchant_categories)
+        bool(new_txns)
+        and new_foreign
+        and new_ratio >= 4
+        and new_peak >= 30000
+        and bool(new_categories & RISKY_CATEGORIES)
+        and "airline" not in new_categories
     )
 
     if card_testing:
@@ -648,7 +729,11 @@ def classify(state: dict) -> None:
         reasons.append("A burst of tiny amounts, many merchants, declines, and a device that is new to the customer.")
     elif mule and not facts["same_household"]:
         pattern, detail = "mule_chain", "pass_through"
-        reasons.append("Money reaches a cash-out through freshly linked accounts, with little of it staying put.")
+        if facts["account_age_days"] < 45 or facts["passthrough_ratio"] >= 0.6:
+            reasons.append("Funds arrive and leave again toward a cash-out, with little of the money staying on the account.")
+        else:
+            path = " → ".join(facts["chain_labels"]) if facts["chain_labels"] else "a cash-out"
+            reasons.append(f"This account sent {money(facts['outbound_sum'])} into a chain that cashes out ({path}).")
     elif ato:
         pattern, detail = "account_takeover", "new_device_foreign_spike"
         reasons.append("A new device in a new country spends far above baseline at gift cards, electronics, or crypto.")
@@ -676,7 +761,16 @@ def classify(state: dict) -> None:
         and len(facts["episode_merchants"]) <= 3
     ):
         pattern, detail = "legitimate", "flash_sale"
-        reasons.append("The hour is busy, but every payment cleared, on a known device, at one or two ordinary shops.")
+        shops = facts["episode_merchants"]
+        if len(shops) == 1:
+            shop_bit = shops[0]
+        elif len(shops) == 2:
+            shop_bit = f"{shops[0]} and {shops[1]}"
+        else:
+            shop_bit = _name_list(shops)
+        reasons.append(
+            f"The hour is busy, but every payment cleared, on a known device, at {shop_bit}."
+        )
     elif (
         facts["new_devices"]
         and not facts["foreign"]
@@ -685,7 +779,11 @@ def classify(state: dict) -> None:
         and not risky_spend
     ):
         pattern, detail = "legitimate", "new_device_at_home"
-        reasons.append("The only new thing is the device. It is at home, and the amount matches the customer's groceries.")
+        if merchant_categories == {"grocery"}:
+            amount_bit = "the amount matches a grocery run"
+        else:
+            amount_bit = "the amount is in line with what this customer usually spends"
+        reasons.append(f"The only new thing is the device. It is at home, and {amount_bit}.")
     elif (
         not facts["new_devices"]
         and not facts["foreign"]
@@ -700,7 +798,7 @@ def classify(state: dict) -> None:
         reasons.append("One large purchase on the usual device at home, from a long-standing customer.")
     else:
         pattern, detail = "legitimate", "unexplained"
-        reasons.append("The flag does not match a planted pattern strongly enough to intervene.")
+        reasons.append("The flag does not add up to card testing, an account takeover, a mule chain, or merchant collusion.")
 
     facts["pattern"] = pattern
     facts["pattern_detail"] = detail
@@ -738,7 +836,7 @@ def recommend(state: dict) -> None:
         rationale = "Block the card. Testing already landed a larger charge, and further attempts will follow the same device."
     elif pattern == "account_takeover":
         signals += [
-            {"name": "New device abroad", "points": 36, "detail": f"Device {', '.join(facts['new_devices'])} in {', '.join(facts['episode_countries'])}."},
+            {"name": "New device abroad", "points": 36, "detail": f"Device {', '.join(facts['new_devices'])} in {_name_list([_country_name(code) for code in facts['episode_countries']])}."},
             {"name": "Spend spike", "points": 28, "detail": f"Peak {money(facts['episode_peak'])} against a median of {money(facts['baseline_median'])}."},
             {"name": "Risky merchants", "points": 18, "detail": "Gift cards, electronics, or crypto, rather than travel."},
         ]
@@ -749,16 +847,28 @@ def recommend(state: dict) -> None:
     elif pattern == "mule_chain":
         signals += [
             {"name": "Cash-out path", "points": 40, "detail": " → ".join(facts["chain_labels"]) if facts["chain_labels"] else "Reaches a cash-out merchant."},
-            {"name": "Shared infrastructure", "points": 18 if facts["linked_customers"] else 8, "detail": f"{len(facts['linked_customers'])} other customer(s) on the episode devices."},
-            {"name": "Funds do not stay", "points": 16, "detail": f"Inbound {money(facts['inbound_sum'])}, outbound {money(facts['outbound_sum'])}."},
+            {
+                "name": "Shared infrastructure",
+                "points": 18 if facts["linked_customers"] else 8,
+                "detail": _others_on_device(len(facts["linked_customers"])),
+            },
+            {
+                "name": "Funds do not stay" if facts["inbound_sum"] else "Sent into the chain",
+                "points": 16,
+                "detail": (
+                    f"Inbound {money(facts['inbound_sum'])}, outbound {money(facts['outbound_sum'])}."
+                    if facts["inbound_sum"]
+                    else f"No inbound transfer in this window. {money(facts['outbound_sum'])} was sent on."
+                ),
+            },
         ]
         if facts["account_age_days"] < 45:
-            signals.append({"name": "Young account", "points": 10, "detail": f"Opened {facts['account_age_days']} days ago."})
+            signals.append({"name": "Young account", "points": 10, "detail": f"Opened {plural(facts['account_age_days'], 'day')} ago."})
         action = "block" if facts["lead"]["type"] == "cash_out" else "escalate"
         rationale = (
             "Block the cash-out before it settles."
             if action == "block"
-            else "Escalate the chain. The receiving accounts need to be frozen together, which is a desk lead's call."
+            else "Escalate the chain so the receiving accounts can be frozen together."
         )
     elif pattern == "merchant_collusion":
         merchant = facts["merchant"]
@@ -777,9 +887,16 @@ def recommend(state: dict) -> None:
             rationale = "Approve. This is a trip on the customer's own device, not a takeover. A takeover would bring a new device and gift-card spend."
         elif detail == "household":
             signals.append({"name": "Household device", "points": 10, "detail": "Shared with the same surname in the same city, with no pass-through."})
-            rationale = "Approve. Shared-device rules catch families. There is no mule flow to go with the iPad."
+            hardware = "device"
+            if facts["episode_devices"]:
+                hardware = state["catalog"].devices[facts["episode_devices"][0]]["hardware"]
+            article = "an" if hardware[:1].lower() in "aeiou" else "a"
+            rationale = (
+                f"Approve. Sharing {article} {hardware} with the same surname, in the same city, "
+                "is a household. Nothing is passed through, so it is not a mule chain."
+            )
         elif detail == "flash_sale":
-            signals.append({"name": "Busy hour, ordinary tickets", "points": 8, "detail": "Several cleared purchases, known device, one or two shops."})
+            signals.append({"name": "Busy hour, ordinary tickets", "points": 8, "detail": f"Cleared purchases on a known device at {_name_list(facts['episode_merchants'])}."})
             rationale = "Approve. Velocity without declines, probes, or a new device is a shopping burst, not card testing."
         elif detail == "new_device_at_home":
             signals.append({"name": "New device at home", "points": 14, "detail": "New hardware, household IP, amount inside the baseline."})
@@ -788,12 +905,12 @@ def recommend(state: dict) -> None:
             signals.append({"name": "Explained one-off", "points": 16, "detail": "Single large ticket, usual device, home IP, long tenure."})
             rationale = "Approve. The amount is unusual and the rest of the session is not. Holding it punishes a real purchase."
         else:
-            signals.append({"name": "Unmatched flag", "points": 18, "detail": "The queue reason did not survive the rest of the checks."})
+            signals.append({"name": "Unmatched flag", "points": 18, "detail": "The queue reason is not backed up by the rest of the file."})
             action = "hold" if facts["foreign"] and facts["new_devices"] else "approve"
             rationale = (
                 "Hold for an analyst. A new device and a new country showed up together, but the rest of the pattern is incomplete."
                 if action == "hold"
-                else "Approve. After history, device, network, and merchant checks, the flag does not hold up."
+                else "Approve. History, device, network, and merchant checks do not support a fraud pattern."
             )
 
     score = sum(item["points"] for item in signals)
@@ -813,7 +930,7 @@ def recommend(state: dict) -> None:
         "recommend",
         "Suggested action",
         "alert" if action in {"block", "escalate"} else "watch" if action == "hold" else "clear",
-        f"Suggest {action}. Risk score {score}/100. {rationale} A person still has to confirm this; the agent does not apply it.",
+        f"Suggested action: {action}. Risk score {score}/100. {rationale} A person still has to confirm this. Halden does not apply it.",
         [
             {"label": "Suggested action", "value": action},
             {"label": "Risk score", "value": f"{score}/100"},
@@ -909,13 +1026,22 @@ def _summary(state: dict) -> str:
     if facts["pattern"] == "card_testing":
         return f"Card testing on {customer}: tiny probes, then {money(facts['episode_peak'])} on a new device."
     if facts["pattern"] == "account_takeover":
-        return f"Account takeover on {customer}: new device, new country, spend at {facts['peak_ratio']:.0f}× baseline."
+        return f"Account takeover on {customer}: new device, new country, spend at {facts['peak_ratio']:.1f}× baseline."
     if facts["pattern"] == "mule_chain":
         return f"Mule flow touching {customer}: funds move onward to a cash-out the same day."
     if facts["pattern"] == "merchant_collusion":
         return f"Collusive buying at {facts['merchant']['name']}, including {customer}."
-    detail = facts["pattern_detail"].replace("_", " ")
-    return f"{customer} looks legitimate ({detail}). The queue flag does not survive the file."
+    detail_lines = {
+        "travel": f"{customer} is travelling on a device already on file. The foreign IP is the trip, not a takeover.",
+        "household": f"{customer} shares a device with someone of the same surname in the same city. Nothing passes through.",
+        "flash_sale": f"{customer} made several ordinary purchases in one hour, on a known device, with no declines.",
+        "new_device_at_home": f"{customer} used a new phone at home, and the amount matches their usual spend.",
+        "large_purchase": f"{customer} made one large purchase on their usual device, at home.",
+    }
+    return detail_lines.get(
+        facts["pattern_detail"],
+        f"{customer} was queued, and the rest of the file does not support a fraud pattern.",
+    )
 
 
 def _narrative(state: dict) -> str:
@@ -923,22 +1049,23 @@ def _narrative(state: dict) -> str:
     lead = facts["lead"]
     customer = facts["customer"]
     bits = [facts["pattern_reasons"][0], facts["rationale"]]
+    card = f", card ••{lead['card_last4']}" if lead.get("card_last4") else ", no card on this transfer"
     bits.append(
         f"Lead payment {lead['id']} is {money(lead['amount_cents'])} "
         f"{'declined' if lead['status'] == 'declined' else 'approved'} "
-        f"at {facts['merchant_name']} on {clock(lead['ts'])}, "
-        f"card ••{lead['card_last4'] or 'none'}, device {lead['device_id']}."
+        f"at {facts['merchant_name']} on {clock(lead['ts'])}{card}, "
+        f"device {lead['device_id']} ({state['catalog'].device_label(lead['device_id'])})."
     )
     if facts["baseline_count"]:
         bits.append(
-            f"Before this episode, {customer['name']} had {facts['baseline_count']} payments "
+            f"Before this episode, {customer['name']} had {plural(facts['baseline_count'], 'payment')} "
             f"with a median of {money(facts['baseline_median'])}."
         )
     if facts["pattern"] == "card_testing":
         bits.append(
             f"Between {short_clock(facts['episode'][0]['ts'])} and {short_clock(facts['episode'][-1]['ts'])} "
             f"there were {len(facts['episode'])} attempts, {facts['decline_count']} declined, "
-            f"across {', '.join(facts['episode_merchants'][:5])}."
+            f"across {_name_list(facts['episode_merchants'])}."
         )
     if facts["pattern"] == "legitimate" and facts["pattern_detail"] == "travel":
         bits.append(

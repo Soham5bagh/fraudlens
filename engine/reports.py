@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from engine.textutil import money
+from engine.textutil import money, plural
 
 
 def case_markdown(investigation: dict, truth: dict | None = None) -> str:
@@ -82,11 +82,11 @@ def summary_markdown(metrics: dict, meta: dict) -> str:
         "| | Frauds caught (recall) | Precision | False positive rate | False alarms (payments) | Genuine customers blocked |",
         "| --- | --- | --- | --- | --- | --- |",
         (
-            f"| Rubber-stamp the queue | {naive['recall']:.1%} | {naive['precision']:.1%} | {naive['fpr']:.2%} | "
+            f"| Rubber-stamp the queue | {_pct(naive['recall'])} | {_pct(naive['precision'])} | {_pct(naive['fpr'])} | "
             f"{naive['fp']} | {harm['naive']} |"
         ),
         (
-            f"| Follow Halden | {agent['recall']:.1%} | {agent['precision']:.1%} | {agent['fpr']:.2%} | "
+            f"| Follow Halden | {_pct(agent['recall'])} | {_pct(agent['precision'])} | {_pct(agent['fpr'])} | "
             f"{agent['fp']} | {harm['agent_block']} |"
         ),
         "",
@@ -137,7 +137,37 @@ def summary_markdown(metrics: dict, meta: dict) -> str:
         lines.append("None.")
     else:
         for row in cleared:
-            lines.append(f"- {row['name']} ({row['customer_id']}), {row['payments']} queued payments")
+            lines.append(
+                f"- {row['name']} ({row['customer_id']}), {plural(row['payments'], 'queued payment')}"
+            )
+    robustness = metrics.get("robustness")
+    if robustness:
+        lines += [
+            "",
+            "## Other seeds",
+            "",
+            robustness["note"],
+            "",
+            "| Seed | Agent recall | Agent precision | False alarms | Genuine customers blocked | Fraud cases named | Legitimate cases approved |",
+            "| --- | --- | --- | --- | --- | --- | --- |",
+        ]
+        for row in robustness["seeds"]:
+            lines.append(
+                f"| {row['seed']} | {_pct(row['agent_recall'])} | {_pct(row['agent_precision'])} | {row['agent_false_alarms']} | "
+                f"{row['genuine_blocked_by_agent']} (queue would block {row['genuine_blocked_by_queue']}) | "
+                f"{row['fraud_cases_named_correctly']} / {row['fraud_cases']} | "
+                f"{row['legitimate_cases_approved']} / {row['legitimate_cases']} |"
+            )
+        lines.append("")
+        for row in robustness["seeds"]:
+            for example in row.get("false_alarm_examples") or []:
+                lines.append(
+                    f"Seed {row['seed']} counts {example['transaction_id']} "
+                    f"({money(example['amount_cents'])} at {example['merchant_name']}, {example['customer_name']}) "
+                    f"with {example['case_id']} ({example['predicted_pattern'].replace('_', ' ')}). "
+                    "The payment is legitimate and sits inside that case's time window, so it is scored with the case."
+                )
+        lines += ["", robustness["limitations"], ""]
     lines += [
         "",
         "## How to read this",
@@ -148,3 +178,10 @@ def summary_markdown(metrics: dict, meta: dict) -> str:
         "",
     ]
     return "\n".join(lines)
+
+
+def _pct(value: float) -> str:
+    points = value * 100
+    if abs(points - round(points)) < 1e-6:
+        return f"{round(points):.0f}%"
+    return f"{points:.2f}%"

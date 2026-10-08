@@ -2,9 +2,9 @@
 
 Halden is a fraud investigation desk. A payment is flagged, an agent reads the file the way an analyst would, and a person decides whether to approve, hold, escalate, or block. The agent never takes the action itself.
 
-It runs on a seeded synthetic book: card testing, account takeover, mule-account chains, merchant collusion, and honest customers who look suspicious (a real trip, a one-off electronics purchase, a lunch-hour sale, a new phone at home, a shared household iPad). No API key.
+It runs on a seeded synthetic book: card testing, account takeover, mule-account chains, merchant collusion, and honest customers who look suspicious (a real trip, a one-off electronics purchase, a lunch-hour sale, a new phone at home, a shared household device). No API key.
 
-On this seed the blunt queue catches **100%** of fraud payments and would also block **8 genuine customers**. Halden still catches **100%**, at **100% precision**, and would block **0** genuine customers.
+On seed 42 the blunt queue catches **100%** of fraud payments and would also block **8 genuine customers**. Halden still catches **100%**, at **100% precision**, and would block **0** genuine customers. The same checks on seeds 7, 99, and 123 are on the metrics page and in `REPORT.md`. Seed 99 keeps one legitimate $24.21 pharmacy payment that fell inside an account-takeover window (precision 98.99%). That result is reported as it came out.
 
 ## Run it locally
 
@@ -49,7 +49,7 @@ The queue, case files, and metrics are static files under `public/data/`, so the
 - **Queue** is the morning review. The five tiles at the top are the pitch.
 - **Demo** walks card testing, account takeover, a mule chain, merchant collusion, then a genuine trip the queue got wrong.
 - Open a case to read the evidence, the step timeline, the linked-entity graph, and the suggested action. Record a decision. The button does not block anyone.
-- **Metrics** is the scorecard against held-out labels: recall, precision, false alarms, and genuine customers each approach would have blocked.
+- **Metrics** is the scorecard against held-out labels: recall, precision, false alarms, genuine customers each approach would have blocked, and the same checks on three other seeds.
 - Download a case as Markdown from the case file, or the book-level report from **Metrics** (`/api/report`).
 
 ## Architecture

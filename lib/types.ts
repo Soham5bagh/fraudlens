@@ -158,6 +158,30 @@ export type Metrics = {
     legitimate_cases_approved: number;
   };
   narrative: string;
+  robustness?: {
+    note: string;
+    limitations: string;
+    seeds: {
+      seed: number;
+      agent_recall: number;
+      agent_precision: number;
+      agent_false_alarms: number;
+      genuine_blocked_by_queue: number;
+      genuine_blocked_by_agent: number;
+      fraud_cases_named_correctly: number;
+      fraud_cases: number;
+      legitimate_cases_approved: number;
+      legitimate_cases: number;
+      false_alarm_examples?: {
+        transaction_id: string;
+        amount_cents: number;
+        merchant_name: string;
+        case_id: string;
+        predicted_pattern: string;
+        customer_name: string;
+      }[];
+    }[];
+  };
   headline: {
     frauds_caught_recall: number;
     precision: number;

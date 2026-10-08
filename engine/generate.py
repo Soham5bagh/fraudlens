@@ -391,7 +391,7 @@ def generate(seed: int = 42) -> dict:
             "name": f"{first} {last}",
             "first_name": first,
             "last_name": last,
-            "email": f"{first}.{last}.planted@example.com".lower(),
+            "email": f"{first}.{last}.desk@example.com".lower(),
             "created_at": iso(opened),
             "created_ts": _ts(opened),
             "home_city": city[0],

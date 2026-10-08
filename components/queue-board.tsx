@@ -64,7 +64,7 @@ export function QueueBoard() {
       <p className="kicker">Morning review · seed 42</p>
       <h1>Thirty cases. One desk.</h1>
       <p className="lede">
-        A blunt flagger caught every planted fraud and also stopped eight genuine customers.
+        A blunt flagger caught every fraudulent payment and also stopped eight genuine customers.
         Halden re-investigated the queue, kept the fraud, and cleared the honest ones.
         Nothing here is blocked until you say so.
       </p>

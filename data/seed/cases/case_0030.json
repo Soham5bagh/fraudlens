@@ -21,10 +21,10 @@
   "pattern_label": "Mule-account chain",
   "pattern_detail": "pass_through",
   "action": "escalate",
-  "action_rationale": "Escalate the chain. The receiving accounts need to be frozen together, which is a desk lead's call.",
+  "action_rationale": "Escalate the chain so the receiving accounts can be frozen together.",
   "confidence": "high",
   "summary": "Mule flow touching Anika Diaz: funds move onward to a cash-out the same day.",
-  "narrative": "Money reaches a cash-out through freshly linked accounts, with little of it staying put. Escalate the chain. The receiving accounts need to be frozen together, which is a desk lead's call. Lead payment txn_005315 is $400.00 approved at peer-to-peer transfer on 10 Aug 2026 07:00 UTC, card \u2022\u2022none, device dev_0360. Before this episode, Anika Diaz had 1 payments with a median of $5.50.",
+  "narrative": "Funds arrive and leave again toward a cash-out, with little of the money staying on the account. Escalate the chain so the receiving accounts can be frozen together. Lead payment txn_005315 is $400.00 approved at peer-to-peer transfer on 10 Aug 2026 07:00 UTC, no card on this transfer, device dev_0360 (Pixel 8 \u00b7 Android 15 \u00b7 Chrome). Before this episode, Anika Diaz had 1 payment with a median of $5.50.",
   "signals": [
     {
       "name": "Case opened",
@@ -39,7 +39,7 @@
     {
       "name": "Shared infrastructure",
       "points": 8,
-      "detail": "0 other customer(s) on the episode devices."
+      "detail": "No other customer uses the devices in this episode."
     },
     {
       "name": "Funds do not stay",
@@ -111,7 +111,7 @@
       "status": "clear",
       "started_at": "2026-08-11T15:00:01Z",
       "duration_ms": 540,
-      "finding": "The episode around txn_005315 holds 2 payments across 60 minutes. The busiest hour contains 2. 0 declines in the episode. Merchants touched: P2P transfer, Keystone Crypto Desk.",
+      "finding": "The episode around txn_005315 holds 2 payments across 60 minutes. The busiest hour contains 2 payments. 0 declines in the episode. Merchants touched: P2P transfer, and Keystone Crypto Desk.",
       "evidence": [
         {
           "label": "Payments in episode",
@@ -163,7 +163,7 @@
       "status": "clear",
       "started_at": "2026-08-11T15:00:03Z",
       "duration_ms": 730,
-      "finding": "Devices in the episode: dev_0360 (Pixel 8 \u00b7 Android 15 \u00b7 Chrome, already on file). IPs: 198.51.100.115 \u00b7 Bristol, GB, datacenter. Home country is GB. The episode stays in the home country.",
+      "finding": "Devices in the episode: dev_0360 (Pixel 8 \u00b7 Android 15 \u00b7 Chrome, already on file). IPs: 198.51.100.115 \u00b7 Bristol, GB, datacenter. The customer's home country is the United Kingdom. Every payment in this episode is there.",
       "evidence": [
         {
           "label": "New devices",
@@ -189,7 +189,7 @@
       "status": "alert",
       "started_at": "2026-08-11T15:00:04Z",
       "duration_ms": 860,
-      "finding": "Devices in the episode are also used by no other customer. Inbound transfers $400.00, outbound $380.00, pass-through 95%. Funds from acct_0175 reach a cash-out inside the graph (Anika Diaz (acct_0175) \u2192 Keystone Crypto Desk).",
+      "finding": "No other customer uses the devices in this episode. Inbound transfers $400.00, outbound $380.00, pass-through 95%. Funds from acct_0175 reach a cash-out inside the graph (Anika Diaz (acct_0175) \u2192 Keystone Crypto Desk).",
       "evidence": [
         {
           "label": "Linked customers",
@@ -229,7 +229,7 @@
       "status": "alert",
       "started_at": "2026-08-11T15:00:06Z",
       "duration_ms": 390,
-      "finding": "Mule-account chain. Money reaches a cash-out through freshly linked accounts, with little of it staying put.",
+      "finding": "Mule-account chain. Funds arrive and leave again toward a cash-out, with little of the money staying on the account.",
       "evidence": [
         {
           "label": "Pattern",
@@ -247,7 +247,7 @@
       "status": "alert",
       "started_at": "2026-08-11T15:00:07Z",
       "duration_ms": 360,
-      "finding": "Suggest escalate. Risk score 78/100. Escalate the chain. The receiving accounts need to be frozen together, which is a desk lead's call. A person still has to confirm this; the agent does not apply it.",
+      "finding": "Suggested action: escalate. Risk score 78/100. Escalate the chain so the receiving accounts can be frozen together. A person still has to confirm this. Halden does not apply it.",
       "evidence": [
         {
           "label": "Suggested action",
@@ -377,7 +377,7 @@
   "customer": {
     "id": "cus_0175",
     "name": "Anika Diaz",
-    "email": "anika.diaz.planted@example.com",
+    "email": "anika.diaz.desk@example.com",
     "home_city": "Bristol",
     "home_country": "GB",
     "segment": "student",
@@ -400,6 +400,6 @@
     "ip_country": "GB",
     "card_last4": null
   },
-  "report_markdown": "# Halden case case_0030\n\n**Customer.** Anika Diaz (cus_0175), Bristol, GB.\n**Lead payment.** txn_005315 \u00b7 $400.00 \u00b7 peer-to-peer transfer \u00b7 2026-08-10T07:00:08Z.\n**Pattern.** Mule-account chain (pass through).\n**Risk score.** 78 / 100.\n**Suggested action.** escalate \u2014 a human still has to confirm it.\n\n## Summary\n\nMoney reaches a cash-out through freshly linked accounts, with little of it staying put. Escalate the chain. The receiving accounts need to be frozen together, which is a desk lead's call. Lead payment txn_005315 is $400.00 approved at peer-to-peer transfer on 10 Aug 2026 07:00 UTC, card \u2022\u2022none, device dev_0360. Before this episode, Anika Diaz had 1 payments with a median of $5.50.\n\n## Why this score\n\n- **Case opened** (+4): Every queued payment starts with a small residual score.\n- **Cash-out path** (+40): Anika Diaz (acct_0175) \u2192 Keystone Crypto Desk\n- **Shared infrastructure** (+8): 0 other customer(s) on the episode devices.\n- **Funds do not stay** (+16): Inbound $400.00, outbound $380.00.\n- **Young account** (+10): Opened 18 days ago.\n\n## What the agent checked\n\n### Open the flagged payment (watch)\n\nQueue sent txn_005315 for Anika Diaz: $400.00 at peer-to-peer transfer on 10 Aug 2026 07:00 UTC. The flagger's reasons were: Account is under 30 days old and the amount is large; The payment's shape is an outlier for the whole book.\n\n- Transaction: txn_005315\n- Amount: $400.00\n- Customer: Anika Diaz (cus_0175)\n- Why it was queued: new_account_amount, isolation_forest\n\n### Customer history and baseline (clear)\n\nAnika Diaz has 1 prior payment before this episode, median $5.50. Account acct_0175 is 18 days old. Usual devices: dev_0369. Countries already seen: GB.\n\n- Account age: 18 days\n- Prior payments: 1\n- Median amount: $5.50\n- Home: Bristol, GB\n\n### Payment velocity (clear)\n\nThe episode around txn_005315 holds 2 payments across 60 minutes. The busiest hour contains 2. 0 declines in the episode. Merchants touched: P2P transfer, Keystone Crypto Desk.\n\n- Payments in episode: 2\n- Busiest hour: 2\n- Declines: 0\n- Distinct merchants: 2\n\n### Amount versus baseline (alert)\n\nEpisode amounts run from $380.00 to $400.00, median $390.00. The peak is 72.7\u00d7 the baseline median of $5.50.\n\n- Episode median: $390.00\n- Episode peak: $400.00\n- Baseline median: $5.50\n- Peak vs baseline: 72.7\u00d7\n\n### Device and IP linkage (clear)\n\nDevices in the episode: dev_0360 (Pixel 8 \u00b7 Android 15 \u00b7 Chrome, already on file). IPs: 198.51.100.115 \u00b7 Bristol, GB, datacenter. Home country is GB. The episode stays in the home country.\n\n- New devices: none\n- Mature devices reused: none\n- Countries: GB\n- Datacenter or VPN: yes\n\n### Linked accounts and money flow (alert)\n\nDevices in the episode are also used by no other customer. Inbound transfers $400.00, outbound $380.00, pass-through 95%. Funds from acct_0175 reach a cash-out inside the graph (Anika Diaz (acct_0175) \u2192 Keystone Crypto Desk).\n\n- Linked customers: 0\n- Household pattern: no\n- Reaches cash-out: yes\n- Pass-through: 95%\n\n### Merchant check (watch)\n\nThe lead movement is a transfer, not a card purchase, so there is no merchant to underwrite. The money-flow step carries that evidence.\n\n- Merchant: none (transfer)\n\n### Pattern classification (alert)\n\nMule-account chain. Money reaches a cash-out through freshly linked accounts, with little of it staying put.\n\n- Pattern: Mule-account chain\n- Detail: pass through\n\n### Suggested action (alert)\n\nSuggest escalate. Risk score 78/100. Escalate the chain. The receiving accounts need to be frozen together, which is a desk lead's call. A person still has to confirm this; the agent does not apply it.\n\n- Suggested action: escalate\n- Risk score: 78/100\n- Who decides: human analyst\n\n## Payments in the episode\n\n| When | Id | Amount | Status | Merchant | Device |\n| --- | --- | --- | --- | --- | --- |\n| 2026-08-10T07:00:08Z | txn_005315 | $400.00 | approved | P2P transfer | dev_0360 |\n| 2026-08-10T08:00:00Z | txn_005316 | $380.00 | approved | Keystone Crypto Desk | dev_0360 |\n\n## Action rationale\n\nEscalate the chain. The receiving accounts need to be frozen together, which is a desk lead's call.\n\n## Held-out label\n\nThis section is joined after the investigation. The agent did not see it.\n\n- Fraud: yes\n- Pattern: mule_chain\n\n*Halden suggests. An analyst decides.*\n",
+  "report_markdown": "# Halden case case_0030\n\n**Customer.** Anika Diaz (cus_0175), Bristol, GB.\n**Lead payment.** txn_005315 \u00b7 $400.00 \u00b7 peer-to-peer transfer \u00b7 2026-08-10T07:00:08Z.\n**Pattern.** Mule-account chain (pass through).\n**Risk score.** 78 / 100.\n**Suggested action.** escalate \u2014 a human still has to confirm it.\n\n## Summary\n\nFunds arrive and leave again toward a cash-out, with little of the money staying on the account. Escalate the chain so the receiving accounts can be frozen together. Lead payment txn_005315 is $400.00 approved at peer-to-peer transfer on 10 Aug 2026 07:00 UTC, no card on this transfer, device dev_0360 (Pixel 8 \u00b7 Android 15 \u00b7 Chrome). Before this episode, Anika Diaz had 1 payment with a median of $5.50.\n\n## Why this score\n\n- **Case opened** (+4): Every queued payment starts with a small residual score.\n- **Cash-out path** (+40): Anika Diaz (acct_0175) \u2192 Keystone Crypto Desk\n- **Shared infrastructure** (+8): No other customer uses the devices in this episode.\n- **Funds do not stay** (+16): Inbound $400.00, outbound $380.00.\n- **Young account** (+10): Opened 18 days ago.\n\n## What the agent checked\n\n### Open the flagged payment (watch)\n\nQueue sent txn_005315 for Anika Diaz: $400.00 at peer-to-peer transfer on 10 Aug 2026 07:00 UTC. The flagger's reasons were: Account is under 30 days old and the amount is large; The payment's shape is an outlier for the whole book.\n\n- Transaction: txn_005315\n- Amount: $400.00\n- Customer: Anika Diaz (cus_0175)\n- Why it was queued: new_account_amount, isolation_forest\n\n### Customer history and baseline (clear)\n\nAnika Diaz has 1 prior payment before this episode, median $5.50. Account acct_0175 is 18 days old. Usual devices: dev_0369. Countries already seen: GB.\n\n- Account age: 18 days\n- Prior payments: 1\n- Median amount: $5.50\n- Home: Bristol, GB\n\n### Payment velocity (clear)\n\nThe episode around txn_005315 holds 2 payments across 60 minutes. The busiest hour contains 2 payments. 0 declines in the episode. Merchants touched: P2P transfer, and Keystone Crypto Desk.\n\n- Payments in episode: 2\n- Busiest hour: 2\n- Declines: 0\n- Distinct merchants: 2\n\n### Amount versus baseline (alert)\n\nEpisode amounts run from $380.00 to $400.00, median $390.00. The peak is 72.7\u00d7 the baseline median of $5.50.\n\n- Episode median: $390.00\n- Episode peak: $400.00\n- Baseline median: $5.50\n- Peak vs baseline: 72.7\u00d7\n\n### Device and IP linkage (clear)\n\nDevices in the episode: dev_0360 (Pixel 8 \u00b7 Android 15 \u00b7 Chrome, already on file). IPs: 198.51.100.115 \u00b7 Bristol, GB, datacenter. The customer's home country is the United Kingdom. Every payment in this episode is there.\n\n- New devices: none\n- Mature devices reused: none\n- Countries: GB\n- Datacenter or VPN: yes\n\n### Linked accounts and money flow (alert)\n\nNo other customer uses the devices in this episode. Inbound transfers $400.00, outbound $380.00, pass-through 95%. Funds from acct_0175 reach a cash-out inside the graph (Anika Diaz (acct_0175) \u2192 Keystone Crypto Desk).\n\n- Linked customers: 0\n- Household pattern: no\n- Reaches cash-out: yes\n- Pass-through: 95%\n\n### Merchant check (watch)\n\nThe lead movement is a transfer, not a card purchase, so there is no merchant to underwrite. The money-flow step carries that evidence.\n\n- Merchant: none (transfer)\n\n### Pattern classification (alert)\n\nMule-account chain. Funds arrive and leave again toward a cash-out, with little of the money staying on the account.\n\n- Pattern: Mule-account chain\n- Detail: pass through\n\n### Suggested action (alert)\n\nSuggested action: escalate. Risk score 78/100. Escalate the chain so the receiving accounts can be frozen together. A person still has to confirm this. Halden does not apply it.\n\n- Suggested action: escalate\n- Risk score: 78/100\n- Who decides: human analyst\n\n## Payments in the episode\n\n| When | Id | Amount | Status | Merchant | Device |\n| --- | --- | --- | --- | --- | --- |\n| 2026-08-10T07:00:08Z | txn_005315 | $400.00 | approved | P2P transfer | dev_0360 |\n| 2026-08-10T08:00:00Z | txn_005316 | $380.00 | approved | Keystone Crypto Desk | dev_0360 |\n\n## Action rationale\n\nEscalate the chain so the receiving accounts can be frozen together.\n\n## Held-out label\n\nThis section is joined after the investigation. The agent did not see it.\n\n- Fraud: yes\n- Pattern: mule_chain\n\n*Halden suggests. An analyst decides.*\n",
   "showcase": null
 }

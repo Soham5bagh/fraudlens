@@ -71,7 +71,7 @@
       "pattern_label": "Account takeover",
       "pattern_detail": "new_device_foreign_spike",
       "action": "block",
-      "summary": "Account takeover on Anika Nguyen: new device, new country, spend at 56\u00d7 baseline.",
+      "summary": "Account takeover on Anika Nguyen: new device, new country, spend at 56.1\u00d7 baseline.",
       "confidence": "high",
       "showcase_slot": "account_takeover"
     },
@@ -96,7 +96,7 @@
       "pattern_label": "Account takeover",
       "pattern_detail": "new_device_foreign_spike",
       "action": "block",
-      "summary": "Account takeover on Sofia Cohen: new device, new country, spend at 26\u00d7 baseline.",
+      "summary": "Account takeover on Sofia Cohen: new device, new country, spend at 26.0\u00d7 baseline.",
       "confidence": "high",
       "showcase_slot": null
     },
@@ -146,7 +146,7 @@
       "pattern_label": "Account takeover",
       "pattern_detail": "new_device_foreign_spike",
       "action": "block",
-      "summary": "Account takeover on Helen Petrov: new device, new country, spend at 26\u00d7 baseline.",
+      "summary": "Account takeover on Helen Petrov: new device, new country, spend at 25.8\u00d7 baseline.",
       "confidence": "high",
       "showcase_slot": null
     },
@@ -539,7 +539,7 @@
       "pattern_label": "Legitimate activity",
       "pattern_detail": "large_purchase",
       "action": "approve",
-      "summary": "Sofia Fischer looks legitimate (large purchase). The queue flag does not survive the file.",
+      "summary": "Sofia Fischer made one large purchase on their usual device, at home.",
       "confidence": "high",
       "showcase_slot": null
     },
@@ -562,7 +562,7 @@
       "pattern_label": "Legitimate activity",
       "pattern_detail": "large_purchase",
       "action": "approve",
-      "summary": "Samir Hughes looks legitimate (large purchase). The queue flag does not survive the file.",
+      "summary": "Samir Hughes made one large purchase on their usual device, at home.",
       "confidence": "high",
       "showcase_slot": null
     },
@@ -584,7 +584,7 @@
       "pattern_label": "Legitimate activity",
       "pattern_detail": "new_device_at_home",
       "action": "approve",
-      "summary": "Priya Keller looks legitimate (new device at home). The queue flag does not survive the file.",
+      "summary": "Priya Keller used a new phone at home, and the amount matches their usual spend.",
       "confidence": "high",
       "showcase_slot": null
     },
@@ -606,7 +606,7 @@
       "pattern_label": "Legitimate activity",
       "pattern_detail": "new_device_at_home",
       "action": "approve",
-      "summary": "Aisha Diaz looks legitimate (new device at home). The queue flag does not survive the file.",
+      "summary": "Aisha Diaz used a new phone at home, and the amount matches their usual spend.",
       "confidence": "high",
       "showcase_slot": null
     },
@@ -629,7 +629,7 @@
       "pattern_label": "Legitimate activity",
       "pattern_detail": "travel",
       "action": "approve",
-      "summary": "Marcus Costa looks legitimate (travel). The queue flag does not survive the file.",
+      "summary": "Marcus Costa is travelling on a device already on file. The foreign IP is the trip, not a takeover.",
       "confidence": "high",
       "showcase_slot": "legitimate"
     },
@@ -652,7 +652,7 @@
       "pattern_label": "Legitimate activity",
       "pattern_detail": "travel",
       "action": "approve",
-      "summary": "Maya Hassan looks legitimate (travel). The queue flag does not survive the file.",
+      "summary": "Maya Hassan is travelling on a device already on file. The foreign IP is the trip, not a takeover.",
       "confidence": "high",
       "showcase_slot": null
     },
@@ -675,7 +675,7 @@
       "pattern_label": "Legitimate activity",
       "pattern_detail": "household",
       "action": "approve",
-      "summary": "Ruth Hart looks legitimate (household). The queue flag does not survive the file.",
+      "summary": "Ruth Hart shares a device with someone of the same surname in the same city. Nothing passes through.",
       "confidence": "high",
       "showcase_slot": null
     },
@@ -698,7 +698,7 @@
       "pattern_label": "Legitimate activity",
       "pattern_detail": "flash_sale",
       "action": "approve",
-      "summary": "Helen Silva looks legitimate (flash sale). The queue flag does not survive the file.",
+      "summary": "Helen Silva made several ordinary purchases in one hour, on a known device, with no declines.",
       "confidence": "high",
       "showcase_slot": null
     }

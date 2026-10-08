@@ -9,6 +9,7 @@ from engine.build import DB_PATH, main as build_main
 from engine.flagging import build_cases, flag_transactions
 from engine.generate import generate, public_world
 from engine.metrics import compute_metrics
+from engine.reports import summary_markdown
 
 PATTERNS = ("card_testing", "account_takeover", "mule_chain", "merchant_collusion")
 
@@ -70,6 +71,78 @@ def test_agent_beats_the_queue_without_blocking_honest_customers():
         assert row["agent_recall"] >= 0.95
 
 
+def test_explanations_cite_concrete_evidence_and_read_cleanly():
+    _world, _visible, _flagged, _cases, investigations, _metrics = _run()
+    banned = (
+        "planted",
+        "survive the file",
+        "had 1 payments",
+        "••none",
+        "Suggest ",
+        "customer(s)",
+        "to go with the iPad",
+        "desk lead",
+        "0 other customers",
+        "outside US",
+        "outside GB",
+        "stays in ",
+        "some of it is at home",
+        "customer's groceries",
+        "one or two ordinary",
+        "digital_goods",
+        "1 queued payments",
+    )
+    for investigation in investigations:
+        blob = " ".join(
+            [
+                investigation["narrative"],
+                investigation["summary"],
+                investigation["action_rationale"],
+                *(step["finding"] for step in investigation["timeline"]),
+            ]
+        )
+        for phrase in banned:
+            assert phrase not in blob, (investigation["case_id"], phrase)
+        assert "planted" not in investigation["customer"]["email"]
+        assert investigation["lead"]["id"] in investigation["narrative"]
+        dollars = f"${investigation['lead']['amount_cents'] / 100:,.2f}"
+        assert dollars in investigation["narrative"]
+        if investigation["pattern"] == "card_testing":
+            declines = sum(1 for txn in investigation["related_transactions"] if txn["status"] == "declined")
+            assert f"{declines} declined" in investigation["narrative"]
+            for name in {txn["merchant_name"] for txn in investigation["related_transactions"]}:
+                assert name in investigation["narrative"], (investigation["case_id"], name)
+        if investigation["pattern"] == "account_takeover":
+            ratio = next(
+                item["value"]
+                for step in investigation["timeline"]
+                if step["id"] == "amount"
+                for item in step["evidence"]
+                if item["label"] == "Peak vs baseline"
+            )
+            assert ratio in investigation["summary"], (investigation["case_id"], ratio, investigation["summary"])
+        if investigation["pattern_detail"] == "household":
+            hardware = investigation["lead"]["device_label"].split("·")[0].strip()
+            assert hardware in investigation["action_rationale"]
+
+
+def test_holdout_seed_still_catches_fraud_without_blocking_customers():
+    from engine.evaluate import run_seed
+
+    held = run_seed(99)
+    assert held["agent_recall"] == 1.0
+    assert held["genuine_blocked_by_agent"] == 0
+    assert held["agent_false_alarms"] == 1
+    assert held["agent_precision"] < 1
+    assert held["fraud_cases_named_correctly"] == held["fraud_cases"]
+    assert all(row["cases"] >= 1 and row["named"] == row["cases"] for row in held["patterns"])
+    example = held["false_alarm_examples"][0]
+    assert example["transaction_id"] == "txn_001034"
+    assert example["amount_cents"] == 2421
+    assert example["merchant_name"] == "Quarter Pharmacy"
+    assert example["predicted_pattern"] == "account_takeover"
+
+
 def test_explanations_cite_concrete_evidence():
     _world, _visible, _flagged, _cases, investigations, _metrics = _run()
     by_pattern = {}
@@ -102,6 +175,9 @@ def test_metrics_arithmetic():
         if row["tp"] + row["fp"]:
             assert row["precision"] == round(row["tp"] / (row["tp"] + row["fp"]), 4)
         assert row["recall"] == round(row["tp"] / (row["tp"] + row["fn"]), 4)
+    report = summary_markdown(metrics, world["meta"])
+    assert "1 queued payments" not in report
+    assert "1 queued payment" in report
 
 
 def test_sqlite_keeps_labels_in_their_own_table(tmp_path, monkeypatch):

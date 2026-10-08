@@ -9,9 +9,12 @@ export function money(cents: number): string {
 
 export function pct(value: number): string {
   const points = value * 100;
-  if (points === 0 || points === 100) return `${points.toFixed(0)}%`;
-  if (points < 1) return `${points.toFixed(2)}%`;
-  return `${points.toFixed(1)}%`;
+  if (Math.abs(points - Math.round(points)) < 1e-6) return `${Math.round(points)}%`;
+  return `${points.toFixed(2)}%`;
+}
+
+export function countLabel(count: number, word: string): string {
+  return `${count} ${word}${count === 1 ? "" : "s"}`;
 }
 
 export function when(iso: string): string {
