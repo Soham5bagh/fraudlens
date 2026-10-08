@@ -4,10 +4,10 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const LINKS = [
-  { href: "/", label: "Queue" },
-  { href: "/metrics", label: "Metrics" },
-  { href: "/demo", label: "Demo" },
-  { href: "/investigate", label: "Investigate" },
+  { href: "/", label: "Review queue" },
+  { href: "/demo", label: "Guided demo" },
+  { href: "/investigate", label: "Investigate live" },
+  { href: "/metrics", label: "Results" },
 ];
 
 export function Shell({ children }: { children: React.ReactNode }) {
@@ -17,7 +17,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
       <header className="topbar">
         <Link href="/" className="brand">
           <strong>Halden</strong>
-          <span>Fraud investigation desk</span>
+          <span>A fraud analyst that waits for you</span>
         </Link>
         <nav className="nav">
           {LINKS.map((link) => {
