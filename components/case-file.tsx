@@ -3,11 +3,13 @@
 import Link from "next/link";
 import { useParams, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import { Info } from "@/components/info-tip";
 import { NetworkGraph } from "@/components/network-graph";
-import { ACTIONS, loadDecisions, saveDecision } from "@/lib/decisions";
 import { VerdictBanner } from "@/components/verdict-banner";
+import { ACTIONS, loadDecisions, saveDecision } from "@/lib/decisions";
 import { actionLabel, money, patternName, when } from "@/lib/format";
-import { actionPlain, patternPlain, statusPlain, TERM_HELP } from "@/lib/glossary";
+import { actionPlain, patternPlain, statusPlain } from "@/lib/glossary";
+import { useDecisionKeys } from "@/lib/use-decision-keys";
 import type { Action, AnalystDecision, CaseFile, JudgeEntry } from "@/lib/types";
 
 export function CaseFileView() {
@@ -70,6 +72,15 @@ export function CaseFileView() {
       .catch(() => setTruthError("The held-out labels did not load."));
   }
 
+  useDecisionKeys(
+    Boolean(file),
+    (next) => {
+      setAction(next);
+      setSaved(false);
+    },
+    () => record(),
+  );
+
   function download() {
     if (!file?.report_markdown) return;
     const blob = new Blob([file.report_markdown], { type: "text/markdown" });
@@ -126,13 +137,13 @@ export function CaseFileView() {
             </p>
           </section>
 
-          <section className="panel">
-            <h2>What Halden thinks happened</h2>
+          <details className="fold" open>
+            <summary>Full explanation</summary>
             <p className="narrative">{file.narrative}</p>
-          </section>
+          </details>
 
-          <section className="panel">
-            <h2>Why the score is {file.risk_score}</h2>
+          <details className="fold" open>
+            <summary>Why the score is {file.risk_score}</summary>
             <ul className="signals">
               {file.signals.map((signal) => (
                 <li key={signal.name}>
@@ -143,11 +154,10 @@ export function CaseFileView() {
                 </li>
               ))}
             </ul>
-          </section>
+          </details>
 
-          <section className="panel">
-            <h2>Evidence, step by step</h2>
-            <p className="hint">Each step is one check. The label says whether that check was fine, worth a look, or a problem. {TERM_HELP.riskScore}</p>
+          <details className="fold" open>
+            <summary>Evidence, step by step <Info text="Each row is one check, with the numbers from that check." /></summary>
             <ol className="timeline">
               {file.timeline.map((step, index) => (
                 <li key={step.id}>
@@ -174,11 +184,10 @@ export function CaseFileView() {
                 </li>
               ))}
             </ol>
-          </section>
+          </details>
 
-          <section className="panel">
-            <h2>Payments Halden looked at</h2>
-            <p className="hint">The burst of activity around the flagged payment, not the customer&apos;s whole history.</p>
+          <details className="fold" open>
+            <summary>Payments in the window <Info text="The burst around the flagged payment, with ids, amounts, and devices. Not the customer's whole history." /></summary>
             <div className="scroll">
               <table>
                 <thead>
@@ -205,21 +214,20 @@ export function CaseFileView() {
                 </tbody>
               </table>
             </div>
-          </section>
+          </details>
         </div>
 
         <aside className="sticky-side">
           <section className="panel">
-            <p className="kicker">Your decision</p>
-            <h2 style={{ textTransform: "capitalize" }}>{actionLabel(file.action)}</h2>
+            <p className="kicker">Your decision <Info text="Halden does not apply this. You do." /></p>
+            <h2 style={{ textTransform: "capitalize" }}>{actionLabel(file.action)} <Info text={actionPlain(file.action)} /></h2>
             <p>{file.action_rationale}</p>
-            <p className="hint">{actionPlain(file.action)} Halden does not apply this. You do.</p>
             <div className="actions" style={{ marginTop: 12 }}>
               {ACTIONS.map((option) => (
                 <button
                   key={option}
                   type="button"
-                  title={actionPlain(option)}
+                  title={`${actionPlain(option)} Shortcut ${option[0].toUpperCase()}.`}
                   className={`${option === action ? "chosen" : ""} pill ${option}`}
                   onClick={() => {
                     setAction(option);
@@ -230,6 +238,7 @@ export function CaseFileView() {
                 </button>
               ))}
             </div>
+            <p className="keys"><kbd>A</kbd> <kbd>H</kbd> <kbd>E</kbd> <kbd>B</kbd> choose · <kbd>R</kbd> record</p>
             <textarea
               value={note}
               onChange={(event) => setNote(event.target.value)}
@@ -249,15 +258,13 @@ export function CaseFileView() {
             ) : null}
           </section>
 
-          <section className="panel">
-            <h2>Who is connected</h2>
-            <p className="hint">Customers, devices, and shops tied to this payment.</p>
+          <details className="fold" open>
+            <summary>Linked accounts <Info text="Customers, devices, and shops tied to this payment." /></summary>
             <NetworkGraph graph={file.graph} />
-          </section>
+          </details>
 
           <section className="panel">
-            <h2>What was actually planted</h2>
-            <p className="hint">Hidden from Halden. Open it only after you have decided, to see if the recommendation was right.</p>
+            <h2>What was actually planted <Info text="Hidden from Halden. Open it after you decide." /></h2>
             {truth ? (
               <p>
                 {truth.is_fraud ? `Fraud · ${patternName(truth.pattern)}. ${patternPlain(truth.pattern)}` : "A genuine customer."}

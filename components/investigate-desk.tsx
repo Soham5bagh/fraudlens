@@ -3,11 +3,13 @@
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import { Info } from "@/components/info-tip";
 import { NetworkGraph } from "@/components/network-graph";
 import { VerdictBanner } from "@/components/verdict-banner";
 import { ACTIONS, loadDecisions, saveDecision } from "@/lib/decisions";
 import { actionLabel, money, when } from "@/lib/format";
 import { actionPlain, patternPlain, statusPlain } from "@/lib/glossary";
+import { useDecisionKeys } from "@/lib/use-decision-keys";
 import { PLANTED, runLive } from "@/lib/live/generate";
 import type { Investigation, PlantedScenario, ScenarioChoice, Truth } from "@/lib/live/types";
 import type { Action, AnalystDecision } from "@/lib/types";
@@ -76,6 +78,8 @@ export function InvestigateDesk() {
     router.replace(`/investigate?scenario=${scenario}&seed=${nextSeed}`);
   }
 
+  useDecisionKeys(ready, setAction, () => record());
+
   function record() {
     if (!file || !truth || seed == null) return;
     const saved = saveDecision({
@@ -103,7 +107,7 @@ export function InvestigateDesk() {
           </button>
         ))}
       </div>
-      <p className="hint">{patternPlain(picked)}</p>
+      <p className="verdict-pattern">{labelFor(picked)} <Info text={patternPlain(picked)} /></p>
       <button className="primary" type="button" onClick={investigateNew} style={{ width: "auto", padding: "10px 14px" }}>
         Investigate a new payment
       </button>
@@ -118,8 +122,7 @@ export function InvestigateDesk() {
         <div className="case-grid" style={{ marginTop: 22 }}>
           <div className="stack">
             <section className="panel">
-              <p className="meta">Seed {seed} · you chose {labelFor(choice)}</p>
-              <p className="hint">{patternPlain(choice)}</p>
+              <p className="meta">Seed {seed} · {labelFor(choice)} · {file.customer.id}</p>
               <h2 style={{ fontSize: "clamp(28px, 4vw, 42px)" }}>{file.customer.name}</h2>
               <p className="lede" style={{ marginBottom: 0 }}>
                 {money(file.lead.amountCents)} at {file.lead.merchantName} · {when(file.lead.occurredAt)}
@@ -142,14 +145,13 @@ export function InvestigateDesk() {
                 <div>
                   <p className="kicker">Verdict</p>
                   <p className="verdict-why">Halden is still checking this payment.</p>
-                  <p className="hint">The risk score and the recommendation appear when the last check finishes. You decide after that.</p>
+                  <p className="hint">Score and recommendation land when the last check finishes.</p>
                 </div>
               </section>
             )}
 
             <section className="panel">
               <h2>Evidence, step by step</h2>
-              <p className="hint">Each step is one check, with the numbers Halden found.</p>
               {shown === 0 ? <p className="state">Opening the file…</p> : null}
               <ol className="timeline">
                 {file.timeline.slice(0, shown).map((step, index) => (
@@ -197,8 +199,7 @@ export function InvestigateDesk() {
                   </ul>
                 </section>
                 <section className="panel">
-                  <h2>Payments Halden looked at</h2>
-                  <p className="hint">The burst of activity around the flagged payment.</p>
+                  <h2>Payments in the window</h2>
                   <div className="scroll">
                     <table>
                       <thead>
@@ -230,12 +231,12 @@ export function InvestigateDesk() {
 
           <aside className="sticky-side">
             <section className="panel">
-              <p className="kicker">Your decision</p>
+              <p className="kicker">Your decision <Info text="Halden does not apply this. You do." /></p>
               {ready ? (
                 <>
-                  <h2 style={{ textTransform: "capitalize" }}>{actionLabel(file.action)}</h2>
+                  <h2 style={{ textTransform: "capitalize" }}>{actionLabel(file.action)} <Info text={actionPlain(file.action)} /></h2>
                   <p>{file.actionRationale}</p>
-                  <p className="hint">{actionPlain(file.action)} Halden does not apply this. You do.</p>
+                  <p className="keys"><kbd>A</kbd> <kbd>H</kbd> <kbd>E</kbd> <kbd>B</kbd> choose · <kbd>R</kbd> record</p>
                   <div className="actions" style={{ marginTop: 12 }}>
                     {ACTIONS.map((option) => (
                       <button
@@ -272,14 +273,13 @@ export function InvestigateDesk() {
                   Planted: {truth.label}. {patternPlain(truth.scenario)} Halden named {file.patternLabel} and suggested {file.action}.{" "}
                   {verdict(truth, file) ? "That matches." : "That does not match."}
                 </p>
-                <p className="hint">Halden never received this label. It only saw the generated payments.</p>
+                <p className="note">Halden never received this label. It only saw the generated payments.</p>
               </section>
             ) : null}
 
             {ready ? (
               <section className="panel">
-                <h2>Who is connected</h2>
-                <p className="hint">Customers, devices, and shops tied to this payment.</p>
+                <h2>Linked accounts <Info text="Customers, devices, and shops tied to this payment." /></h2>
                 <NetworkGraph graph={file.graph} />
                 <p className="note">{file.graph.caption}</p>
               </section>

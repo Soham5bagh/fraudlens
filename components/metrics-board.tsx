@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { Info } from "@/components/info-tip";
 import { countLabel, money, patternName, pct } from "@/lib/format";
 import { patternPlain, TERM_HELP } from "@/lib/glossary";
 import type { Metrics } from "@/lib/types";
@@ -32,51 +33,51 @@ export function MetricsBoard() {
       </p>
       <div className="compare-plain">
         <article className="panel">
-          <h2>Basic rule queue</h2>
-          <p className="hint">{TERM_HELP.queue} If someone blocked every flag, this is the result.</p>
+          <h2>Basic rule queue <Info text={`${TERM_HELP.queue} If someone blocked every flag, this is the result.`} /></h2>
           <div className="figure">
             <div><b>{naive.tp}</b><span>frauds caught, of {population.fraud_transactions}</span></div>
             <div><b>{headline.genuine_customers_blocked_by_queue}</b><span>genuine customers wrongly blocked</span></div>
-            <div><b>{naive.fp}</b><span>false alarms. {TERM_HELP.falseAlarms}</span></div>
+            <div><b>{naive.fp}</b><span>false alarms <Info text={TERM_HELP.falseAlarms} /></span></div>
           </div>
         </article>
         <article className="panel halden">
-          <h2>Halden</h2>
-          <p className="hint">The same flagged payments, read one by one. A person still has to agree before anything is blocked.</p>
+          <h2>Halden <Info text="The same flagged payments, read one by one. A person still has to agree." /></h2>
           <div className="figure">
             <div><b>{agent.tp}</b><span>frauds caught, of {population.fraud_transactions}</span></div>
             <div><b>{headline.genuine_customers_blocked_by_agent}</b><span>genuine customers wrongly blocked</span></div>
-            <div><b>{agent.fp}</b><span>false alarms. {TERM_HELP.falseAlarms}</span></div>
+            <div><b>{agent.fp}</b><span>false alarms <Info text={TERM_HELP.falseAlarms} /></span></div>
           </div>
         </article>
       </div>
-      <p className="hint" style={{ marginBottom: 16 }}>{metrics.narrative}</p>
+      <details className="fold" open>
+        <summary>Scorecard note</summary>
+        <p>{metrics.narrative}</p>
+      </details>
       <div className="stats">
         <article className="stat">
-          <span className="kicker" title={TERM_HELP.recall}>Frauds caught</span>
+          <span className="kicker">Frauds caught <Info text={TERM_HELP.recall} /></span>
           <b>{pct(headline.frauds_caught_recall)}</b>
-          <span className="muted">{agent.tp} of {agent.tp + agent.fn} fraud payments. {TERM_HELP.recall}</span>
+          <span className="muted">{agent.tp} of {agent.tp + agent.fn} fraud payments</span>
         </article>
         <article className="stat">
-          <span className="kicker" title={TERM_HELP.precision}>Right when it says fraud</span>
+          <span className="kicker">Precision <Info text={TERM_HELP.precision} /></span>
           <b>{pct(headline.precision)}</b>
-          <span className="muted">This is precision. The rule queue was {pct(naive.precision)}. {TERM_HELP.precision}</span>
+          <span className="muted">Rule queue {pct(naive.precision)}</span>
         </article>
         <article className="stat">
-          <span className="kicker" title={TERM_HELP.falseAlarms}>False alarms</span>
+          <span className="kicker">False alarms <Info text={TERM_HELP.falseAlarms} /></span>
           <b>{headline.false_alarms}</b>
-          <span className="muted">The rule queue raised {naive.fp}. Share of genuine payments: {pct(headline.false_positive_rate)}.</span>
+          <span className="muted">Rule queue {naive.fp} · rate {pct(headline.false_positive_rate)}</span>
         </article>
         <article className="stat">
           <span className="kicker">Genuine customers blocked</span>
           <b>{headline.genuine_customers_blocked_by_agent}</b>
-          <span className="muted">Blocking every flag would stop {headline.genuine_customers_blocked_by_queue}.</span>
+          <span className="muted">Rule queue would block {headline.genuine_customers_blocked_by_queue}</span>
         </article>
       </div>
 
       <section className="panel" style={{ marginBottom: 14 }}>
-        <h2>Same comparison, as rates</h2>
-        <p className="hint">Grey is the basic rule queue. Blue is Halden. Frauds caught is recall. “Right when it says fraud” is precision.</p>
+        <h2>Rates <Info text="Grey is the basic rule queue. Blue is Halden. Frauds caught is recall. Precision is how often a fraud call was right." /></h2>
         <div className="bars">
           <Bar label="Frauds caught" naive={naive.recall} agent={agent.recall} />
           <Bar label="Right when it says fraud" naive={naive.precision} agent={agent.precision} />
@@ -96,8 +97,7 @@ export function MetricsBoard() {
       </div>
 
       <section className="panel" style={{ margin: "14px 0" }}>
-        <h2>By kind of fraud</h2>
-        <p className="hint">A pattern is the story Halden names. Caught is how many fraudulent payments of that kind it stopped. Named correctly means the case file used the right story.</p>
+        <h2>By pattern <Info text="Caught is fraudulent payments stopped. Named correctly means the case file used the right pattern." /></h2>
         <div className="scroll">
           <table>
             <thead>
@@ -112,7 +112,7 @@ export function MetricsBoard() {
             <tbody>
               {metrics.by_pattern.map((row) => (
                 <tr key={row.pattern}>
-                  <td>{patternName(row.pattern)}<span className="hint">{patternPlain(row.pattern)}</span></td>
+                  <td>{patternName(row.pattern)} <Info text={patternPlain(row.pattern)} /></td>
                   <td>{row.fraud_transactions}</td>
                   <td>{row.caught_by_agent}</td>
                   <td>{pct(row.agent_recall)}</td>
@@ -131,8 +131,7 @@ export function MetricsBoard() {
 
       {metrics.robustness ? (
         <section className="panel" style={{ marginBottom: 14 }}>
-          <h2>The same checks on other synthetic books</h2>
-        <p className="hint">A seed is the number that rebuilds the book. These were not used to tune the demo. Recall is frauds caught. Precision is how often a fraud call was right.</p>
+          <h2>Other seeds <Info text="A seed rebuilds the book. These were not used to tune the demo. Frauds caught is recall. Precision is how often a fraud call was right." /></h2>
           <p>{metrics.robustness.note}</p>
           <div className="scroll">
             <table>

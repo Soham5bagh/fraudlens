@@ -23,8 +23,8 @@ const STEPS = [
 
 export function HowItWorks() {
   return (
-    <section className="how" aria-labelledby="how-heading">
-      <h2 id="how-heading">How it works</h2>
+    <details className="how" open>
+      <summary id="how-heading">How it works</summary>
       <ol>
         {STEPS.map((step, index) => (
           <li key={step.title}>
@@ -36,7 +36,7 @@ export function HowItWorks() {
           </li>
         ))}
       </ol>
-    </section>
+    </details>
   );
 }
 

@@ -1,3 +1,5 @@
+import { Info } from "@/components/info-tip";
+import { actionLabel } from "@/lib/format";
 import { actionPlain, patternPlain, riskBand, TERM_HELP } from "@/lib/glossary";
 import type { Action } from "@/lib/types";
 
@@ -15,29 +17,24 @@ export function VerdictBanner({
   why: string;
 }) {
   const band = riskBand(score);
-  const plain = patternPlain(pattern);
   return (
     <section className={`verdict ${band.tone}`} aria-label="Halden's verdict">
       <div className="verdict-score">
         <b>{score}</b>
-        <span>risk score out of 100</span>
+        <span>out of 100 <Info text={TERM_HELP.riskScore} /></span>
         <strong>{band.label}</strong>
       </div>
       <div>
-        <p className="kicker">Halden recommends {ACTION_WORD[action]}</p>
+        <p className="kicker">
+          Recommends {actionLabel(action)}
+          <Info text={actionPlain(action)} />
+        </p>
         <p className="verdict-why">{why}</p>
-        <p className="hint">{actionPlain(action)}</p>
-        <p className="hint">
-          <b>{patternLabel}.</b> {plain} {TERM_HELP.riskScore}
+        <p className="verdict-pattern">
+          {patternLabel}
+          <Info text={patternPlain(pattern)} />
         </p>
       </div>
     </section>
   );
 }
-
-const ACTION_WORD: Record<Action, string> = {
-  approve: "approve",
-  hold: "hold",
-  escalate: "escalate",
-  block: "block",
-};

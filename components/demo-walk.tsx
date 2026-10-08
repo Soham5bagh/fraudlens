@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { Info } from "@/components/info-tip";
 import { actionLabel } from "@/lib/format";
 import { patternPlain } from "@/lib/glossary";
 import type { DemoStep } from "@/lib/types";
@@ -35,8 +36,7 @@ export function DemoWalk() {
         {steps.map((step, index) => (
           <article key={step.case_id} className="panel">
             <p className="kicker">Step {index + 1}</p>
-            <h2>{step.title}</h2>
-            <p className="hint">{patternPlain(step.slot)}</p>
+            <h2>{step.title} <Info text={patternPlain(step.slot)} /></h2>
             <p>{step.say}</p>
             <p className="meta">
               {step.customer_name} · {step.amount} · risk score {step.risk_score} out of 100 · recommends {actionLabel(step.action)}
