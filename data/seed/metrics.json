@@ -1,34 +1,34 @@
 {
   "population": {
-    "transactions": 5346,
+    "transactions": 5459,
     "fraud_transactions": 98,
-    "legitimate_transactions": 5248,
+    "legitimate_transactions": 5361,
     "customers": 181,
     "cases": 30
   },
   "naive": {
     "tp": 98,
     "fp": 19,
-    "tn": 5229,
+    "tn": 5342,
     "fn": 0,
     "precision": 0.8376,
     "recall": 1.0,
-    "fpr": 0.0036,
+    "fpr": 0.0035,
     "f1": 0.9116,
     "predicted_positive": 117,
-    "predicted_negative": 5229
+    "predicted_negative": 5342
   },
   "agent": {
     "tp": 98,
-    "fp": 0,
-    "tn": 5248,
+    "fp": 1,
+    "tn": 5360,
     "fn": 0,
-    "precision": 1.0,
+    "precision": 0.9899,
     "recall": 1.0,
-    "fpr": 0.0,
-    "f1": 1.0,
-    "predicted_positive": 98,
-    "predicted_negative": 5248
+    "fpr": 0.0002,
+    "f1": 0.9949,
+    "predicted_positive": 99,
+    "predicted_negative": 5360
   },
   "customers_wrongly_blocked": {
     "naive": 8,
@@ -37,42 +37,42 @@
     "naive_customers": [
       {
         "customer_id": "cus_0003",
-        "name": "Priya Keller",
+        "name": "Arnab Banerjee",
         "payments": 1
       },
       {
         "customer_id": "cus_0005",
-        "name": "Marcus Costa",
+        "name": "Faisal Khan",
         "payments": 6
       },
       {
         "customer_id": "cus_0008",
-        "name": "Sofia Fischer",
+        "name": "Priya Gupta",
         "payments": 1
       },
       {
         "customer_id": "cus_0012",
-        "name": "Maya Hassan",
+        "name": "Zara Qureshi",
         "payments": 6
       },
       {
         "customer_id": "cus_0016",
-        "name": "Aisha Diaz",
+        "name": "Arjun Menon",
         "payments": 1
       },
       {
         "customer_id": "cus_0019",
-        "name": "Samir Hughes",
+        "name": "Farhan Siddiqui",
         "payments": 1
       },
       {
         "customer_id": "cus_0022",
-        "name": "Helen Silva",
+        "name": "Ananya Mishra",
         "payments": 2
       },
       {
         "customer_id": "cus_0169",
-        "name": "Ruth Hart",
+        "name": "Revathi Nair",
         "payments": 1
       }
     ],
@@ -81,42 +81,42 @@
     "cleared_by_agent": [
       {
         "customer_id": "cus_0003",
-        "name": "Priya Keller",
+        "name": "Arnab Banerjee",
         "payments": 1
       },
       {
         "customer_id": "cus_0005",
-        "name": "Marcus Costa",
+        "name": "Faisal Khan",
         "payments": 6
       },
       {
         "customer_id": "cus_0008",
-        "name": "Sofia Fischer",
+        "name": "Priya Gupta",
         "payments": 1
       },
       {
         "customer_id": "cus_0012",
-        "name": "Maya Hassan",
+        "name": "Zara Qureshi",
         "payments": 6
       },
       {
         "customer_id": "cus_0016",
-        "name": "Aisha Diaz",
+        "name": "Arjun Menon",
         "payments": 1
       },
       {
         "customer_id": "cus_0019",
-        "name": "Samir Hughes",
+        "name": "Farhan Siddiqui",
         "payments": 1
       },
       {
         "customer_id": "cus_0022",
-        "name": "Helen Silva",
+        "name": "Ananya Mishra",
         "payments": 2
       },
       {
         "customer_id": "cus_0169",
-        "name": "Ruth Hart",
+        "name": "Revathi Nair",
         "payments": 1
       }
     ]
@@ -192,7 +192,7 @@
     "legitimate_cases": 8,
     "legitimate_cases_approved": 8
   },
-  "narrative": "The flagger queued 117 payments, catching 100% of fraud transactions and also pulling in 8 genuine customers. FraudLens, reviewing only that queue, caught 100% of fraud transactions at 100% precision and would have blocked 0 genuine customers. It cleared 8 genuine customers the queue would otherwise have stopped.",
+  "narrative": "The flagger queued 117 payments, catching 100% of fraud transactions and also pulling in 8 genuine customers. FraudLens, reviewing only that queue, caught 100% of fraud transactions at 98.99% precision and would have blocked 0 genuine customers. It cleared 8 genuine customers the queue would otherwise have stopped.",
   "case_ids_in_flag_order": [
     "case_0001",
     "case_0002",
@@ -225,27 +225,37 @@
     "case_0029",
     "case_0030"
   ],
+  "false_alarm_examples": [
+    {
+      "transaction_id": "txn_002343",
+      "amount_paise": 79830,
+      "merchant_name": "Pustak Books",
+      "case_id": "case_0021",
+      "predicted_pattern": "mule_chain",
+      "customer_name": "Suresh Iyer"
+    }
+  ],
   "robustness": {
     "note": "Seeds 7, 99, and 123 were not used to write the demo. Each one replants the same four patterns and the same kinds of honest traps, with different customers and amounts.",
     "limitations": "High scores are expected: the fraud is planted with sharp signatures, and the honest traps are planted too. This is not a claim about a live payments book. A normal purchase can also fall inside an attack's time window and be counted with it. The agent never sees the labels. Production fraud is fuzzier, and these checks would need to be retuned on real outcomes.",
     "seeds": [
       {
         "seed": 7,
-        "transactions": 5523,
+        "transactions": 5574,
         "fraud_transactions": 98,
-        "cases": 31,
-        "naive_precision": 0.8305,
+        "cases": 30,
+        "naive_precision": 0.8376,
         "naive_recall": 1.0,
-        "naive_false_alarms": 20,
+        "naive_false_alarms": 19,
         "agent_precision": 1.0,
         "agent_recall": 1.0,
         "agent_false_alarms": 0,
-        "genuine_blocked_by_queue": 9,
+        "genuine_blocked_by_queue": 8,
         "genuine_blocked_by_agent": 0,
         "fraud_cases": 22,
         "fraud_cases_named_correctly": 22,
-        "legitimate_cases": 9,
-        "legitimate_cases_approved": 9,
+        "legitimate_cases": 8,
+        "legitimate_cases_approved": 8,
         "false_alarm_examples": [],
         "patterns": [
           {
@@ -276,31 +286,22 @@
       },
       {
         "seed": 99,
-        "transactions": 5386,
+        "transactions": 5525,
         "fraud_transactions": 98,
         "cases": 30,
         "naive_precision": 0.8376,
         "naive_recall": 1.0,
         "naive_false_alarms": 19,
-        "agent_precision": 0.9899,
+        "agent_precision": 1.0,
         "agent_recall": 1.0,
-        "agent_false_alarms": 1,
+        "agent_false_alarms": 0,
         "genuine_blocked_by_queue": 8,
         "genuine_blocked_by_agent": 0,
         "fraud_cases": 22,
         "fraud_cases_named_correctly": 22,
         "legitimate_cases": 8,
         "legitimate_cases_approved": 8,
-        "false_alarm_examples": [
-          {
-            "transaction_id": "txn_001034",
-            "amount_cents": 2421,
-            "merchant_name": "Quarter Pharmacy",
-            "case_id": "case_0007",
-            "predicted_pattern": "account_takeover",
-            "customer_name": "Anika Nguyen"
-          }
-        ],
+        "false_alarm_examples": [],
         "patterns": [
           {
             "pattern": "card_testing",
@@ -330,7 +331,7 @@
       },
       {
         "seed": 123,
-        "transactions": 5438,
+        "transactions": 5536,
         "fraud_transactions": 98,
         "cases": 30,
         "naive_precision": 0.8376,
@@ -377,9 +378,9 @@
   },
   "headline": {
     "frauds_caught_recall": 1.0,
-    "precision": 1.0,
-    "false_alarms": 0,
-    "false_positive_rate": 0.0,
+    "precision": 0.9899,
+    "false_alarms": 1,
+    "false_positive_rate": 0.0002,
     "genuine_customers_blocked_by_queue": 8,
     "genuine_customers_blocked_by_agent": 0,
     "genuine_customers_cleared": 8

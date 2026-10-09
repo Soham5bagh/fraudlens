@@ -1,14 +1,15 @@
 {
   "case_id": "case_0006",
-  "lead_transaction_id": "txn_005196",
+  "lead_transaction_id": "txn_005296",
   "customer_id": "cus_0012",
   "covered_transaction_ids": [
-    "txn_005196",
-    "txn_005197",
-    "txn_005198",
-    "txn_005199",
-    "txn_005200",
-    "txn_005201"
+    "txn_005296",
+    "txn_005297",
+    "txn_005298",
+    "txn_000402",
+    "txn_005299",
+    "txn_005300",
+    "txn_005301"
   ],
   "flag_reasons": [
     {
@@ -27,8 +28,8 @@
   "action": "approve",
   "action_rationale": "Approve. This is a trip on the customer's own device, not a takeover. A takeover would bring a new device and gift-card spend.",
   "confidence": "high",
-  "summary": "Maya Hassan is travelling on a device already on file. The foreign IP is the trip, not a takeover.",
-  "narrative": "Foreign IP, but the device is the one this customer has used for weeks, and the merchants are travel. Approve. This is a trip on the customer's own device, not a takeover. A takeover would bring a new device and gift-card spend. Lead payment txn_005196 is $286.00 approved at Brightair on 04 Aug 2026 15:00 UTC, card \u2022\u20224618, device dev_0023 (Windows laptop \u00b7 Windows 11 \u00b7 Chrome). Before this episode, Maya Hassan had 40 payments with a median of $42.73. The contrast with account takeover is the device: takeover arrives on hardware the customer has never used.",
+  "summary": "Zara Qureshi is travelling on a device already on file. The foreign IP is the trip, not a takeover.",
+  "narrative": "Foreign IP, but the device is the one this customer has used for weeks, and the merchants are travel. Approve. This is a trip on the customer's own device, not a takeover. A takeover would bring a new device and gift-card spend. Lead payment txn_005296 is \u20b911,440.00 approved at SkyVahan Airways on 04 Aug 2026 21:30 IST, card \u2022\u20227803, device dev_0023 (Windows laptop \u00b7 Windows 11 \u00b7 Chrome). Before this episode, Zara Qureshi had 28 payments with a median of \u20b91,635.91. The contrast with account takeover is the device: takeover arrives on hardware the customer has never used.",
   "signals": [
     {
       "name": "Case opened",
@@ -46,21 +47,21 @@
       "id": "open_case",
       "title": "Open the flagged payment",
       "status": "watch",
-      "started_at": "2026-08-11T15:00:00Z",
+      "started_at": "2026-08-11T04:30:00Z",
       "duration_ms": 420,
-      "finding": "Queue sent txn_005196 for Maya Hassan: $286.00 at Brightair on 04 Aug 2026 15:00 UTC. The flagger's reasons were: IP country does not match the customer's home country; The payment's shape is an outlier for the whole book.",
+      "finding": "Queue sent txn_005296 for Zara Qureshi: \u20b911,440.00 at SkyVahan Airways on 04 Aug 2026 21:30 IST. The flagger's reasons were: IP country does not match the customer's home country; The payment's shape is an outlier for the whole book.",
       "evidence": [
         {
           "label": "Transaction",
-          "value": "txn_005196"
+          "value": "txn_005296"
         },
         {
           "label": "Amount",
-          "value": "$286.00"
+          "value": "\u20b911,440.00"
         },
         {
           "label": "Customer",
-          "value": "Maya Hassan (cus_0012)"
+          "value": "Zara Qureshi (cus_0012)"
         },
         {
           "label": "Why it was queued",
@@ -72,25 +73,25 @@
       "id": "customer_baseline",
       "title": "Customer history and baseline",
       "status": "clear",
-      "started_at": "2026-08-11T15:00:00Z",
+      "started_at": "2026-08-11T04:30:00Z",
       "duration_ms": 680,
-      "finding": "Maya Hassan has 40 prior payments before this episode, median $42.73. Account acct_0012 is 1041 days old. Usual devices: dev_0023, dev_0024. Countries already seen: ES.",
+      "finding": "Zara Qureshi has 28 prior payments before this episode, median \u20b91,635.91. Account acct_0012 is 825 days old. Usual devices: dev_0023, dev_0024. Countries already seen: IN.",
       "evidence": [
         {
           "label": "Account age",
-          "value": "1041 days"
+          "value": "825 days"
         },
         {
           "label": "Prior payments",
-          "value": "40"
+          "value": "28"
         },
         {
           "label": "Median amount",
-          "value": "$42.73"
+          "value": "\u20b91,635.91"
         },
         {
           "label": "Home",
-          "value": "Madrid, ES"
+          "value": "Chandigarh, IN"
         }
       ]
     },
@@ -98,17 +99,17 @@
       "id": "velocity",
       "title": "Payment velocity",
       "status": "clear",
-      "started_at": "2026-08-11T15:00:01Z",
+      "started_at": "2026-08-11T04:30:01Z",
       "duration_ms": 540,
-      "finding": "The episode around txn_005196 holds 6 payments across 2340 minutes. The busiest hour contains 1 payment. 0 declines in the episode. Merchants touched: Brightair, Staywright Hotels, Copper Kettle, Metro Card, Sable Coffee, and Lantern Inns.",
+      "finding": "The episode around txn_005296 holds 7 payments across 2460 minutes. The busiest hour contains 2 payments. 0 declines in the episode. Merchants touched: SkyVahan Airways, Ashoka Stays, Udupi Kitchen, Chai Adda, City Bus Pass, and Lotus Inns.",
       "evidence": [
         {
           "label": "Payments in episode",
-          "value": "6"
+          "value": "7"
         },
         {
           "label": "Busiest hour",
-          "value": "1"
+          "value": "2"
         },
         {
           "label": "Declines",
@@ -124,25 +125,25 @@
       "id": "amount",
       "title": "Amount versus baseline",
       "status": "alert",
-      "started_at": "2026-08-11T15:00:02Z",
+      "started_at": "2026-08-11T04:30:02Z",
       "duration_ms": 480,
-      "finding": "Episode amounts run from $9.00 to $286.00, median $131.00. The peak is 6.7\u00d7 the baseline median of $42.73.",
+      "finding": "Episode amounts run from \u20b9360.00 to \u20b911,440.00, median \u20b92,560.00. The peak is 7.0\u00d7 the baseline median of \u20b91,635.91.",
       "evidence": [
         {
           "label": "Episode median",
-          "value": "$131.00"
+          "value": "\u20b92,560.00"
         },
         {
           "label": "Episode peak",
-          "value": "$286.00"
+          "value": "\u20b911,440.00"
         },
         {
           "label": "Baseline median",
-          "value": "$42.73"
+          "value": "\u20b91,635.91"
         },
         {
           "label": "Peak vs baseline",
-          "value": "6.7\u00d7"
+          "value": "7.0\u00d7"
         }
       ]
     },
@@ -150,9 +151,9 @@
       "id": "device_ip",
       "title": "Device and IP linkage",
       "status": "watch",
-      "started_at": "2026-08-11T15:00:03Z",
+      "started_at": "2026-08-11T04:30:03Z",
       "duration_ms": 730,
-      "finding": "Devices in the episode: dev_0023 (Windows laptop \u00b7 Windows 11 \u00b7 Chrome, already on file). IPs: 198.51.100.89 \u00b7 Berlin, DE. The customer's home country is Spain. Every payment in this episode is outside that country.",
+      "finding": "Devices in the episode: dev_0023 (Windows laptop \u00b7 Windows 11 \u00b7 Chrome, already on file). IPs: 198.51.100.89 \u00b7 London, GB; 203.0.113.24 \u00b7 Chandigarh, IN. The customer's home country is India. Some payments in this episode are outside that country, and some are at home.",
       "evidence": [
         {
           "label": "New devices",
@@ -164,7 +165,7 @@
         },
         {
           "label": "Countries",
-          "value": "DE"
+          "value": "GB, IN"
         },
         {
           "label": "Datacenter or VPN",
@@ -176,9 +177,9 @@
       "id": "network",
       "title": "Linked accounts and money flow",
       "status": "clear",
-      "started_at": "2026-08-11T15:00:04Z",
+      "started_at": "2026-08-11T04:30:04Z",
       "duration_ms": 860,
-      "finding": "No other customer uses the devices in this episode. No peer-to-peer transfer or cash-out on this account in the six-day window. No cash-out path leaves this account in the six-day money graph.",
+      "finding": "No other customer uses the devices in this episode. No UPI transfer or cash-out on this account in the six-day window. No cash-out path leaves this account in the six-day money graph.",
       "evidence": [
         {
           "label": "Linked customers",
@@ -202,9 +203,9 @@
       "id": "merchant",
       "title": "Merchant check",
       "status": "clear",
-      "started_at": "2026-08-11T15:00:05Z",
+      "started_at": "2026-08-11T04:30:05Z",
       "duration_ms": 640,
-      "finding": "Brightair (airline, Madrid) has 2 payments in the past 14 days from 2 customers. 0% of those customers are under 45 days old. 0% of the amounts are round (multiples of $50, at least $200). Devices shared by two or more buyers: none.",
+      "finding": "SkyVahan Airways (airline, Chandigarh) has 2 payments in the past 14 days from 2 customers. 0% of those customers are under 45 days old. 0% of the amounts are round (multiples of \u20b91,000, at least \u20b98,000). Devices shared by two or more buyers: none.",
       "evidence": [
         {
           "label": "Category",
@@ -228,7 +229,7 @@
       "id": "classify",
       "title": "Pattern classification",
       "status": "clear",
-      "started_at": "2026-08-11T15:00:06Z",
+      "started_at": "2026-08-11T04:30:06Z",
       "duration_ms": 390,
       "finding": "Legitimate activity. Foreign IP, but the device is the one this customer has used for weeks, and the merchants are travel.",
       "evidence": [
@@ -246,7 +247,7 @@
       "id": "recommend",
       "title": "Suggested action",
       "status": "clear",
-      "started_at": "2026-08-11T15:00:07Z",
+      "started_at": "2026-08-11T04:30:07Z",
       "duration_ms": 360,
       "finding": "Suggested action: approve. Risk score 16/100. Approve. This is a trip on the customer's own device, not a takeover. A takeover would bring a new device and gift-card spend. A person still has to confirm this. FraudLens does not apply it.",
       "evidence": [
@@ -270,10 +271,10 @@
       {
         "id": "cus_0012",
         "type": "customer",
-        "label": "Maya Hassan",
+        "label": "Zara Qureshi",
         "sublabel": "cus_0012",
-        "x": 0.1335,
-        "y": 0.7305,
+        "x": 0.218,
+        "y": 0.8115,
         "emphasis": true
       },
       {
@@ -281,8 +282,8 @@
         "type": "account",
         "label": "Account",
         "sublabel": "acct_0012",
-        "x": 0.492,
-        "y": 0.5045,
+        "x": 0.5018,
+        "y": 0.4896,
         "emphasis": true
       },
       {
@@ -291,61 +292,70 @@
         "label": "Windows laptop",
         "sublabel": "dev_0023",
         "x": 0.92,
-        "y": 0.5877,
+        "y": 0.5768,
         "emphasis": false
       },
       {
         "id": "ip_0338",
         "type": "ip",
-        "label": "Berlin",
+        "label": "London",
         "sublabel": "198.51.100.89",
-        "x": 0.6053,
-        "y": 0.08,
+        "x": 0.6588,
+        "y": 0.0882,
+        "emphasis": false
+      },
+      {
+        "id": "ip_0023",
+        "type": "ip",
+        "label": "Chandigarh",
+        "sublabel": "203.0.113.24",
+        "x": 0.08,
+        "y": 0.5519,
         "emphasis": false
       },
       {
         "id": "mer_016",
         "type": "merchant",
-        "label": "Brightair",
+        "label": "SkyVahan Airways",
         "sublabel": "airline",
-        "x": 0.8194,
-        "y": 0.2961,
+        "x": 0.7654,
+        "y": 0.8271,
         "emphasis": false
       },
       {
         "id": "mer_018",
         "type": "merchant",
-        "label": "Staywright Hotels",
+        "label": "Ashoka Stays",
         "sublabel": "hotel",
-        "x": 0.7218,
-        "y": 0.8618,
+        "x": 0.3672,
+        "y": 0.08,
         "emphasis": false
       },
       {
         "id": "mer_005",
         "type": "merchant",
-        "label": "Copper Kettle",
+        "label": "Udupi Kitchen",
         "sublabel": "restaurant",
-        "x": 0.2738,
-        "y": 0.1401,
+        "x": 0.489,
+        "y": 0.92,
+        "emphasis": false
+      },
+      {
+        "id": "mer_008",
+        "type": "merchant",
+        "label": "Chai Adda",
+        "sublabel": "coffee",
+        "x": 0.1381,
+        "y": 0.2627,
         "emphasis": false
       },
       {
         "id": "mer_010",
         "type": "merchant",
-        "label": "Metro Card",
+        "label": "City Bus Pass",
         "sublabel": "transit",
-        "x": 0.3999,
-        "y": 0.92,
-        "emphasis": false
-      },
-      {
-        "id": "mer_007",
-        "type": "merchant",
-        "label": "Sable Coffee",
-        "sublabel": "coffee",
-        "x": 0.08,
-        "y": 0.406,
+        "x": 0.8764,
+        "y": 0.2847,
         "emphasis": false
       }
     ],
@@ -370,6 +380,12 @@
       },
       {
         "source": "acct_0012",
+        "target": "ip_0023",
+        "kind": "ip",
+        "label": "from"
+      },
+      {
+        "source": "acct_0012",
         "target": "mer_016",
         "kind": "paid",
         "label": "paid"
@@ -388,13 +404,13 @@
       },
       {
         "source": "acct_0012",
-        "target": "mer_010",
+        "target": "mer_008",
         "kind": "paid",
         "label": "paid"
       },
       {
         "source": "acct_0012",
-        "target": "mer_007",
+        "target": "mer_010",
         "kind": "paid",
         "label": "paid"
       }
@@ -403,128 +419,144 @@
   },
   "related_transactions": [
     {
-      "id": "txn_005196",
-      "occurred_at": "2026-08-04T15:00:00Z",
-      "ts": 1785855600,
-      "amount_cents": 28600,
+      "id": "txn_005296",
+      "occurred_at": "2026-08-04T16:00:00Z",
+      "ts": 1785859200,
+      "amount_paise": 1144000,
       "status": "approved",
       "type": "card_purchase",
-      "merchant_name": "Brightair",
+      "merchant_name": "SkyVahan Airways",
       "merchant_category": "airline",
       "device_id": "dev_0023",
-      "ip": "198.51.100.89 \u00b7 Berlin, DE",
-      "ip_country": "DE",
-      "city": "Berlin",
+      "ip": "198.51.100.89 \u00b7 London, GB",
+      "ip_country": "GB",
+      "city": "London",
       "flagged": true,
       "counterparty_account_id": null
     },
     {
-      "id": "txn_005197",
-      "occurred_at": "2026-08-04T23:00:00Z",
-      "ts": 1785884400,
-      "amount_cents": 24200,
+      "id": "txn_005297",
+      "occurred_at": "2026-08-05T00:00:00Z",
+      "ts": 1785888000,
+      "amount_paise": 968000,
       "status": "approved",
       "type": "card_purchase",
-      "merchant_name": "Staywright Hotels",
+      "merchant_name": "Ashoka Stays",
       "merchant_category": "hotel",
       "device_id": "dev_0023",
-      "ip": "198.51.100.89 \u00b7 Berlin, DE",
-      "ip_country": "DE",
-      "city": "Berlin",
+      "ip": "198.51.100.89 \u00b7 London, GB",
+      "ip_country": "GB",
+      "city": "London",
       "flagged": true,
       "counterparty_account_id": null
     },
     {
-      "id": "txn_005198",
+      "id": "txn_005298",
       "occurred_at": "2026-08-05T07:00:00Z",
       "ts": 1785913200,
-      "amount_cents": 6400,
+      "amount_paise": 256000,
       "status": "approved",
       "type": "card_purchase",
-      "merchant_name": "Copper Kettle",
+      "merchant_name": "Udupi Kitchen",
       "merchant_category": "restaurant",
       "device_id": "dev_0023",
-      "ip": "198.51.100.89 \u00b7 Berlin, DE",
-      "ip_country": "DE",
-      "city": "Berlin",
+      "ip": "198.51.100.89 \u00b7 London, GB",
+      "ip_country": "GB",
+      "city": "London",
       "flagged": true,
       "counterparty_account_id": null
     },
     {
-      "id": "txn_005199",
-      "occurred_at": "2026-08-05T13:00:00Z",
-      "ts": 1785934800,
-      "amount_cents": 1800,
+      "id": "txn_000402",
+      "occurred_at": "2026-08-05T14:29:31Z",
+      "ts": 1785940171,
+      "amount_paise": 127270,
       "status": "approved",
       "type": "card_purchase",
-      "merchant_name": "Metro Card",
-      "merchant_category": "transit",
-      "device_id": "dev_0023",
-      "ip": "198.51.100.89 \u00b7 Berlin, DE",
-      "ip_country": "DE",
-      "city": "Berlin",
-      "flagged": true,
-      "counterparty_account_id": null
-    },
-    {
-      "id": "txn_005200",
-      "occurred_at": "2026-08-05T21:00:00Z",
-      "ts": 1785963600,
-      "amount_cents": 900,
-      "status": "approved",
-      "type": "card_purchase",
-      "merchant_name": "Sable Coffee",
+      "merchant_name": "Chai Adda",
       "merchant_category": "coffee",
       "device_id": "dev_0023",
-      "ip": "198.51.100.89 \u00b7 Berlin, DE",
-      "ip_country": "DE",
-      "city": "Berlin",
+      "ip": "203.0.113.24 \u00b7 Chandigarh, IN",
+      "ip_country": "IN",
+      "city": "Chandigarh",
+      "flagged": false,
+      "counterparty_account_id": null
+    },
+    {
+      "id": "txn_005299",
+      "occurred_at": "2026-08-05T15:00:00Z",
+      "ts": 1785942000,
+      "amount_paise": 72000,
+      "status": "approved",
+      "type": "card_purchase",
+      "merchant_name": "City Bus Pass",
+      "merchant_category": "transit",
+      "device_id": "dev_0023",
+      "ip": "198.51.100.89 \u00b7 London, GB",
+      "ip_country": "GB",
+      "city": "London",
       "flagged": true,
       "counterparty_account_id": null
     },
     {
-      "id": "txn_005201",
-      "occurred_at": "2026-08-06T06:00:00Z",
-      "ts": 1785996000,
-      "amount_cents": 19800,
+      "id": "txn_005300",
+      "occurred_at": "2026-08-06T00:00:00Z",
+      "ts": 1785974400,
+      "amount_paise": 36000,
       "status": "approved",
       "type": "card_purchase",
-      "merchant_name": "Lantern Inns",
+      "merchant_name": "Chai Adda",
+      "merchant_category": "coffee",
+      "device_id": "dev_0023",
+      "ip": "198.51.100.89 \u00b7 London, GB",
+      "ip_country": "GB",
+      "city": "London",
+      "flagged": true,
+      "counterparty_account_id": null
+    },
+    {
+      "id": "txn_005301",
+      "occurred_at": "2026-08-06T09:00:00Z",
+      "ts": 1786006800,
+      "amount_paise": 792000,
+      "status": "approved",
+      "type": "card_purchase",
+      "merchant_name": "Lotus Inns",
       "merchant_category": "hotel",
       "device_id": "dev_0023",
-      "ip": "198.51.100.89 \u00b7 Berlin, DE",
-      "ip_country": "DE",
-      "city": "Berlin",
+      "ip": "198.51.100.89 \u00b7 London, GB",
+      "ip_country": "GB",
+      "city": "London",
       "flagged": true,
       "counterparty_account_id": null
     }
   ],
   "customer": {
     "id": "cus_0012",
-    "name": "Maya Hassan",
-    "email": "maya.hassan.11@example.com",
-    "home_city": "Madrid",
-    "home_country": "ES",
+    "name": "Zara Qureshi",
+    "email": "zara.qureshi.11@example.com",
+    "home_city": "Chandigarh",
+    "home_country": "IN",
     "segment": "everyday",
-    "customer_since": "2023-09-28T00:00:00Z",
+    "customer_since": "2024-05-01T00:00:00Z",
     "account_id": "acct_0012",
-    "account_age_days": 1041
+    "account_age_days": 825
   },
   "lead": {
-    "id": "txn_005196",
-    "occurred_at": "2026-08-04T15:00:00Z",
-    "amount_cents": 28600,
+    "id": "txn_005296",
+    "occurred_at": "2026-08-04T16:00:00Z",
+    "amount_paise": 1144000,
     "status": "approved",
     "type": "card_purchase",
-    "merchant_name": "Brightair",
+    "merchant_name": "SkyVahan Airways",
     "merchant_category": "airline",
     "device_id": "dev_0023",
     "device_label": "Windows laptop \u00b7 Windows 11 \u00b7 Chrome",
-    "ip": "198.51.100.89 \u00b7 Berlin, DE",
-    "ip_city": "Berlin",
-    "ip_country": "DE",
-    "card_last4": "4618"
+    "ip": "198.51.100.89 \u00b7 London, GB",
+    "ip_city": "London",
+    "ip_country": "GB",
+    "card_last4": "7803"
   },
-  "report_markdown": "# FraudLens case case_0006\n\n**Customer.** Maya Hassan (cus_0012), Madrid, ES.\n**Lead payment.** txn_005196 \u00b7 $286.00 \u00b7 Brightair \u00b7 2026-08-04T15:00:00Z.\n**Pattern.** Legitimate activity (travel).\n**Risk score.** 16 / 100.\n**Suggested action.** approve \u2014 a human still has to confirm it.\n\n## Summary\n\nForeign IP, but the device is the one this customer has used for weeks, and the merchants are travel. Approve. This is a trip on the customer's own device, not a takeover. A takeover would bring a new device and gift-card spend. Lead payment txn_005196 is $286.00 approved at Brightair on 04 Aug 2026 15:00 UTC, card \u2022\u20224618, device dev_0023 (Windows laptop \u00b7 Windows 11 \u00b7 Chrome). Before this episode, Maya Hassan had 40 payments with a median of $42.73. The contrast with account takeover is the device: takeover arrives on hardware the customer has never used.\n\n## Why this score\n\n- **Case opened** (+4): Every queued payment starts with a small residual score.\n- **Trip on a known device** (+12): Reused dev_0023 abroad at travel merchants.\n\n## What the agent checked\n\n### Open the flagged payment (watch)\n\nQueue sent txn_005196 for Maya Hassan: $286.00 at Brightair on 04 Aug 2026 15:00 UTC. The flagger's reasons were: IP country does not match the customer's home country; The payment's shape is an outlier for the whole book.\n\n- Transaction: txn_005196\n- Amount: $286.00\n- Customer: Maya Hassan (cus_0012)\n- Why it was queued: foreign_ip, isolation_forest\n\n### Customer history and baseline (clear)\n\nMaya Hassan has 40 prior payments before this episode, median $42.73. Account acct_0012 is 1041 days old. Usual devices: dev_0023, dev_0024. Countries already seen: ES.\n\n- Account age: 1041 days\n- Prior payments: 40\n- Median amount: $42.73\n- Home: Madrid, ES\n\n### Payment velocity (clear)\n\nThe episode around txn_005196 holds 6 payments across 2340 minutes. The busiest hour contains 1 payment. 0 declines in the episode. Merchants touched: Brightair, Staywright Hotels, Copper Kettle, Metro Card, Sable Coffee, and Lantern Inns.\n\n- Payments in episode: 6\n- Busiest hour: 1\n- Declines: 0\n- Distinct merchants: 6\n\n### Amount versus baseline (alert)\n\nEpisode amounts run from $9.00 to $286.00, median $131.00. The peak is 6.7\u00d7 the baseline median of $42.73.\n\n- Episode median: $131.00\n- Episode peak: $286.00\n- Baseline median: $42.73\n- Peak vs baseline: 6.7\u00d7\n\n### Device and IP linkage (watch)\n\nDevices in the episode: dev_0023 (Windows laptop \u00b7 Windows 11 \u00b7 Chrome, already on file). IPs: 198.51.100.89 \u00b7 Berlin, DE. The customer's home country is Spain. Every payment in this episode is outside that country.\n\n- New devices: none\n- Mature devices reused: dev_0023\n- Countries: DE\n- Datacenter or VPN: no\n\n### Linked accounts and money flow (clear)\n\nNo other customer uses the devices in this episode. No peer-to-peer transfer or cash-out on this account in the six-day window. No cash-out path leaves this account in the six-day money graph.\n\n- Linked customers: 0\n- Household pattern: no\n- Reaches cash-out: no\n- Pass-through: no inbound\n\n### Merchant check (clear)\n\nBrightair (airline, Madrid) has 2 payments in the past 14 days from 2 customers. 0% of those customers are under 45 days old. 0% of the amounts are round (multiples of $50, at least $200). Devices shared by two or more buyers: none.\n\n- Category: airline\n- Recent buyers: 2\n- Young-account share: 0%\n- Round-amount share: 0%\n\n### Pattern classification (clear)\n\nLegitimate activity. Foreign IP, but the device is the one this customer has used for weeks, and the merchants are travel.\n\n- Pattern: Legitimate activity\n- Detail: travel\n\n### Suggested action (clear)\n\nSuggested action: approve. Risk score 16/100. Approve. This is a trip on the customer's own device, not a takeover. A takeover would bring a new device and gift-card spend. A person still has to confirm this. FraudLens does not apply it.\n\n- Suggested action: approve\n- Risk score: 16/100\n- Who decides: human analyst\n\n## Payments in the episode\n\n| When | Id | Amount | Status | Merchant | Device |\n| --- | --- | --- | --- | --- | --- |\n| 2026-08-04T15:00:00Z | txn_005196 | $286.00 | approved | Brightair | dev_0023 |\n| 2026-08-04T23:00:00Z | txn_005197 | $242.00 | approved | Staywright Hotels | dev_0023 |\n| 2026-08-05T07:00:00Z | txn_005198 | $64.00 | approved | Copper Kettle | dev_0023 |\n| 2026-08-05T13:00:00Z | txn_005199 | $18.00 | approved | Metro Card | dev_0023 |\n| 2026-08-05T21:00:00Z | txn_005200 | $9.00 | approved | Sable Coffee | dev_0023 |\n| 2026-08-06T06:00:00Z | txn_005201 | $198.00 | approved | Lantern Inns | dev_0023 |\n\n## Action rationale\n\nApprove. This is a trip on the customer's own device, not a takeover. A takeover would bring a new device and gift-card spend.\n\n## Held-out label\n\nThis section is joined after the investigation. The agent did not see it.\n\n- Fraud: no\n- Pattern: legitimate\n\n*FraudLens suggests. An analyst decides.*\n",
+  "report_markdown": "# FraudLens case case_0006\n\n**Customer.** Zara Qureshi (cus_0012), Chandigarh, IN.\n**Lead payment.** txn_005296 \u00b7 \u20b911,440.00 \u00b7 SkyVahan Airways \u00b7 2026-08-04T16:00:00Z.\n**Pattern.** Legitimate activity (travel).\n**Risk score.** 16 / 100.\n**Suggested action.** approve \u2014 a human still has to confirm it.\n\n## Summary\n\nForeign IP, but the device is the one this customer has used for weeks, and the merchants are travel. Approve. This is a trip on the customer's own device, not a takeover. A takeover would bring a new device and gift-card spend. Lead payment txn_005296 is \u20b911,440.00 approved at SkyVahan Airways on 04 Aug 2026 21:30 IST, card \u2022\u20227803, device dev_0023 (Windows laptop \u00b7 Windows 11 \u00b7 Chrome). Before this episode, Zara Qureshi had 28 payments with a median of \u20b91,635.91. The contrast with account takeover is the device: takeover arrives on hardware the customer has never used.\n\n## Why this score\n\n- **Case opened** (+4): Every queued payment starts with a small residual score.\n- **Trip on a known device** (+12): Reused dev_0023 abroad at travel merchants.\n\n## What the agent checked\n\n### Open the flagged payment (watch)\n\nQueue sent txn_005296 for Zara Qureshi: \u20b911,440.00 at SkyVahan Airways on 04 Aug 2026 21:30 IST. The flagger's reasons were: IP country does not match the customer's home country; The payment's shape is an outlier for the whole book.\n\n- Transaction: txn_005296\n- Amount: \u20b911,440.00\n- Customer: Zara Qureshi (cus_0012)\n- Why it was queued: foreign_ip, isolation_forest\n\n### Customer history and baseline (clear)\n\nZara Qureshi has 28 prior payments before this episode, median \u20b91,635.91. Account acct_0012 is 825 days old. Usual devices: dev_0023, dev_0024. Countries already seen: IN.\n\n- Account age: 825 days\n- Prior payments: 28\n- Median amount: \u20b91,635.91\n- Home: Chandigarh, IN\n\n### Payment velocity (clear)\n\nThe episode around txn_005296 holds 7 payments across 2460 minutes. The busiest hour contains 2 payments. 0 declines in the episode. Merchants touched: SkyVahan Airways, Ashoka Stays, Udupi Kitchen, Chai Adda, City Bus Pass, and Lotus Inns.\n\n- Payments in episode: 7\n- Busiest hour: 2\n- Declines: 0\n- Distinct merchants: 6\n\n### Amount versus baseline (alert)\n\nEpisode amounts run from \u20b9360.00 to \u20b911,440.00, median \u20b92,560.00. The peak is 7.0\u00d7 the baseline median of \u20b91,635.91.\n\n- Episode median: \u20b92,560.00\n- Episode peak: \u20b911,440.00\n- Baseline median: \u20b91,635.91\n- Peak vs baseline: 7.0\u00d7\n\n### Device and IP linkage (watch)\n\nDevices in the episode: dev_0023 (Windows laptop \u00b7 Windows 11 \u00b7 Chrome, already on file). IPs: 198.51.100.89 \u00b7 London, GB; 203.0.113.24 \u00b7 Chandigarh, IN. The customer's home country is India. Some payments in this episode are outside that country, and some are at home.\n\n- New devices: none\n- Mature devices reused: dev_0023\n- Countries: GB, IN\n- Datacenter or VPN: no\n\n### Linked accounts and money flow (clear)\n\nNo other customer uses the devices in this episode. No UPI transfer or cash-out on this account in the six-day window. No cash-out path leaves this account in the six-day money graph.\n\n- Linked customers: 0\n- Household pattern: no\n- Reaches cash-out: no\n- Pass-through: no inbound\n\n### Merchant check (clear)\n\nSkyVahan Airways (airline, Chandigarh) has 2 payments in the past 14 days from 2 customers. 0% of those customers are under 45 days old. 0% of the amounts are round (multiples of \u20b91,000, at least \u20b98,000). Devices shared by two or more buyers: none.\n\n- Category: airline\n- Recent buyers: 2\n- Young-account share: 0%\n- Round-amount share: 0%\n\n### Pattern classification (clear)\n\nLegitimate activity. Foreign IP, but the device is the one this customer has used for weeks, and the merchants are travel.\n\n- Pattern: Legitimate activity\n- Detail: travel\n\n### Suggested action (clear)\n\nSuggested action: approve. Risk score 16/100. Approve. This is a trip on the customer's own device, not a takeover. A takeover would bring a new device and gift-card spend. A person still has to confirm this. FraudLens does not apply it.\n\n- Suggested action: approve\n- Risk score: 16/100\n- Who decides: human analyst\n\n## Payments in the episode\n\n| When | Id | Amount | Status | Merchant | Device |\n| --- | --- | --- | --- | --- | --- |\n| 2026-08-04T16:00:00Z | txn_005296 | \u20b911,440.00 | approved | SkyVahan Airways | dev_0023 |\n| 2026-08-05T00:00:00Z | txn_005297 | \u20b99,680.00 | approved | Ashoka Stays | dev_0023 |\n| 2026-08-05T07:00:00Z | txn_005298 | \u20b92,560.00 | approved | Udupi Kitchen | dev_0023 |\n| 2026-08-05T14:29:31Z | txn_000402 | \u20b91,272.70 | approved | Chai Adda | dev_0023 |\n| 2026-08-05T15:00:00Z | txn_005299 | \u20b9720.00 | approved | City Bus Pass | dev_0023 |\n| 2026-08-06T00:00:00Z | txn_005300 | \u20b9360.00 | approved | Chai Adda | dev_0023 |\n| 2026-08-06T09:00:00Z | txn_005301 | \u20b97,920.00 | approved | Lotus Inns | dev_0023 |\n\n## Action rationale\n\nApprove. This is a trip on the customer's own device, not a takeover. A takeover would bring a new device and gift-card spend.\n\n## Held-out label\n\nThis section is joined after the investigation. The agent did not see it.\n\n- Fraud: no\n- Pattern: legitimate\n\n*FraudLens suggests. An analyst decides.*\n",
   "showcase": null
 }

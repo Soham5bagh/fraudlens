@@ -1,11 +1,11 @@
 {
   "seed": 42,
-  "currency": "USD",
+  "currency": "INR",
   "window_start": "2026-05-01T00:00:00Z",
   "window_end": "2026-08-10T20:00:00Z",
   "generator": "engine.generate",
   "version": "1.0.0",
-  "transactions": 5346,
+  "transactions": 5459,
   "customers": 181,
   "cases": 30,
   "flagged_transactions": 117,

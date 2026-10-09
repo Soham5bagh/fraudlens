@@ -1,12 +1,12 @@
 {
   "case_id": "case_0017",
-  "lead_transaction_id": "txn_005340",
+  "lead_transaction_id": "txn_005453",
   "customer_id": "cus_0180",
   "covered_transaction_ids": [
-    "txn_005338",
-    "txn_005339",
-    "txn_005340",
-    "txn_005341"
+    "txn_005451",
+    "txn_005452",
+    "txn_005453",
+    "txn_005454"
   ],
   "flag_reasons": [
     {
@@ -29,8 +29,8 @@
   "action": "escalate",
   "action_rationale": "Escalate to merchant risk. Blocking one buyer leaves the rest of the ring, and the merchant, untouched.",
   "confidence": "high",
-  "summary": "Collusive buying at Northwind Digital Keys, including Nathan Quinn.",
-  "narrative": "Young accounts share devices and repeatedly pay the same merchant in round amounts. Escalate to merchant risk. Blocking one buyer leaves the rest of the ring, and the merchant, untouched. Lead payment txn_005340 is $500.00 approved at Northwind Digital Keys on 07 Aug 2026 14:00 UTC, card \u2022\u20221276, device dev_0371 (MacBook \u00b7 macOS 15 \u00b7 Safari). Before this episode, Nathan Quinn had 1 payment with a median of $6.00.",
+  "summary": "Collusive buying at Vistar Digital Keys, including Naveen Goyal.",
+  "narrative": "Young accounts share devices and repeatedly pay the same merchant in round amounts. Escalate to merchant risk. Blocking one buyer leaves the rest of the ring, and the merchant, untouched. Lead payment txn_005453 is \u20b920,000.00 approved at Vistar Digital Keys on 07 Aug 2026 19:30 IST, card \u2022\u20226761, device dev_0371 (MacBook \u00b7 macOS 15 \u00b7 Safari). Before this episode, Naveen Goyal had 1 payment with a median of \u20b9240.00.",
   "signals": [
     {
       "name": "Case opened",
@@ -40,7 +40,7 @@
     {
       "name": "Round amounts",
       "points": 26,
-      "detail": "100% of recent payments at Northwind Digital Keys are round."
+      "detail": "100% of recent payments at Vistar Digital Keys are round."
     },
     {
       "name": "Young buyers",
@@ -58,21 +58,21 @@
       "id": "open_case",
       "title": "Open the flagged payment",
       "status": "watch",
-      "started_at": "2026-08-11T15:00:00Z",
+      "started_at": "2026-08-11T04:30:00Z",
       "duration_ms": 420,
-      "finding": "Queue sent txn_005340 for Nathan Quinn: $500.00 at Northwind Digital Keys on 07 Aug 2026 14:00 UTC. The flagger's reasons were: Device is already linked to a different customer; Account is under 30 days old and the amount is large; The payment's shape is an outlier for the whole book.",
+      "finding": "Queue sent txn_005453 for Naveen Goyal: \u20b920,000.00 at Vistar Digital Keys on 07 Aug 2026 19:30 IST. The flagger's reasons were: Device is already linked to a different customer; Account is under 30 days old and the amount is large; The payment's shape is an outlier for the whole book.",
       "evidence": [
         {
           "label": "Transaction",
-          "value": "txn_005340"
+          "value": "txn_005453"
         },
         {
           "label": "Amount",
-          "value": "$500.00"
+          "value": "\u20b920,000.00"
         },
         {
           "label": "Customer",
-          "value": "Nathan Quinn (cus_0180)"
+          "value": "Naveen Goyal (cus_0180)"
         },
         {
           "label": "Why it was queued",
@@ -84,9 +84,9 @@
       "id": "customer_baseline",
       "title": "Customer history and baseline",
       "status": "clear",
-      "started_at": "2026-08-11T15:00:00Z",
+      "started_at": "2026-08-11T04:30:00Z",
       "duration_ms": 680,
-      "finding": "Nathan Quinn has 1 prior payment before this episode, median $6.00. Account acct_0180 is 19 days old. Usual devices: dev_0386. Countries already seen: EE.",
+      "finding": "Naveen Goyal has 1 prior payment before this episode, median \u20b9240.00. Account acct_0180 is 19 days old. Usual devices: dev_0386. Countries already seen: IN.",
       "evidence": [
         {
           "label": "Account age",
@@ -98,11 +98,11 @@
         },
         {
           "label": "Median amount",
-          "value": "$6.00"
+          "value": "\u20b9240.00"
         },
         {
           "label": "Home",
-          "value": "Tallinn, EE"
+          "value": "Gurugram, IN"
         }
       ]
     },
@@ -110,9 +110,9 @@
       "id": "velocity",
       "title": "Payment velocity",
       "status": "clear",
-      "started_at": "2026-08-11T15:00:01Z",
+      "started_at": "2026-08-11T04:30:01Z",
       "duration_ms": 540,
-      "finding": "The episode around txn_005340 holds 4 payments across 360 minutes. The busiest hour contains 1 payment. 0 declines in the episode. Merchants touched: Northwind Digital Keys.",
+      "finding": "The episode around txn_005453 holds 4 payments across 360 minutes. The busiest hour contains 1 payment. 0 declines in the episode. Merchants touched: Vistar Digital Keys.",
       "evidence": [
         {
           "label": "Payments in episode",
@@ -136,21 +136,21 @@
       "id": "amount",
       "title": "Amount versus baseline",
       "status": "alert",
-      "started_at": "2026-08-11T15:00:02Z",
+      "started_at": "2026-08-11T04:30:02Z",
       "duration_ms": 480,
-      "finding": "Episode amounts run from $250.00 to $500.00, median $375.00. The peak is 83.3\u00d7 the baseline median of $6.00.",
+      "finding": "Episode amounts run from \u20b910,000.00 to \u20b920,000.00, median \u20b915,000.00. The peak is 83.3\u00d7 the baseline median of \u20b9240.00.",
       "evidence": [
         {
           "label": "Episode median",
-          "value": "$375.00"
+          "value": "\u20b915,000.00"
         },
         {
           "label": "Episode peak",
-          "value": "$500.00"
+          "value": "\u20b920,000.00"
         },
         {
           "label": "Baseline median",
-          "value": "$6.00"
+          "value": "\u20b9240.00"
         },
         {
           "label": "Peak vs baseline",
@@ -162,9 +162,9 @@
       "id": "device_ip",
       "title": "Device and IP linkage",
       "status": "clear",
-      "started_at": "2026-08-11T15:00:03Z",
+      "started_at": "2026-08-11T04:30:03Z",
       "duration_ms": 730,
-      "finding": "Devices in the episode: dev_0371 (MacBook \u00b7 macOS 15 \u00b7 Safari, already on file). IPs: 198.51.100.130 \u00b7 Tallinn, EE, datacenter. The customer's home country is Estonia. Every payment in this episode is there.",
+      "finding": "Devices in the episode: dev_0371 (MacBook \u00b7 macOS 15 \u00b7 Safari, already on file). IPs: 198.51.100.130 \u00b7 Gurugram, IN, datacenter. The customer's home country is India. Every payment in this episode is there.",
       "evidence": [
         {
           "label": "New devices",
@@ -176,7 +176,7 @@
         },
         {
           "label": "Countries",
-          "value": "EE"
+          "value": "IN"
         },
         {
           "label": "Datacenter or VPN",
@@ -188,9 +188,9 @@
       "id": "network",
       "title": "Linked accounts and money flow",
       "status": "alert",
-      "started_at": "2026-08-11T15:00:04Z",
+      "started_at": "2026-08-11T04:30:04Z",
       "duration_ms": 860,
-      "finding": "These devices are also used by Eva Cohen (cus_0179) via dev_0371, Iris Khan (cus_0181) via dev_0371. No peer-to-peer transfer or cash-out on this account in the six-day window. No cash-out path leaves this account in the six-day money graph.",
+      "finding": "These devices are also used by Esha Bansal (cus_0179) via dev_0371, Ira Khanna (cus_0181) via dev_0371. No UPI transfer or cash-out on this account in the six-day window. No cash-out path leaves this account in the six-day money graph.",
       "evidence": [
         {
           "label": "Linked customers",
@@ -214,9 +214,9 @@
       "id": "merchant",
       "title": "Merchant check",
       "status": "alert",
-      "started_at": "2026-08-11T15:00:05Z",
+      "started_at": "2026-08-11T04:30:05Z",
       "duration_ms": 640,
-      "finding": "Northwind Digital Keys (digital goods, Tallinn) has 24 payments in the past 14 days from 6 customers. 100% of those customers are under 45 days old. 100% of the amounts are round (multiples of $50, at least $200). Devices shared by two or more buyers: dev_0370, dev_0371.",
+      "finding": "Vistar Digital Keys (digital goods, Gurugram) has 24 payments in the past 14 days from 6 customers. 100% of those customers are under 45 days old. 100% of the amounts are round (multiples of \u20b91,000, at least \u20b98,000). Devices shared by two or more buyers: dev_0370, dev_0371.",
       "evidence": [
         {
           "label": "Category",
@@ -240,7 +240,7 @@
       "id": "classify",
       "title": "Pattern classification",
       "status": "alert",
-      "started_at": "2026-08-11T15:00:06Z",
+      "started_at": "2026-08-11T04:30:06Z",
       "duration_ms": 390,
       "finding": "Merchant collusion. Young accounts share devices and repeatedly pay the same merchant in round amounts.",
       "evidence": [
@@ -258,7 +258,7 @@
       "id": "recommend",
       "title": "Suggested action",
       "status": "alert",
-      "started_at": "2026-08-11T15:00:07Z",
+      "started_at": "2026-08-11T04:30:07Z",
       "duration_ms": 360,
       "finding": "Suggested action: escalate. Risk score 74/100. Escalate to merchant risk. Blocking one buyer leaves the rest of the ring, and the merchant, untouched. A person still has to confirm this. FraudLens does not apply it.",
       "evidence": [
@@ -282,7 +282,7 @@
       {
         "id": "cus_0180",
         "type": "customer",
-        "label": "Nathan Quinn",
+        "label": "Naveen Goyal",
         "sublabel": "cus_0180",
         "x": 0.08,
         "y": 0.7307,
@@ -309,7 +309,7 @@
       {
         "id": "ip_0379",
         "type": "ip",
-        "label": "Tallinn",
+        "label": "Gurugram",
         "sublabel": "198.51.100.130",
         "x": 0.8308,
         "y": 0.1272,
@@ -318,7 +318,7 @@
       {
         "id": "mer_029",
         "type": "merchant",
-        "label": "Northwind Digital Keys",
+        "label": "Vistar Digital Keys",
         "sublabel": "digital_goods",
         "x": 0.3761,
         "y": 0.2973,
@@ -327,7 +327,7 @@
       {
         "id": "cus_0179",
         "type": "customer",
-        "label": "Eva Cohen",
+        "label": "Esha Bansal",
         "sublabel": "cus_0179",
         "x": 0.92,
         "y": 0.4713,
@@ -345,7 +345,7 @@
       {
         "id": "cus_0181",
         "type": "customer",
-        "label": "Iris Khan",
+        "label": "Ira Khanna",
         "sublabel": "cus_0181",
         "x": 0.2725,
         "y": 0.92,
@@ -411,100 +411,100 @@
         "label": "owns"
       }
     ],
-    "caption": "Devices in this episode are shared with Eva Cohen, Iris Khan"
+    "caption": "Devices in this episode are shared with Esha Bansal, Ira Khanna"
   },
   "related_transactions": [
     {
-      "id": "txn_005338",
+      "id": "txn_005451",
       "occurred_at": "2026-08-07T10:00:00Z",
       "ts": 1786096800,
-      "amount_cents": 50000,
+      "amount_paise": 2000000,
       "status": "approved",
       "type": "card_purchase",
-      "merchant_name": "Northwind Digital Keys",
+      "merchant_name": "Vistar Digital Keys",
       "merchant_category": "digital_goods",
       "device_id": "dev_0371",
-      "ip": "198.51.100.130 \u00b7 Tallinn, EE, datacenter",
-      "ip_country": "EE",
-      "city": "Tallinn",
+      "ip": "198.51.100.130 \u00b7 Gurugram, IN, datacenter",
+      "ip_country": "IN",
+      "city": "Gurugram",
       "flagged": true,
       "counterparty_account_id": null
     },
     {
-      "id": "txn_005339",
+      "id": "txn_005452",
       "occurred_at": "2026-08-07T12:00:00Z",
       "ts": 1786104000,
-      "amount_cents": 25000,
+      "amount_paise": 1000000,
       "status": "approved",
       "type": "card_purchase",
-      "merchant_name": "Northwind Digital Keys",
+      "merchant_name": "Vistar Digital Keys",
       "merchant_category": "digital_goods",
       "device_id": "dev_0371",
-      "ip": "198.51.100.130 \u00b7 Tallinn, EE, datacenter",
-      "ip_country": "EE",
-      "city": "Tallinn",
+      "ip": "198.51.100.130 \u00b7 Gurugram, IN, datacenter",
+      "ip_country": "IN",
+      "city": "Gurugram",
       "flagged": true,
       "counterparty_account_id": null
     },
     {
-      "id": "txn_005340",
+      "id": "txn_005453",
       "occurred_at": "2026-08-07T14:00:00Z",
       "ts": 1786111200,
-      "amount_cents": 50000,
+      "amount_paise": 2000000,
       "status": "approved",
       "type": "card_purchase",
-      "merchant_name": "Northwind Digital Keys",
+      "merchant_name": "Vistar Digital Keys",
       "merchant_category": "digital_goods",
       "device_id": "dev_0371",
-      "ip": "198.51.100.130 \u00b7 Tallinn, EE, datacenter",
-      "ip_country": "EE",
-      "city": "Tallinn",
+      "ip": "198.51.100.130 \u00b7 Gurugram, IN, datacenter",
+      "ip_country": "IN",
+      "city": "Gurugram",
       "flagged": true,
       "counterparty_account_id": null
     },
     {
-      "id": "txn_005341",
+      "id": "txn_005454",
       "occurred_at": "2026-08-07T16:00:00Z",
       "ts": 1786118400,
-      "amount_cents": 25000,
+      "amount_paise": 1000000,
       "status": "approved",
       "type": "card_purchase",
-      "merchant_name": "Northwind Digital Keys",
+      "merchant_name": "Vistar Digital Keys",
       "merchant_category": "digital_goods",
       "device_id": "dev_0371",
-      "ip": "198.51.100.130 \u00b7 Tallinn, EE, datacenter",
-      "ip_country": "EE",
-      "city": "Tallinn",
+      "ip": "198.51.100.130 \u00b7 Gurugram, IN, datacenter",
+      "ip_country": "IN",
+      "city": "Gurugram",
       "flagged": true,
       "counterparty_account_id": null
     }
   ],
   "customer": {
     "id": "cus_0180",
-    "name": "Nathan Quinn",
-    "email": "nathan.quinn.desk@example.com",
-    "home_city": "Tallinn",
-    "home_country": "EE",
+    "name": "Naveen Goyal",
+    "email": "naveen.goyal.desk@example.com",
+    "home_city": "Gurugram",
+    "home_country": "IN",
     "segment": "student",
     "customer_since": "2026-07-19T00:00:00Z",
     "account_id": "acct_0180",
     "account_age_days": 19
   },
   "lead": {
-    "id": "txn_005340",
+    "id": "txn_005453",
     "occurred_at": "2026-08-07T14:00:00Z",
-    "amount_cents": 50000,
+    "amount_paise": 2000000,
     "status": "approved",
     "type": "card_purchase",
-    "merchant_name": "Northwind Digital Keys",
+    "merchant_name": "Vistar Digital Keys",
     "merchant_category": "digital_goods",
     "device_id": "dev_0371",
     "device_label": "MacBook \u00b7 macOS 15 \u00b7 Safari",
-    "ip": "198.51.100.130 \u00b7 Tallinn, EE, datacenter",
-    "ip_city": "Tallinn",
-    "ip_country": "EE",
-    "card_last4": "1276"
+    "ip": "198.51.100.130 \u00b7 Gurugram, IN, datacenter",
+    "ip_city": "Gurugram",
+    "ip_country": "IN",
+    "card_last4": "6761"
   },
-  "report_markdown": "# FraudLens case case_0017\n\n**Customer.** Nathan Quinn (cus_0180), Tallinn, EE.\n**Lead payment.** txn_005340 \u00b7 $500.00 \u00b7 Northwind Digital Keys \u00b7 2026-08-07T14:00:00Z.\n**Pattern.** Merchant collusion (round amounts shared devices).\n**Risk score.** 74 / 100.\n**Suggested action.** escalate \u2014 a human still has to confirm it.\n\n## Summary\n\nYoung accounts share devices and repeatedly pay the same merchant in round amounts. Escalate to merchant risk. Blocking one buyer leaves the rest of the ring, and the merchant, untouched. Lead payment txn_005340 is $500.00 approved at Northwind Digital Keys on 07 Aug 2026 14:00 UTC, card \u2022\u20221276, device dev_0371 (MacBook \u00b7 macOS 15 \u00b7 Safari). Before this episode, Nathan Quinn had 1 payment with a median of $6.00.\n\n## Why this score\n\n- **Case opened** (+4): Every queued payment starts with a small residual score.\n- **Round amounts** (+26): 100% of recent payments at Northwind Digital Keys are round.\n- **Young buyers** (+22): 100% of buyers are under 45 days old.\n- **Shared buyer devices** (+22): dev_0370, dev_0371\n\n## What the agent checked\n\n### Open the flagged payment (watch)\n\nQueue sent txn_005340 for Nathan Quinn: $500.00 at Northwind Digital Keys on 07 Aug 2026 14:00 UTC. The flagger's reasons were: Device is already linked to a different customer; Account is under 30 days old and the amount is large; The payment's shape is an outlier for the whole book.\n\n- Transaction: txn_005340\n- Amount: $500.00\n- Customer: Nathan Quinn (cus_0180)\n- Why it was queued: shared_device, new_account_amount, isolation_forest\n\n### Customer history and baseline (clear)\n\nNathan Quinn has 1 prior payment before this episode, median $6.00. Account acct_0180 is 19 days old. Usual devices: dev_0386. Countries already seen: EE.\n\n- Account age: 19 days\n- Prior payments: 1\n- Median amount: $6.00\n- Home: Tallinn, EE\n\n### Payment velocity (clear)\n\nThe episode around txn_005340 holds 4 payments across 360 minutes. The busiest hour contains 1 payment. 0 declines in the episode. Merchants touched: Northwind Digital Keys.\n\n- Payments in episode: 4\n- Busiest hour: 1\n- Declines: 0\n- Distinct merchants: 1\n\n### Amount versus baseline (alert)\n\nEpisode amounts run from $250.00 to $500.00, median $375.00. The peak is 83.3\u00d7 the baseline median of $6.00.\n\n- Episode median: $375.00\n- Episode peak: $500.00\n- Baseline median: $6.00\n- Peak vs baseline: 83.3\u00d7\n\n### Device and IP linkage (clear)\n\nDevices in the episode: dev_0371 (MacBook \u00b7 macOS 15 \u00b7 Safari, already on file). IPs: 198.51.100.130 \u00b7 Tallinn, EE, datacenter. The customer's home country is Estonia. Every payment in this episode is there.\n\n- New devices: none\n- Mature devices reused: none\n- Countries: EE\n- Datacenter or VPN: yes\n\n### Linked accounts and money flow (alert)\n\nThese devices are also used by Eva Cohen (cus_0179) via dev_0371, Iris Khan (cus_0181) via dev_0371. No peer-to-peer transfer or cash-out on this account in the six-day window. No cash-out path leaves this account in the six-day money graph.\n\n- Linked customers: 2\n- Household pattern: no\n- Reaches cash-out: no\n- Pass-through: no inbound\n\n### Merchant check (alert)\n\nNorthwind Digital Keys (digital goods, Tallinn) has 24 payments in the past 14 days from 6 customers. 100% of those customers are under 45 days old. 100% of the amounts are round (multiples of $50, at least $200). Devices shared by two or more buyers: dev_0370, dev_0371.\n\n- Category: digital_goods\n- Recent buyers: 6\n- Young-account share: 100%\n- Round-amount share: 100%\n\n### Pattern classification (alert)\n\nMerchant collusion. Young accounts share devices and repeatedly pay the same merchant in round amounts.\n\n- Pattern: Merchant collusion\n- Detail: round amounts shared devices\n\n### Suggested action (alert)\n\nSuggested action: escalate. Risk score 74/100. Escalate to merchant risk. Blocking one buyer leaves the rest of the ring, and the merchant, untouched. A person still has to confirm this. FraudLens does not apply it.\n\n- Suggested action: escalate\n- Risk score: 74/100\n- Who decides: human analyst\n\n## Payments in the episode\n\n| When | Id | Amount | Status | Merchant | Device |\n| --- | --- | --- | --- | --- | --- |\n| 2026-08-07T10:00:00Z | txn_005338 | $500.00 | approved | Northwind Digital Keys | dev_0371 |\n| 2026-08-07T12:00:00Z | txn_005339 | $250.00 | approved | Northwind Digital Keys | dev_0371 |\n| 2026-08-07T14:00:00Z | txn_005340 | $500.00 | approved | Northwind Digital Keys | dev_0371 |\n| 2026-08-07T16:00:00Z | txn_005341 | $250.00 | approved | Northwind Digital Keys | dev_0371 |\n\n## Action rationale\n\nEscalate to merchant risk. Blocking one buyer leaves the rest of the ring, and the merchant, untouched.\n\n## Held-out label\n\nThis section is joined after the investigation. The agent did not see it.\n\n- Fraud: yes\n- Pattern: merchant_collusion\n\n*FraudLens suggests. An analyst decides.*\n",
+  "report_markdown": "# FraudLens case case_0017\n\n**Customer.** Naveen Goyal (cus_0180), Gurugram, IN.\n**Lead payment.** txn_005453 \u00b7 \u20b920,000.00 \u00b7 Vistar Digital Keys \u00b7 2026-08-07T14:00:00Z.\n**Pattern.** Merchant collusion (round amounts shared devices).\n**Risk score.** 74 / 100.\n**Suggested action.** escalate \u2014 a human still has to confirm it.\n\n## Summary\n\nYoung accounts share devices and repeatedly pay the same merchant in round amounts. Escalate to merchant risk. Blocking one buyer leaves the rest of the ring, and the merchant, untouched. Lead payment txn_005453 is \u20b920,000.00 approved at Vistar Digital Keys on 07 Aug 2026 19:30 IST, card \u2022\u20226761, device dev_0371 (MacBook \u00b7 macOS 15 \u00b7 Safari). Before this episode, Naveen Goyal had 1 payment with a median of \u20b9240.00.\n\n## Why this score\n\n- **Case opened** (+4): Every queued payment starts with a small residual score.\n- **Round amounts** (+26): 100% of recent payments at Vistar Digital Keys are round.\n- **Young buyers** (+22): 100% of buyers are under 45 days old.\n- **Shared buyer devices** (+22): dev_0370, dev_0371\n\n## What the agent checked\n\n### Open the flagged payment (watch)\n\nQueue sent txn_005453 for Naveen Goyal: \u20b920,000.00 at Vistar Digital Keys on 07 Aug 2026 19:30 IST. The flagger's reasons were: Device is already linked to a different customer; Account is under 30 days old and the amount is large; The payment's shape is an outlier for the whole book.\n\n- Transaction: txn_005453\n- Amount: \u20b920,000.00\n- Customer: Naveen Goyal (cus_0180)\n- Why it was queued: shared_device, new_account_amount, isolation_forest\n\n### Customer history and baseline (clear)\n\nNaveen Goyal has 1 prior payment before this episode, median \u20b9240.00. Account acct_0180 is 19 days old. Usual devices: dev_0386. Countries already seen: IN.\n\n- Account age: 19 days\n- Prior payments: 1\n- Median amount: \u20b9240.00\n- Home: Gurugram, IN\n\n### Payment velocity (clear)\n\nThe episode around txn_005453 holds 4 payments across 360 minutes. The busiest hour contains 1 payment. 0 declines in the episode. Merchants touched: Vistar Digital Keys.\n\n- Payments in episode: 4\n- Busiest hour: 1\n- Declines: 0\n- Distinct merchants: 1\n\n### Amount versus baseline (alert)\n\nEpisode amounts run from \u20b910,000.00 to \u20b920,000.00, median \u20b915,000.00. The peak is 83.3\u00d7 the baseline median of \u20b9240.00.\n\n- Episode median: \u20b915,000.00\n- Episode peak: \u20b920,000.00\n- Baseline median: \u20b9240.00\n- Peak vs baseline: 83.3\u00d7\n\n### Device and IP linkage (clear)\n\nDevices in the episode: dev_0371 (MacBook \u00b7 macOS 15 \u00b7 Safari, already on file). IPs: 198.51.100.130 \u00b7 Gurugram, IN, datacenter. The customer's home country is India. Every payment in this episode is there.\n\n- New devices: none\n- Mature devices reused: none\n- Countries: IN\n- Datacenter or VPN: yes\n\n### Linked accounts and money flow (alert)\n\nThese devices are also used by Esha Bansal (cus_0179) via dev_0371, Ira Khanna (cus_0181) via dev_0371. No UPI transfer or cash-out on this account in the six-day window. No cash-out path leaves this account in the six-day money graph.\n\n- Linked customers: 2\n- Household pattern: no\n- Reaches cash-out: no\n- Pass-through: no inbound\n\n### Merchant check (alert)\n\nVistar Digital Keys (digital goods, Gurugram) has 24 payments in the past 14 days from 6 customers. 100% of those customers are under 45 days old. 100% of the amounts are round (multiples of \u20b91,000, at least \u20b98,000). Devices shared by two or more buyers: dev_0370, dev_0371.\n\n- Category: digital_goods\n- Recent buyers: 6\n- Young-account share: 100%\n- Round-amount share: 100%\n\n### Pattern classification (alert)\n\nMerchant collusion. Young accounts share devices and repeatedly pay the same merchant in round amounts.\n\n- Pattern: Merchant collusion\n- Detail: round amounts shared devices\n\n### Suggested action (alert)\n\nSuggested action: escalate. Risk score 74/100. Escalate to merchant risk. Blocking one buyer leaves the rest of the ring, and the merchant, untouched. A person still has to confirm this. FraudLens does not apply it.\n\n- Suggested action: escalate\n- Risk score: 74/100\n- Who decides: human analyst\n\n## Payments in the episode\n\n| When | Id | Amount | Status | Merchant | Device |\n| --- | --- | --- | --- | --- | --- |\n| 2026-08-07T10:00:00Z | txn_005451 | \u20b920,000.00 | approved | Vistar Digital Keys | dev_0371 |\n| 2026-08-07T12:00:00Z | txn_005452 | \u20b910,000.00 | approved | Vistar Digital Keys | dev_0371 |\n| 2026-08-07T14:00:00Z | txn_005453 | \u20b920,000.00 | approved | Vistar Digital Keys | dev_0371 |\n| 2026-08-07T16:00:00Z | txn_005454 | \u20b910,000.00 | approved | Vistar Digital Keys | dev_0371 |\n\n## Action rationale\n\nEscalate to merchant risk. Blocking one buyer leaves the rest of the ring, and the merchant, untouched.\n\n## Held-out label\n\nThis section is joined after the investigation. The agent did not see it.\n\n- Fraud: yes\n- Pattern: merchant_collusion\n\n*FraudLens suggests. An analyst decides.*\n",
   "showcase": null
 }

@@ -14,10 +14,15 @@ import {
   plural,
   shortClock,
   times,
+  wholeRupees,
 } from "./format";
 import type { CaseInput, Evidence, Investigation, TimelineStep, Txn, World } from "./types";
 
-const REVIEW_MS = Date.UTC(2026, 7, 11, 15, 0, 0);
+// 10:00 IST on the morning after the book closes.
+const REVIEW_MS = Date.UTC(2026, 7, 11, 4, 30, 0);
+// Amounts are paise. A round amount is a whole multiple of ₹1,000, and at least ₹8,000.
+const ROUND_PAISE = 100_000;
+const ROUND_FLOOR_PAISE = 800_000;
 const TRAVEL = new Set(["airline", "hotel", "transit", "restaurant"]);
 const RISKY = new Set(["gift_card", "crypto", "electronics", "wire"]);
 const PATTERN_LABELS: Record<string, string> = {
@@ -188,7 +193,7 @@ export async function investigate(world: World, caseInput: CaseInput): Promise<I
     caseInput,
     clock: REVIEW_MS,
     timeline: [],
-    facts: emptyFacts(lead, customer, merchant?.name ?? "peer-to-peer transfer", enrolled),
+    facts: emptyFacts(lead, customer, merchant?.name ?? "UPI transfer", enrolled),
   });
   return assemble(final);
 }
@@ -267,17 +272,17 @@ function baselineOf(state: State): Txn[] {
 }
 
 function openCase(state: State) {
-  const { lead, customer, merchantName } = state.facts;
+  const { lead, customer } = state.facts;
   const reasons = state.caseInput.flag_reasons.map((code) => REASON_TEXT[code] ?? code);
   step(
     state,
     "open_case",
     "Open the flagged payment",
     "watch",
-    `Queue sent ${lead.id} for ${customer.name}: ${money(lead.amount_cents)} at ${merchantName} on ${clock(lead.ts)}. The flagger's reasons were: ${reasons.join("; ")}.`,
+    `Queue sent ${lead.id} for ${customer.name}: ${money(lead.amount_paise)} ${where(state.catalog.merchant(lead.merchant_id))} on ${clock(lead.ts)}. The flagger's reasons were: ${reasons.join("; ")}.`,
     [
       { label: "Transaction", value: lead.id },
-      { label: "Amount", value: money(lead.amount_cents) },
+      { label: "Amount", value: money(lead.amount_paise) },
       { label: "Customer", value: `${customer.name} (${customer.id})` },
       { label: "Why it was queued", value: state.caseInput.flag_reasons.join(", ") },
     ],
@@ -291,7 +296,7 @@ function customerBaseline(state: State) {
   const account = catalog.accountForCustomer(customer.id);
   const baseline = baselineOf(state);
   const lead = state.facts.lead;
-  const amounts = baseline.filter((txn) => txn.status === "approved").map((txn) => txn.amount_cents);
+  const amounts = baseline.filter((txn) => txn.status === "approved").map((txn) => txn.amount_paise);
   const median = amounts.length ? medianInt(amounts) : 0;
   const ageDays = Math.max(0, Math.trunc((lead.ts - account.opened_ts) / 86400));
   const devices = [...new Set(baseline.map((txn) => txn.device_id))].sort();
@@ -334,7 +339,7 @@ function velocityCheck(state: State) {
   const merchants: string[] = [];
   for (const txn of episode) {
     const merchant = state.catalog.merchant(txn.merchant_id);
-    const name = merchant ? merchant.name : "P2P transfer";
+    const name = merchant ? merchant.name : "UPI transfer";
     if (!merchants.includes(name)) merchants.push(name);
   }
   state.facts.episode = episode;
@@ -342,7 +347,7 @@ function velocityCheck(state: State) {
   state.facts.declineCount = declines.length;
   state.facts.spanMinutes = span;
   state.facts.episodeMerchants = merchants;
-  state.facts.episodeAmounts = episode.map((txn) => txn.amount_cents);
+  state.facts.episodeAmounts = episode.map((txn) => txn.amount_paise);
   step(
     state,
     "velocity",
@@ -504,10 +509,10 @@ function linkedAccounts(state: State) {
   }
   const inbound = (catalog.byAccount.get(account.id) ?? [])
     .filter((txn) => txn.type === "p2p_in" && txn.ts >= windowStart)
-    .map((txn) => txn.amount_cents);
+    .map((txn) => txn.amount_paise);
   const outbound = (catalog.byAccount.get(account.id) ?? [])
     .filter((txn) => (txn.type === "p2p_out" || txn.type === "cash_out") && txn.ts >= windowStart)
-    .map((txn) => txn.amount_cents);
+    .map((txn) => txn.amount_paise);
   const inboundSum = inbound.reduce((sum, value) => sum + value, 0);
   const outboundSum = outbound.reduce((sum, value) => sum + value, 0);
   const ratio = inboundSum ? outboundSum / inboundSum : 0;
@@ -554,7 +559,7 @@ function flowSentence(inboundSum: number, outboundSum: number, ratio: number): s
   if (inboundSum && outboundSum) return `Inbound transfers ${money(inboundSum)}, outbound ${money(outboundSum)}, pass-through ${pct0(ratio)}.`;
   if (outboundSum) return `No inbound transfer in this window. ${money(outboundSum)} was sent on.`;
   if (inboundSum) return `Inbound transfers ${money(inboundSum)}. Nothing was sent on.`;
-  return "No peer-to-peer transfer or cash-out on this account in the six-day window.";
+  return "No UPI transfer or cash-out on this account in the six-day window.";
 }
 
 function addEdge(graph: Map<string, string[]>, source: string, target: string) {
@@ -635,7 +640,7 @@ function merchantCheck(state: State) {
       const account = catalog.accounts.get(txn.account_id);
       if (account && (txn.ts - account.opened_ts) / 86400 < 45) young.push(txn.customer_id);
     }
-    if (txn.amount_cents % 5000 === 0 && txn.amount_cents >= 20000) roundHits += 1;
+    if (txn.amount_paise % ROUND_PAISE === 0 && txn.amount_paise >= ROUND_FLOOR_PAISE) roundHits += 1;
     const owners = devices.get(txn.device_id) ?? new Set<string>();
     owners.add(txn.customer_id);
     devices.set(txn.device_id, owners);
@@ -657,7 +662,7 @@ function merchantCheck(state: State) {
     "merchant",
     "Merchant check",
     suspicious ? "alert" : "clear",
-    `${merchant.name} (${merchant.category.replaceAll("_", " ")}, ${merchant.city}) has ${plural(recent.length, "payment")} in the past 14 days from ${plural(buyers.length, "customer")}. ${pct0(youngShare)} of those customers are under 45 days old. ${pct0(roundShare)} of the amounts are round (multiples of $50, at least $200). Devices shared by two or more buyers: ${sharedDevices.length ? sharedDevices.join(", ") : "none"}.`,
+    `${merchant.name} (${merchant.category.replaceAll("_", " ")}, ${merchant.city}) has ${plural(recent.length, "payment")} in the past 14 days from ${plural(buyers.length, "customer")}. ${pct0(youngShare)} of those customers are under 45 days old. ${pct0(roundShare)} of the amounts are round (multiples of ${wholeRupees(ROUND_PAISE)}, at least ${wholeRupees(ROUND_FLOOR_PAISE)}). Devices shared by two or more buyers: ${sharedDevices.length ? sharedDevices.join(", ") : "none"}.`,
     [
       { label: "Category", value: merchant.category },
       { label: "Recent buyers", value: String(buyers.length) },
@@ -685,7 +690,7 @@ function classify(state: State) {
   const declines = facts.declineCount;
   const cardTesting =
     episode.length >= 6 &&
-    episodeMedian < 2000 &&
+    episodeMedian < 80_000 &&
     facts.episodeMerchants.length >= 4 &&
     (declines >= 3 || (episode.length > 0 && declines / episode.length >= 0.25)) &&
     facts.newDevices.length > 0;
@@ -693,7 +698,7 @@ function classify(state: State) {
   const travelSpend = [...merchantCategories].some((category) => TRAVEL.has(category));
   const newTxns = episode.filter((txn) => facts.newDevices.includes(txn.device_id));
   const newCategories = categoriesOf(state.catalog, newTxns);
-  const newPeak = newTxns.reduce((max, txn) => Math.max(max, txn.amount_cents), 0);
+  const newPeak = newTxns.reduce((max, txn) => Math.max(max, txn.amount_paise), 0);
   const newRatio = facts.baselineMedian ? newPeak / facts.baselineMedian : 0;
   const newForeign = newTxns.some((txn) => (state.catalog.ips.get(txn.ip_id)?.country ?? "") !== facts.customer.home_country);
   const stats = facts.merchantStats;
@@ -704,7 +709,7 @@ function classify(state: State) {
       stats.youngShare >= 0.5 &&
       stats.roundShare >= 0.5 &&
       stats.sharedDevices.length &&
-      lead.amount_cents % 5000 === 0 &&
+      lead.amount_paise % ROUND_PAISE === 0 &&
       facts.accountAgeDays < 45,
   );
   const moneyMovement = ["p2p_out", "p2p_in", "cash_out"].includes(lead.type) || facts.reachesCash || facts.outboundSum > 0;
@@ -714,14 +719,14 @@ function classify(state: State) {
       facts.reachesCash ||
       facts.counterpartyYoung ||
       facts.passthrough >= 0.6 ||
-      (facts.accountAgeDays < 45 && (facts.inboundSum >= 20000 || facts.outboundSum >= 20000)) ||
-      (!facts.sameHousehold && facts.linked.length >= 1 && facts.outboundSum >= 20000);
+      (facts.accountAgeDays < 45 && (facts.inboundSum >= 800_000 || facts.outboundSum >= 800_000)) ||
+      (!facts.sameHousehold && facts.linked.length >= 1 && facts.outboundSum >= 800_000);
   }
   const ato =
     newTxns.length > 0 &&
     newForeign &&
     newRatio >= 4 &&
-    newPeak >= 30000 &&
+    newPeak >= 1_200_000 &&
     [...newCategories].some((category) => RISKY.has(category)) &&
     !newCategories.has("airline");
 
@@ -749,18 +754,18 @@ function classify(state: State) {
     pattern = "merchant_collusion";
     detail = "round_amounts_shared_devices";
     reason = "Young accounts share devices and repeatedly pay the same merchant in round amounts.";
-  } else if (facts.foreign && facts.knownMature.length && travelSpend && facts.episodePeak < 80000 && declines === 0) {
+  } else if (facts.foreign && facts.knownMature.length && travelSpend && facts.episodePeak < 3_200_000 && declines === 0) {
     pattern = "legitimate";
     detail = "travel";
     reason = "Foreign IP, but the device is the one this customer has used for weeks, and the merchants are travel.";
-  } else if (facts.sameHousehold && !facts.foreign && facts.episodePeak < 40000 && !mule) {
+  } else if (facts.sameHousehold && !facts.foreign && facts.episodePeak < 1_600_000 && !mule) {
     pattern = "legitimate";
     detail = "household";
     reason = "The shared device belongs to someone with the same surname and city, and nothing is passed through.";
   } else if (
     facts.peakVelocity >= 5 &&
     declines === 0 &&
-    episodeMedian >= 2000 &&
+    episodeMedian >= 80_000 &&
     facts.newDevices.length === 0 &&
     !facts.foreign &&
     facts.episodeMerchants.length <= 3
@@ -770,7 +775,7 @@ function classify(state: State) {
     const shops = facts.episodeMerchants;
     const shopBit = shops.length === 1 ? shops[0] : shops.length === 2 ? `${shops[0]} and ${shops[1]}` : nameList(shops);
     reason = `The hour is busy, but every payment cleared, on a known device, at ${shopBit}.`;
-  } else if (facts.newDevices.length && !facts.foreign && facts.episodePeak < 15000 && facts.peakVelocity <= 2 && !riskySpend) {
+  } else if (facts.newDevices.length && !facts.foreign && facts.episodePeak < 600_000 && facts.peakVelocity <= 2 && !riskySpend) {
     pattern = "legitimate";
     detail = "new_device_at_home";
     const amountBit = merchantCategories.size === 1 && merchantCategories.has("grocery")
@@ -783,7 +788,7 @@ function classify(state: State) {
     facts.peakVelocity <= 2 &&
     lead.type === "card_purchase" &&
     episode.length <= 2 &&
-    facts.episodePeak >= 40000 &&
+    facts.episodePeak >= 1_600_000 &&
     facts.accountAgeDays > 180 &&
     (merchantCategories.size === 0 || [...merchantCategories].every((category) => ["electronics", "fashion", "airline", "hotel", "furniture"].includes(category)))
   ) {
@@ -921,9 +926,9 @@ function assemble(state: State): Investigation {
   const related = facts.episode.map((txn) => ({
     id: txn.id,
     occurredAt: txn.occurred_at,
-    amountCents: txn.amount_cents,
+    amountPaise: txn.amount_paise,
     status: txn.status,
-    merchantName: catalog.merchant(txn.merchant_id)?.name ?? "P2P transfer",
+    merchantName: catalog.merchant(txn.merchant_id)?.name ?? "UPI transfer",
     deviceId: txn.device_id,
   }));
   return {
@@ -949,11 +954,12 @@ function assemble(state: State): Investigation {
     },
     lead: {
       id: lead.id,
-      amountCents: lead.amount_cents,
+      amountPaise: lead.amount_paise,
       merchantName: facts.merchantName,
       occurredAt: lead.occurred_at,
       deviceId: lead.device_id,
       cardLast4: lead.card_last4,
+      type: lead.type,
     },
     related,
   };
@@ -983,7 +989,7 @@ function narrativeOf(state: State): string {
   const bits = [
     facts.patternReasons[0],
     facts.rationale,
-    `Lead payment ${lead.id} is ${money(lead.amount_cents)} ${lead.status === "declined" ? "declined" : "approved"} at ${facts.merchantName} on ${clock(lead.ts)}${card}, device ${lead.device_id} (${state.catalog.deviceLabel(lead.device_id)}).`,
+    `Lead payment ${lead.id} is ${money(lead.amount_paise)} ${lead.status === "declined" ? "declined" : "approved"} ${where(state.catalog.merchant(lead.merchant_id))} on ${clock(lead.ts)}${card}, device ${lead.device_id} (${state.catalog.deviceLabel(lead.device_id)}).`,
   ];
   if (facts.baselineCount) {
     bits.push(`Before this episode, ${customer.name} had ${plural(facts.baselineCount, "payment")} with a median of ${money(facts.baselineMedian)}.`);
@@ -997,6 +1003,10 @@ function narrativeOf(state: State): string {
     bits.push("The contrast with account takeover is the device: takeover arrives on hardware the customer has never used.");
   }
   return bits.join(" ");
+}
+
+function where(merchant: World["merchants"][number] | null | undefined): string {
+  return merchant ? `at ${merchant.name}` : "by UPI transfer";
 }
 
 function buildGraph(state: State) {

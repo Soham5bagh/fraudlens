@@ -33,7 +33,7 @@ def run_seed(seed: int) -> dict:
     investigations = [investigate_case(case, visible) for case in cases]
     metrics = compute_metrics(world, flagged, investigations, cases)
     harm = metrics["customers_wrongly_blocked"]
-    alarms = _false_alarms(world, investigations)
+    alarms = false_alarm_examples(world, investigations)
     return {
         "seed": seed,
         "transactions": metrics["population"]["transactions"],
@@ -64,7 +64,7 @@ def run_seed(seed: int) -> dict:
     }
 
 
-def _false_alarms(world: dict, investigations: list[dict]) -> list[dict]:
+def false_alarm_examples(world: dict, investigations: list[dict]) -> list[dict]:
     """Legitimate payments covered by a non-approve case. Reported, not hidden."""
     labels = {row["transaction_id"]: row for row in world["labels"]}
     txns = {txn["id"]: txn for txn in world["transactions"]}
@@ -81,8 +81,8 @@ def _false_alarms(world: dict, investigations: list[dict]) -> list[dict]:
             examples.append(
                 {
                     "transaction_id": txn_id,
-                    "amount_cents": txn["amount_cents"],
-                    "merchant_name": merchant["name"] if merchant else "peer-to-peer transfer",
+                    "amount_paise": txn["amount_paise"],
+                    "merchant_name": merchant["name"] if merchant else "UPI transfer",
                     "case_id": investigation["case_id"],
                     "predicted_pattern": investigation["pattern"],
                     "customer_name": investigation["customer"]["name"],

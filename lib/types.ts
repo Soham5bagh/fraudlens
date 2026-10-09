@@ -7,7 +7,7 @@ export type QueueItem = {
   customer_name: string;
   home: string;
   merchant_name: string;
-  amount_cents: number;
+  amount_paise: number;
   occurred_at: string;
   status: string;
   flag_reasons: string[];
@@ -65,7 +65,7 @@ export type CaseFile = {
   related_transactions: {
     id: string;
     occurred_at: string;
-    amount_cents: number;
+    amount_paise: number;
     status: string;
     type: string;
     merchant_name: string;
@@ -87,7 +87,7 @@ export type CaseFile = {
   lead: {
     id: string;
     occurred_at: string;
-    amount_cents: number;
+    amount_paise: number;
     status: string;
     type: string;
     merchant_name: string;
@@ -125,6 +125,15 @@ export type ScoreRow = {
   predicted_positive: number;
 };
 
+export type FalseAlarmExample = {
+  transaction_id: string;
+  amount_paise: number;
+  merchant_name: string;
+  case_id: string;
+  predicted_pattern: string;
+  customer_name: string;
+};
+
 export type Metrics = {
   population: {
     transactions: number;
@@ -158,6 +167,7 @@ export type Metrics = {
     legitimate_cases_approved: number;
   };
   narrative: string;
+  false_alarm_examples?: FalseAlarmExample[];
   robustness?: {
     note: string;
     limitations: string;
@@ -172,14 +182,7 @@ export type Metrics = {
       fraud_cases: number;
       legitimate_cases_approved: number;
       legitimate_cases: number;
-      false_alarm_examples?: {
-        transaction_id: string;
-        amount_cents: number;
-        merchant_name: string;
-        case_id: string;
-        predicted_pattern: string;
-        customer_name: string;
-      }[];
+      false_alarm_examples?: FalseAlarmExample[];
     }[];
   };
   headline: {

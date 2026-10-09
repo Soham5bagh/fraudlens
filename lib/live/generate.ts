@@ -27,17 +27,25 @@ const LABELS: Record<PlantedScenario, string> = {
   genuine: "Genuine trip",
 };
 
-const FIRST = ["Maya", "Jonah", "Priya", "Elena", "Samir", "Nora", "Hugo", "Aisha", "Leo", "Ines", "Owen", "Farah", "Nico", "Ruth", "Idris", "Helen", "Colin", "Anika", "Marcus", "Sofia"];
-const LAST = ["Okoye", "Berg", "Shah", "Moreau", "Nguyen", "Adler", "Costa", "Petrov", "Silva", "Hart", "Bennett", "Almeida", "Keller", "Diaz", "Rossi", "Quinn", "Hughes", "Sato", "Khan", "Fischer"];
+// The same name pools as the Python generator: a first name and a surname from one community.
+const COMMUNITIES: { first: string[]; last: string[] }[] = [
+  { first: ["Aarav", "Priya", "Rohan", "Ananya", "Vikram", "Neha"], last: ["Sharma", "Gupta", "Verma", "Mishra", "Agarwal"] },
+  { first: ["Karthik", "Lakshmi", "Arjun", "Deepa", "Suresh", "Kavya"], last: ["Iyer", "Nair", "Menon", "Pillai", "Krishnan"] },
+  { first: ["Arnab", "Ritika", "Sourav", "Moumita", "Debashish", "Ishita"], last: ["Banerjee", "Chatterjee", "Ghosh", "Bose", "Mukherjee"] },
+  { first: ["Siddharth", "Sneha", "Aditya", "Riya", "Kunal", "Pooja"], last: ["Kulkarni", "Joshi", "Desai", "Patel", "Mehta"] },
+  { first: ["Faisal", "Zara", "Farhan", "Fatima", "Imtiaz", "Sana"], last: ["Khan", "Qureshi", "Siddiqui", "Ansari", "Shaikh"] },
+  { first: ["Harpreet", "Gurleen", "Manpreet", "Simran", "Jaspreet", "Navjot"], last: ["Gill", "Sandhu", "Dhillon", "Grewal", "Bedi"] },
+  { first: ["Venkat", "Sravani", "Praveen", "Divya", "Naveen", "Bhavana"], last: ["Reddy", "Rao", "Naidu", "Hegde", "Shetty"] },
+];
 const CITIES: [string, string][] = [
-  ["London", "GB"],
-  ["Chicago", "US"],
-  ["Lisbon", "PT"],
-  ["Berlin", "DE"],
-  ["Toronto", "CA"],
-  ["Madrid", "ES"],
-  ["Dublin", "IE"],
-  ["Tallinn", "EE"],
+  ["Mumbai", "IN"],
+  ["Delhi", "IN"],
+  ["Bengaluru", "IN"],
+  ["Chennai", "IN"],
+  ["Kolkata", "IN"],
+  ["Hyderabad", "IN"],
+  ["Pune", "IN"],
+  ["Jaipur", "IN"],
 ];
 
 export async function runLive(choice: ScenarioChoice, seed: number): Promise<{ investigation: Investigation; truth: Truth }> {
@@ -61,23 +69,23 @@ export function buildWorld(scenario: PlantedScenario, seed: number): { world: Wo
     seq: 1,
   };
   const home = CITIES[randInt(rng, CITIES.length)];
-  const person = makeCustomer(bag, pick(rng, FIRST), pick(rng, LAST), home, daysBefore(seed, 700));
+  const person = makeCustomer(bag, ...pickName(rng), home, daysBefore(seed, 700));
   const phone = device(bag, "iPhone", "iOS 18", "Safari");
   const homeIp = ip(bag, home[0], home[1], false, false);
   enroll(bag, person.customer, phone);
-  const grocery = merchant(bag, "Harbor Grocery", "grocery", home[0], home[1]);
-  const coffee = merchant(bag, "Sable Coffee", "coffee", home[0], home[1]);
-  const gift = merchant(bag, "Parcel Gift Cards", "gift_card", "Ashburn", "US");
-  const electronics = merchant(bag, "Lumen Electronics", "electronics", "Chicago", "US");
-  const airline = merchant(bag, "Brightair", "airline", "Lisbon", "PT");
-  const hotel = merchant(bag, "Atelier Hale", "hotel", "Lisbon", "PT");
-  const crypto = merchant(bag, "Keystone Crypto Desk", "crypto", "Austin", "US");
-  const keys = merchant(bag, "Northwind Digital Keys", "digital_goods", "Tallinn", "EE");
+  const grocery = merchant(bag, "Annapurna Grocers", "grocery", home[0], home[1]);
+  const coffee = merchant(bag, "Filter Kaapi Co", "coffee", home[0], home[1]);
+  const gift = merchant(bag, "Uphaar Gift Cards", "gift_card", "Mumbai", "IN");
+  const electronics = merchant(bag, "Prism Electronics", "electronics", "Bengaluru", "IN");
+  const airline = merchant(bag, "SkyVahan Airways", "airline", "Delhi", "IN");
+  const hotel = merchant(bag, "Ashoka Stays", "hotel", "Singapore", "SG");
+  const crypto = merchant(bag, "Sikka Crypto Exchange", "crypto", "Bengaluru", "IN");
+  const keys = merchant(bag, "Vistar Digital Keys", "digital_goods", "Gurugram", "IN");
   const shops = [
-    merchant(bag, "Hearth Gift Co", "gift_card", "Austin", "US"),
-    merchant(bag, "Nimbus Cloud Apps", "digital_goods", "Dublin", "IE"),
-    merchant(bag, "Kinfolk Streaming", "digital_goods", "Berlin", "DE"),
-    merchant(bag, "Dayrate Parking", "transit", "Chicago", "US"),
+    merchant(bag, "Tohfa Gift Co", "gift_card", "Delhi", "IN"),
+    merchant(bag, "Megh Cloud Apps", "digital_goods", "Pune", "IN"),
+    merchant(bag, "Raga Streaming", "digital_goods", "Mumbai", "IN"),
+    merchant(bag, "ParkEasy Parking", "transit", "Chennai", "IN"),
     gift,
     coffee,
   ];
@@ -86,7 +94,7 @@ export function buildWorld(scenario: PlantedScenario, seed: number): { world: Wo
   if (scenario === "account_takeover") return finish(bag, seed, person, takeover(bag, rng, seed, person, phone, homeIp, grocery, gift, electronics), "account_takeover", ["new_device", "foreign_ip", "amount_outlier"]);
   if (scenario === "mule_chain") return mule(bag, rng, seed, person, phone, homeIp, grocery, crypto);
   if (scenario === "merchant_collusion") return collusion(bag, rng, seed, keys, grocery);
-  return finish(bag, seed, person, trip(bag, rng, seed, person, phone, homeIp, grocery, airline, hotel, home[1]), "genuine", ["foreign_ip"]);
+  return finish(bag, seed, person, trip(bag, rng, seed, person, phone, homeIp, grocery, airline, hotel), "genuine", ["foreign_ip"]);
 }
 
 function cardTesting(
@@ -99,16 +107,16 @@ function cardTesting(
   shops: Merchant[],
   gift: Merchant,
 ): Txn[] {
-  history(bag, person, phone, homeIp, [shops[5]], 24, 2_000 + (seed % 20) * 50);
+  history(bag, person, phone, homeIp, [shops[5]], 24, 80_000 + (seed % 20) * 2_000);
   const attack = device(bag, "Windows laptop", "Windows 11", "Chrome");
   const remote = ip(bag, "Ashburn", "US", true, false);
   const start = stamp(2026, 8, 8, 2, 20);
   const probes = 8 + (seed % 5);
   const episode: Txn[] = [];
   for (let i = 0; i < probes; i += 1) {
-    episode.push(pay(bag, person, attack, remote, shops[i % 5], start + i * 90, 120 + randInt(rng, 280), i % 2 === 0 ? "declined" : "approved", "card_purchase"));
+    episode.push(pay(bag, person, attack, remote, shops[i % 5], start + i * 90, 4_800 + randInt(rng, 280) * 40, i % 2 === 0 ? "declined" : "approved", "card_purchase"));
   }
-  episode.push(pay(bag, person, attack, remote, gift, start + probes * 90, 15_000 + (seed % 70) * 100, "approved", "card_purchase"));
+  episode.push(pay(bag, person, attack, remote, gift, start + probes * 90, 600_000 + (seed % 70) * 4_000, "approved", "card_purchase"));
   return episode;
 }
 
@@ -123,13 +131,13 @@ function takeover(
   gift: Merchant,
   electronics: Merchant,
 ): Txn[] {
-  history(bag, person, phone, homeIp, [grocery], 22, 1_400 + (seed % 15) * 40);
-  const pixel = device(bag, "Pixel 8", "Android 15", "Chrome");
+  history(bag, person, phone, homeIp, [grocery], 22, 56_000 + (seed % 15) * 1_600);
+  const stranger = device(bag, "Redmi Note 13", "Android 14", "Chrome");
   const vpn = ip(bag, "Lagos", "NG", false, true);
   const start = stamp(2026, 8, 8, 20, 10);
-  const amounts = [26_500 + randInt(rng, 20) * 100, 42_000 + (seed % 30) * 100, 64_000 + (seed % 40) * 100];
+  const amounts = [1_060_000 + randInt(rng, 20) * 4_000, 1_680_000 + (seed % 30) * 4_000, 2_560_000 + (seed % 40) * 4_000];
   const shops = [gift, electronics, gift];
-  return amounts.map((amount, index) => pay(bag, person, pixel, vpn, shops[index], start + index * 600, amount, "approved", "card_purchase"));
+  return amounts.map((amount, index) => pay(bag, person, stranger, vpn, shops[index], start + index * 600, amount, "approved", "card_purchase"));
 }
 
 function trip(
@@ -142,16 +150,13 @@ function trip(
   grocery: Merchant,
   airline: Merchant,
   hotel: Merchant,
-  homeCountry: string,
 ): Txn[] {
-  history(bag, person, phone, homeIp, [grocery], 20, 3_200 + (seed % 12) * 80);
-  const abroadCity = homeCountry === "PT" ? "Berlin" : "Lisbon";
-  const abroadCountry = homeCountry === "PT" ? "DE" : "PT";
-  const abroad = ip(bag, abroadCity, abroadCountry, false, false);
+  history(bag, person, phone, homeIp, [grocery], 20, 128_000 + (seed % 12) * 3_200);
+  const abroad = ip(bag, "Singapore", "SG", false, false);
   const start = stamp(2026, 8, 8, 18, 0);
   return [
-    pay(bag, person, phone, abroad, airline, start, 22_000 + (seed % 40) * 100, "approved", "card_purchase"),
-    pay(bag, person, phone, abroad, hotel, start + 3600, 14_000 + randInt(rng, 30) * 100, "approved", "card_purchase"),
+    pay(bag, person, phone, abroad, airline, start, 880_000 + (seed % 40) * 4_000, "approved", "card_purchase"),
+    pay(bag, person, phone, abroad, hotel, start + 3600, 560_000 + randInt(rng, 30) * 4_000, "approved", "card_purchase"),
   ];
 }
 
@@ -165,23 +170,23 @@ function mule(
   grocery: Merchant,
   crypto: Merchant,
 ): { world: World; caseInput: CaseInput; truth: Truth } {
-  history(bag, sender, senderPhone, homeIp, [grocery], 18, 4_000);
-  const muleHome: [string, string] = ["Austin", "US"];
-  const mulePerson = makeCustomer(bag, pick(rng, FIRST), pick(rng, LAST), muleHome, 17);
-  const hopper = makeCustomer(bag, pick(rng, FIRST), pick(rng, LAST), ["Paris", "FR"], 18);
+  history(bag, sender, senderPhone, homeIp, [grocery], 18, 160_000);
+  const muleHome: [string, string] = ["Hyderabad", "IN"];
+  const mulePerson = makeCustomer(bag, ...pickName(rng), muleHome, 17);
+  const hopper = makeCustomer(bag, ...pickName(rng), ["Kolkata", "IN"], 18);
   const mulePhone = device(bag, "iPhone", "iOS 18", "Safari");
   const laptop = device(bag, "Windows laptop", "Windows 11", "Chrome");
   enroll(bag, mulePerson.customer, mulePhone);
-  const muleIp = ip(bag, "Austin", "US", false, false);
+  const muleIp = ip(bag, "Hyderabad", "IN", false, false);
   const day = stamp(2026, 8, 8, 13, 0);
-  pay(bag, mulePerson, mulePhone, muleIp, grocery, day - 10 * 86400, 450 + (seed % 10) * 20, "approved", "card_purchase");
-  const inbound = 100_000 + (seed % 20) * 1000;
-  const outbound = inbound - 8_000;
+  pay(bag, mulePerson, mulePhone, muleIp, grocery, day - 10 * 86400, 18_000 + (seed % 10) * 800, "approved", "card_purchase");
+  const inbound = 4_000_000 + (seed % 20) * 40_000;
+  const outbound = inbound - 320_000;
   pay(bag, sender, senderPhone, homeIp, null, day, inbound, "approved", "p2p_out", mulePerson.account.id);
   pay(bag, mulePerson, laptop, muleIp, null, day + 20, inbound, "approved", "p2p_in", sender.account.id);
   const lead = pay(bag, mulePerson, laptop, muleIp, null, day + 7200, outbound, "approved", "p2p_out", hopper.account.id);
-  pay(bag, hopper, laptop, ip(bag, "Paris", "FR", false, false), null, day + 7300, outbound, "approved", "p2p_in", mulePerson.account.id);
-  pay(bag, hopper, laptop, ip(bag, "Austin", "US", false, false), crypto, day + 10800, outbound - 4_000, "approved", "cash_out");
+  pay(bag, hopper, laptop, ip(bag, "Kolkata", "IN", false, false), null, day + 7300, outbound, "approved", "p2p_in", mulePerson.account.id);
+  pay(bag, hopper, laptop, ip(bag, "Hyderabad", "IN", false, false), crypto, day + 10800, outbound - 160_000, "approved", "cash_out");
   const episode = bag.world.transactions.filter((txn) => txn.customer_id === mulePerson.customer.id && txn.ts >= day);
   return {
     world: bag.world,
@@ -198,15 +203,16 @@ function collusion(bag: Bag, rng: () => number, seed: number, keys: Merchant, gr
   let leadCustomer = "";
   let leadEpisode: Txn[] = [];
   for (let index = 0; index < 4; index += 1) {
-    const city: [string, string] = index % 2 === 0 ? ["Tallinn", "EE"] : ["Riga", "LV"];
-    const person = makeCustomer(bag, FIRST[(seed + index) % FIRST.length], LAST[(seed * 3 + index) % LAST.length], city, 16);
+    const city: [string, string] = index % 2 === 0 ? ["Gurugram", "IN"] : ["Noida", "IN"];
+    const community = COMMUNITIES[(seed + index) % COMMUNITIES.length];
+    const person = makeCustomer(bag, community.first[(seed + index) % community.first.length], community.last[(seed * 3 + index) % community.last.length], city, 16);
     const phone = device(bag, "iPhone", "iOS 18", "Safari");
     enroll(bag, person.customer, phone);
-    const local = ip(bag, city[0], city[1] === "LV" ? "LV" : "EE", false, false);
-    pay(bag, person, phone, local, grocery, when - 8 * 86400, 500 + randInt(rng, 40) * 10, "approved", "card_purchase");
+    const local = ip(bag, city[0], city[1], false, false);
+    pay(bag, person, phone, local, grocery, when - 8 * 86400, 20_000 + randInt(rng, 40) * 400, "approved", "card_purchase");
     const shared = index < 2 ? laptopA : laptopB;
-    const small = pay(bag, person, shared, local, keys, when + index * 120, 25_000, "approved", "card_purchase");
-    const large = pay(bag, person, shared, local, keys, when + 7200 + index * 120, 50_000, "approved", "card_purchase");
+    const small = pay(bag, person, shared, local, keys, when + index * 120, 1_000_000, "approved", "card_purchase");
+    const large = pay(bag, person, shared, local, keys, when + 7200 + index * 120, 2_000_000, "approved", "card_purchase");
     if (index === 0) {
       lead = large;
       leadCustomer = person.customer.id;
@@ -229,7 +235,7 @@ function finish(
   scenario: PlantedScenario,
   reasons: string[],
 ): { world: World; caseInput: CaseInput; truth: Truth } {
-  const lead = episode.reduce((best, txn) => (txn.amount_cents > best.amount_cents ? txn : best), episode[0]);
+  const lead = episode.reduce((best, txn) => (txn.amount_paise > best.amount_paise ? txn : best), episode[0]);
   return {
     world: bag.world,
     caseInput: caseFor(person.customer.id, lead, episode, reasons, seed),
@@ -255,8 +261,8 @@ function history(bag: Bag, person: { customer: Customer; account: Account }, pho
   const end = stamp(2026, 8, 1, 12, 0);
   for (let i = 0; i < count; i += 1) {
     const ts = end - (count - i) * 3 * 86400;
-    const amount = median + ((i % 5) - 2) * 180;
-    pay(bag, person, phone, homeIp, shops[i % shops.length], ts, Math.max(400, amount), "approved", "card_purchase");
+    const amount = median + ((i % 5) - 2) * 7_200;
+    pay(bag, person, phone, homeIp, shops[i % shops.length], ts, Math.max(16_000, amount), "approved", "card_purchase");
   }
 }
 
@@ -337,7 +343,7 @@ function pay(
     device_id: deviceRow.id,
     ip_id: ipRow.id,
     merchant_id: shop?.id ?? null,
-    amount_cents: amount,
+    amount_paise: amount,
     status,
     type,
     counterparty_account_id: counterparty,
@@ -351,8 +357,9 @@ function nextId(bag: Bag, prefix: string): string {
   return `${prefix}_${String(bag.seq).padStart(4, "0")}`;
 }
 
-function pick(rng: () => number, list: string[]): string {
-  return list[randInt(rng, list.length)];
+function pickName(rng: () => number): [string, string] {
+  const community = COMMUNITIES[randInt(rng, COMMUNITIES.length)];
+  return [community.first[randInt(rng, community.first.length)], community.last[randInt(rng, community.last.length)]];
 }
 
 function daysBefore(seed: number, base: number): number {

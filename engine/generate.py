@@ -1,8 +1,9 @@
 """Seeded synthetic payments with planted fraud and honest lookalikes.
 
-The generator writes ordinary card traffic, then injects four fraud patterns
-and several legitimate cases that are easy for a blunt rule to flag. Labels
-are returned beside the ledger, never inside a transaction row.
+The generator writes ordinary card and UPI traffic for customers in India,
+then injects four fraud patterns and several legitimate cases that are easy
+for a blunt rule to flag. Amounts are integer paise. Labels are returned
+beside the ledger, never inside a transaction row.
 """
 
 from __future__ import annotations
@@ -17,77 +18,117 @@ from engine.textutil import iso
 START = datetime(2026, 5, 1, tzinfo=timezone.utc)
 END = datetime(2026, 8, 10, 20, tzinfo=timezone.utc)
 
-FIRST_NAMES = [
-    "Amina", "Jonas", "Priya", "Elena", "Marcus", "Hannah", "Leo", "Sofia",
-    "Noah", "Ines", "Owen", "Maya", "Felix", "Clara", "Jonah", "Aisha",
-    "Theo", "Nora", "Samir", "Ruth", "Idris", "Helen", "Pavel", "Grace",
-    "Luis", "Freya", "Adrian", "Chloe", "Yusuf", "Marta", "Colin", "Leila",
-    "Hugo", "Anika", "Peter", "Diana", "Karim", "Eva", "Nathan", "Iris",
-]
-LAST_NAMES = [
-    "Ward", "Okoye", "Bennett", "Almeida", "Shah", "Moreau", "Keller", "Diaz",
-    "Novak", "Ibrahim", "Walsh", "Berg", "Costa", "Rahman", "Ellis", "Sato",
-    "Hughes", "Pereira", "Adler", "Mensah", "Clarke", "Fischer", "Rossi",
-    "Nguyen", "Hart", "Silva", "Bauer", "Cohen", "Murphy", "Lindgren",
-    "Okafor", "Petrov", "Quinn", "Hassan", "Brooks", "Vogel", "Reyes", "Khan",
+CURRENCY = "INR"
+
+# Names are drawn inside one community so a first name and a surname belong together.
+# Six first names against five surnames gives 30 distinct pairs per community.
+COMMUNITIES = [
+    {
+        "first": ["Aarav", "Priya", "Rohan", "Ananya", "Vikram", "Neha"],
+        "last": ["Sharma", "Gupta", "Verma", "Mishra", "Agarwal"],
+        "partner": "Sunita",
+    },
+    {
+        "first": ["Karthik", "Lakshmi", "Arjun", "Deepa", "Suresh", "Kavya"],
+        "last": ["Iyer", "Nair", "Menon", "Pillai", "Krishnan"],
+        "partner": "Revathi",
+    },
+    {
+        "first": ["Arnab", "Ritika", "Sourav", "Moumita", "Debashish", "Ishita"],
+        "last": ["Banerjee", "Chatterjee", "Ghosh", "Bose", "Mukherjee"],
+        "partner": "Sharmila",
+    },
+    {
+        "first": ["Siddharth", "Sneha", "Aditya", "Riya", "Kunal", "Pooja"],
+        "last": ["Kulkarni", "Joshi", "Desai", "Patel", "Mehta"],
+        "partner": "Madhuri",
+    },
+    {
+        "first": ["Faisal", "Zara", "Farhan", "Fatima", "Imtiaz", "Sana"],
+        "last": ["Khan", "Qureshi", "Siddiqui", "Ansari", "Shaikh"],
+        "partner": "Nasreen",
+    },
+    {
+        "first": ["Harpreet", "Gurleen", "Manpreet", "Simran", "Jaspreet", "Navjot"],
+        "last": ["Gill", "Sandhu", "Dhillon", "Grewal", "Bedi"],
+        "partner": "Rupinder",
+    },
+    {
+        "first": ["Venkat", "Sravani", "Praveen", "Divya", "Naveen", "Bhavana"],
+        "last": ["Reddy", "Rao", "Naidu", "Hegde", "Shetty"],
+        "partner": "Padma",
+    },
 ]
 
 CITIES = [
-    ("London", "GB", 51.507, -0.128),
-    ("Manchester", "GB", 53.480, -2.242),
-    ("Edinburgh", "GB", 55.953, -3.189),
-    ("Bristol", "GB", 51.455, -2.588),
-    ("Chicago", "US", 41.878, -87.630),
-    ("Austin", "US", 30.267, -97.743),
-    ("Seattle", "US", 47.606, -122.332),
-    ("Toronto", "CA", 43.653, -79.383),
-    ("Dublin", "IE", 53.350, -6.260),
-    ("Berlin", "DE", 52.520, 13.405),
-    ("Paris", "FR", 48.857, 2.352),
-    ("Madrid", "ES", 40.417, -3.704),
-    ("Lisbon", "PT", 38.722, -9.139),
-    ("Amsterdam", "NL", 52.367, 4.904),
-    ("Singapore", "SG", 1.352, 103.820),
+    ("Mumbai", "IN", 19.076, 72.878),
+    ("Delhi", "IN", 28.614, 77.209),
+    ("Bengaluru", "IN", 12.972, 77.595),
+    ("Chennai", "IN", 13.083, 80.271),
+    ("Kolkata", "IN", 22.573, 88.364),
+    ("Hyderabad", "IN", 17.385, 78.487),
+    ("Pune", "IN", 18.520, 73.857),
+    ("Ahmedabad", "IN", 23.023, 72.571),
+    ("Jaipur", "IN", 26.912, 75.787),
+    ("Lucknow", "IN", 26.847, 80.947),
+    ("Kochi", "IN", 9.931, 76.267),
+    ("Chandigarh", "IN", 30.733, 76.779),
+    ("Indore", "IN", 22.720, 75.858),
+    ("Bhubaneswar", "IN", 20.296, 85.825),
+    ("Guwahati", "IN", 26.144, 91.736),
 ]
 
 DEVICE_PROFILES = [
     ("iPhone", "iOS 18", "Safari"),
-    ("Pixel 8", "Android 15", "Chrome"),
-    ("MacBook", "macOS 15", "Safari"),
+    ("Redmi Note 13", "Android 14", "Chrome"),
+    ("Samsung Galaxy S24", "Android 15", "Chrome"),
     ("Windows laptop", "Windows 11", "Chrome"),
     ("iPad", "iPadOS 18", "Safari"),
 ]
 
 # Fixed catalogue so merchant names stay readable across regenerations.
 MERCHANT_SPECS = [
-    ("Harbor Grocery", "5411", "grocery", "low"),
-    ("Greenmarket Co-op", "5411", "grocery", "low"),
-    ("Northline Fuel", "5541", "fuel", "low"),
-    ("Pylon Fuel", "5541", "fuel", "low"),
-    ("Copper Kettle", "5812", "restaurant", "low"),
-    ("Marlow Dining", "5812", "restaurant", "low"),
-    ("Sable Coffee", "5814", "coffee", "low"),
-    ("Platform Coffee", "5814", "coffee", "low"),
-    ("Cityline Transit", "4111", "transit", "low"),
-    ("Metro Card", "4111", "transit", "low"),
-    ("Kinfolk Streaming", "4899", "streaming", "low"),
-    ("Northroom Audio", "4899", "streaming", "low"),
-    ("Lumen Electronics", "5732", "electronics", "medium"),
-    ("Field & Wire", "5651", "fashion", "low"),
-    ("Atelier Hale", "5651", "fashion", "low"),
-    ("Brightair", "4511", "airline", "medium"),
-    ("Coastal Air", "4511", "airline", "medium"),
-    ("Staywright Hotels", "7011", "hotel", "medium"),
-    ("Lantern Inns", "7011", "hotel", "medium"),
-    ("Parcel Gift Cards", "5947", "gift_card", "high"),
-    ("Hearth Gift Co", "5947", "gift_card", "high"),
-    ("Keystone Crypto Desk", "6051", "crypto", "high"),
-    ("Quarter Pharmacy", "5912", "pharmacy", "low"),
-    ("Paperwhites Books", "5942", "books", "low"),
-    ("Lowell Hardware", "5251", "hardware", "low"),
-    ("Orchard Furniture", "5712", "furniture", "medium"),
-    ("Dayrate Parking", "7523", "parking", "low"),
-    ("Nimbus Cloud Apps", "5734", "digital_goods", "medium"),
+    ("Annapurna Grocers", "5411", "grocery", "low"),
+    ("Kirana Junction", "5411", "grocery", "low"),
+    ("Sarathi Fuels", "5541", "fuel", "low"),
+    ("Highway Petro", "5541", "fuel", "low"),
+    ("Udupi Kitchen", "5812", "restaurant", "low"),
+    ("Tandoor House", "5812", "restaurant", "low"),
+    ("Filter Kaapi Co", "5814", "coffee", "low"),
+    ("Chai Adda", "5814", "coffee", "low"),
+    ("Metro Smart Card", "4111", "transit", "low"),
+    ("City Bus Pass", "4111", "transit", "low"),
+    ("Raga Streaming", "4899", "streaming", "low"),
+    ("Cinebox Stream", "4899", "streaming", "low"),
+    ("Prism Electronics", "5732", "electronics", "medium"),
+    ("Kurta Kraft", "5651", "fashion", "low"),
+    ("Silk Route Apparel", "5651", "fashion", "low"),
+    ("SkyVahan Airways", "4511", "airline", "medium"),
+    ("Konkan Air", "4511", "airline", "medium"),
+    ("Ashoka Stays", "7011", "hotel", "medium"),
+    ("Lotus Inns", "7011", "hotel", "medium"),
+    ("Uphaar Gift Cards", "5947", "gift_card", "high"),
+    ("Tohfa Gift Co", "5947", "gift_card", "high"),
+    ("Sikka Crypto Exchange", "6051", "crypto", "high"),
+    ("Jeevan Pharmacy", "5912", "pharmacy", "low"),
+    ("Pustak Books", "5942", "books", "low"),
+    ("Mistry Hardware", "5251", "hardware", "low"),
+    ("Teakwood Furniture", "5712", "furniture", "medium"),
+    ("ParkEasy Parking", "7523", "parking", "low"),
+    ("Megh Cloud Apps", "5734", "digital_goods", "medium"),
+]
+
+MULE_RINGS = [
+    [("Imran", "Qureshi"), ("Sravya", "Goud"), ("Pranay", "Varma")],
+    [("Lata", "Subramanian"), ("Harish", "Raman"), ("Ayesha", "Basha")],
+]
+COLLUSION_BUYERS = [
+    ("Chirag", "Malhotra"),
+    ("Disha", "Arora"),
+    ("Kabir", "Sethi"),
+    ("Esha", "Bansal"),
+    ("Naveen", "Goyal"),
+    ("Ira", "Khanna"),
 ]
 
 
@@ -183,7 +224,7 @@ def generate(seed: int = 42) -> dict:
         device: dict,
         ip: dict,
         merchant: dict | None,
-        amount_cents: int,
+        amount_paise: int,
         status: str,
         txn_type: str,
         counterparty: str | None = None,
@@ -203,8 +244,8 @@ def generate(seed: int = 42) -> dict:
             "device_id": device["id"],
             "ip_id": ip["id"],
             "merchant_id": merchant["id"] if merchant else None,
-            "amount_cents": int(amount_cents),
-            "currency": "USD",
+            "amount_paise": int(amount_paise),
+            "currency": CURRENCY,
             "status": status,
             "type": txn_type,
             "channel": "ecom" if txn_type != "p2p_out" else "transfer",
@@ -228,14 +269,14 @@ def generate(seed: int = 42) -> dict:
                 "risk_tier": risk,
             }
         )
-    collusive_city = ("Tallinn", "EE", 59.437, 24.753)
+    collusive_city = ("Gurugram", "IN", 28.459, 77.027)
     collusive = {
         "id": ids.next("mer", 3),
-        "name": "Northwind Digital Keys",
+        "name": "Vistar Digital Keys",
         "mcc": "5734",
         "category": "digital_goods",
-        "country": "EE",
-        "city": "Tallinn",
+        "country": collusive_city[1],
+        "city": collusive_city[0],
         "risk_tier": "high",
     }
     merchants.append(collusive)
@@ -257,14 +298,15 @@ def generate(seed: int = 42) -> dict:
 
     # Customers and their steady-state traffic.
     segments = ["everyday", "everyday", "everyday", "student", "affluent"]
-    median_cents = {"student": 1800, "everyday": 4200, "affluent": 11000}
+    median_paise = {"student": 72000, "everyday": 168000, "affluent": 440000}
     daily_rate = {"student": 0.22, "everyday": 0.36, "affluent": 0.28}
 
     people: list[dict] = []
     for i in range(168):
-        first = FIRST_NAMES[i % len(FIRST_NAMES)]
-        last = LAST_NAMES[(i * 3) % len(LAST_NAMES)]
-        # Spread surnames so a later household pair can share one on purpose.
+        community = COMMUNITIES[i % len(COMMUNITIES)]
+        slot = i // len(COMMUNITIES)
+        first = community["first"][slot % len(community["first"])]
+        last = community["last"][slot % len(community["last"])]
         city = CITIES[i % len(CITIES)]
         segment = segments[i % len(segments)]
         opened = datetime(2019, 3, 1, tzinfo=timezone.utc) + timedelta(
@@ -298,7 +340,7 @@ def generate(seed: int = 42) -> dict:
             "account_id": account["id"],
             "customer_id": customer["id"],
             "last4": f"{int(rng.integers(0, 10000)):04d}",
-            "brand": "visa" if i % 3 else "mastercard",
+            "brand": "rupay" if i % 3 == 0 else "visa" if i % 3 == 1 else "mastercard",
             "issued_at": customer["created_at"],
         }
         primary = add_device()
@@ -335,12 +377,12 @@ def generate(seed: int = 42) -> dict:
         count = int(rng.poisson(rate * span_days))
         count = int(np.clip(count, 10, 42))
         offsets = np.sort(rng.random(count))
-        med = median_cents[customer["segment"]]
+        med = median_paise[customer["segment"]]
         mu = math.log(med)
         for offset in offsets:
             when = begin + timedelta(seconds=float(offset) * (END - begin).total_seconds())
             amount = int(rng.lognormal(mu, 0.42))
-            amount = int(np.clip(amount, 350, 32000))
+            amount = int(np.clip(amount, 14000, 1280000))
             device = person["primary"] if rng.random() < 0.88 else person["secondary"]
             ip = person["home_ip"] if rng.random() < 0.93 else person["mobile_ip"]
             merchant = any_merchant(
@@ -356,7 +398,7 @@ def generate(seed: int = 42) -> dict:
                 device=device,
                 ip=ip,
                 merchant=merchant,
-                amount_cents=amount,
+                amount_paise=amount,
                 status=status,
                 txn_type="card_purchase",
             )
@@ -448,8 +490,8 @@ def generate(seed: int = 42) -> dict:
 
     # --- Legitimate traps ---------------------------------------------------
     trip_cities = [
-        ("Lisbon", "PT", 38.722, -9.139),
-        ("Berlin", "DE", 52.520, 13.405),
+        ("Singapore", "SG", 1.352, 103.820),
+        ("London", "GB", 51.507, -0.128),
     ]
     for index, person in enumerate(traveler_people):
         scenario_id = f"traveler_{index + 1}"
@@ -460,12 +502,12 @@ def generate(seed: int = 42) -> dict:
         trip_ip = alloc_ip(city)
         start = datetime(2026, 8, 3, 9, 0, tzinfo=timezone.utc) + timedelta(days=index)
         plan = [
-            (merchant_named("Brightair"), 28600),
-            (merchant_named("Staywright Hotels"), 24200),
-            (any_merchant("restaurant"), 6400),
-            (any_merchant("transit"), 1800),
-            (any_merchant("coffee"), 900),
-            (merchant_named("Lantern Inns"), 19800),
+            (merchant_named("SkyVahan Airways"), 1144000),
+            (merchant_named("Ashoka Stays"), 968000),
+            (any_merchant("restaurant"), 256000),
+            (any_merchant("transit"), 72000),
+            (any_merchant("coffee"), 36000),
+            (merchant_named("Lotus Inns"), 792000),
         ]
         txn_ids = []
         when = start
@@ -479,7 +521,7 @@ def generate(seed: int = 42) -> dict:
                 device=person["primary"],
                 ip=trip_ip,
                 merchant=merchant,
-                amount_cents=amount,
+                amount_paise=amount,
                 status="approved",
                 txn_type="card_purchase",
                 scenario_id=scenario_id,
@@ -497,7 +539,7 @@ def generate(seed: int = 42) -> dict:
     for index, person in enumerate(big_people):
         scenario_id = f"large_purchase_{index + 1}"
         when = datetime(2026, 8, 6, 16, 20, tzinfo=timezone.utc) + timedelta(days=index, hours=3)
-        amount = 214000 if index == 0 else 186500
+        amount = 8560000 if index == 0 else 7460000
         txn = add_txn(
             when=when,
             customer=person["customer"],
@@ -505,8 +547,8 @@ def generate(seed: int = 42) -> dict:
             card=person["card"],
             device=person["primary"],
             ip=person["home_ip"],
-            merchant=merchant_named("Lumen Electronics"),
-            amount_cents=amount,
+            merchant=merchant_named("Prism Electronics"),
+            amount_paise=amount,
             status="approved",
             txn_type="card_purchase",
             scenario_id=scenario_id,
@@ -531,8 +573,8 @@ def generate(seed: int = 42) -> dict:
             card=flash_person["card"],
             device=flash_person["primary"],
             ip=flash_person["home_ip"],
-            merchant=merchant_named("Field & Wire") if rng.random() < 0.5 else merchant_named("Atelier Hale"),
-            amount_cents=int(rng.integers(2800, 6200)),
+            merchant=merchant_named("Kurta Kraft") if rng.random() < 0.5 else merchant_named("Silk Route Apparel"),
+            amount_paise=int(rng.integers(112000, 248000)),
             status="approved",
             txn_type="card_purchase",
             scenario_id="flash_sale_1",
@@ -544,7 +586,7 @@ def generate(seed: int = 42) -> dict:
         "legitimate",
         flash_person,
         sale_ids,
-        "Six full-price fashion purchases in one lunch hour. No declines, known device.",
+        "Six full-price fashion purchases in one sale hour. No declines, known device.",
     )
 
     for index, person in enumerate(phone_people):
@@ -559,7 +601,7 @@ def generate(seed: int = 42) -> dict:
             device=phone,
             ip=person["home_ip"],
             merchant=any_merchant("grocery"),
-            amount_cents=3400 + index * 250,
+            amount_paise=136000 + index * 10000,
             status="approved",
             txn_type="card_purchase",
             scenario_id=scenario_id,
@@ -574,27 +616,27 @@ def generate(seed: int = 42) -> dict:
         )
 
     partner = make_person(
-        "Ruth",
+        COMMUNITIES[8 % len(COMMUNITIES)]["partner"],
         household_last,
         household_city,
         "everyday",
         datetime(2021, 4, 12, tzinfo=timezone.utc),
     )
-    # Partner's own history uses a personal phone; one grocery run uses the shared iPad.
+    # Partner's own history uses a personal phone; one grocery run uses the shared household device.
     partner["primary"] = add_device()
     enroll(partner["customer"], partner["primary"])
     organic_for(partner)
-    shared_ipad = household_a["secondary"]
+    shared_device = household_a["secondary"]
     when = datetime(2026, 8, 8, 10, 15, tzinfo=timezone.utc)
     household_txn = add_txn(
         when=when,
         customer=partner["customer"],
         account=partner["account"],
         card=partner["card"],
-        device=shared_ipad,
+        device=shared_device,
         ip=partner["home_ip"],
         merchant=any_merchant("grocery"),
-        amount_cents=6400,
+        amount_paise=256000,
         status="approved",
         txn_type="card_purchase",
         scenario_id="household_1",
@@ -605,20 +647,20 @@ def generate(seed: int = 42) -> dict:
         "legitimate",
         partner,
         [household_txn["id"]],
-        "Two people, one household iPad, same surname and city, no money passing through.",
+        "Two people, one household device, same surname and city, no money passing through.",
     )
 
     # --- Card testing -------------------------------------------------------
     victims = [people[30], people[44], people[58]]
     probe_pool = [
-        merchant_named("Parcel Gift Cards"),
-        merchant_named("Hearth Gift Co"),
-        merchant_named("Nimbus Cloud Apps"),
-        merchant_named("Sable Coffee"),
-        merchant_named("Kinfolk Streaming"),
-        merchant_named("Dayrate Parking"),
-        merchant_named("Paperwhites Books"),
-        merchant_named("Quarter Pharmacy"),
+        merchant_named("Uphaar Gift Cards"),
+        merchant_named("Tohfa Gift Co"),
+        merchant_named("Megh Cloud Apps"),
+        merchant_named("Filter Kaapi Co"),
+        merchant_named("Raga Streaming"),
+        merchant_named("ParkEasy Parking"),
+        merchant_named("Pustak Books"),
+        merchant_named("Jeevan Pharmacy"),
     ]
     for index, person in enumerate(victims):
         scenario_id = f"card_testing_{index + 1}"
@@ -630,7 +672,7 @@ def generate(seed: int = 42) -> dict:
         attempts = 12 + index
         for attempt in range(attempts):
             when += timedelta(minutes=int(rng.integers(1, 3)))
-            small = int(rng.integers(50, 499))
+            small = int(rng.integers(2000, 19960))
             declined = attempt < attempts - 4
             txn = add_txn(
                 when=when,
@@ -640,7 +682,7 @@ def generate(seed: int = 42) -> dict:
                 device=attacker_device,
                 ip=attack_ip,
                 merchant=probe_pool[(attempt + index) % len(probe_pool)],
-                amount_cents=small,
+                amount_paise=small,
                 status="declined" if declined else "approved",
                 txn_type="card_purchase",
                 scenario_id=scenario_id,
@@ -656,8 +698,8 @@ def generate(seed: int = 42) -> dict:
             card=person["card"],
             device=attacker_device,
             ip=attack_ip,
-            merchant=merchant_named("Parcel Gift Cards"),
-            amount_cents=18600 + index * 2400,
+            merchant=merchant_named("Uphaar Gift Cards"),
+            amount_paise=744000 + index * 96000,
             status="approved",
             txn_type="card_purchase",
             scenario_id=scenario_id,
@@ -682,15 +724,15 @@ def generate(seed: int = 42) -> dict:
         ("Dubai", "AE", 25.205, 55.271),
     ]
     ato_merchants = [
-        merchant_named("Parcel Gift Cards"),
-        merchant_named("Lumen Electronics"),
-        merchant_named("Keystone Crypto Desk"),
-        merchant_named("Hearth Gift Co"),
+        merchant_named("Uphaar Gift Cards"),
+        merchant_named("Prism Electronics"),
+        merchant_named("Sikka Crypto Exchange"),
+        merchant_named("Tohfa Gift Co"),
     ]
-    ato_amounts = [42000, 89000, 26500, 64000]
+    ato_amounts = [1680000, 3560000, 1060000, 2560000]
     for index, person in enumerate(ato_people):
         scenario_id = f"account_takeover_{index + 1}"
-        stranger = add_device(("Pixel 8", "Android 15", "Chrome"))
+        stranger = add_device(("Redmi Note 13", "Android 14", "Chrome"))
         city = ato_cities[index]
         if city[1] == person["customer"]["home_country"]:
             city = ("Nairobi", "KE", -1.292, 36.822)
@@ -707,7 +749,7 @@ def generate(seed: int = 42) -> dict:
                 device=stranger,
                 ip=vpn_ip,
                 merchant=ato_merchants[(step + index) % len(ato_merchants)],
-                amount_cents=amount + index * 1500,
+                amount_paise=amount + index * 60000,
                 status="approved",
                 txn_type="card_purchase",
                 scenario_id=scenario_id,
@@ -730,16 +772,16 @@ def generate(seed: int = 42) -> dict:
         opened = datetime(2026, 7, 22, tzinfo=timezone.utc) + timedelta(days=index)
         city = CITIES[20 % len(CITIES)] if index == 0 else CITIES[3]
         shared = add_device(("Windows laptop", "Windows 11", "Chrome"))
-        spare = add_device(("Pixel 8", "Android 15", "Chrome"))
+        spare = add_device(("Redmi Note 13", "Android 14", "Chrome"))
         mule_people = []
-        for mule_index, first in enumerate(("Idris", "Nora", "Pavel") if index == 0 else ("Leila", "Hugo", "Anika")):
-            mule = make_person(first, LAST_NAMES[(40 + index * 3 + mule_index) % len(LAST_NAMES)], city, "student", opened)
+        for mule_index, (first, last) in enumerate(MULE_RINGS[index]):
+            mule = make_person(first, last, city, "student", opened)
             mule["primary"] = shared if mule_index < 2 else spare
             enroll(mule["customer"], mule["primary"])
             mule["home_ip"] = alloc_ip(city, datacenter=True)
             mule_people.append(mule)
             # Camouflage uses a private phone. The shared laptop appears only on the fraud flow,
-            # so a $5 coffee is not itself queued as a mule payment.
+            # so a ₹180 coffee is not itself queued as a mule payment.
             camouflage_device = add_device(("iPhone", "iOS 18", "Safari"))
             enroll(mule["customer"], camouflage_device)
             camouflage_at = opened + timedelta(days=2, hours=4 + mule_index)
@@ -751,13 +793,13 @@ def generate(seed: int = 42) -> dict:
                 device=camouflage_device,
                 ip=mule["home_ip"],
                 merchant=any_merchant("coffee"),
-                amount_cents=450 + mule_index * 50,
+                amount_paise=18000 + mule_index * 2000,
                 status="approved",
                 txn_type="card_purchase",
                 scenario_id=scenario_id,
             )
         flow_at = datetime(2026, 8, 8, 13, 0, tzinfo=timezone.utc) + timedelta(days=index)
-        amounts = [120000, 80000] if index == 0 else [96000, 142000]
+        amounts = [4800000, 3200000] if index == 0 else [3840000, 5680000]
         ring_txn_ids: dict[str, list[str]] = {p["customer"]["id"]: [] for p in sources}
         for mule in mule_people:
             ring_txn_ids[mule["customer"]["id"]] = []
@@ -767,11 +809,11 @@ def generate(seed: int = 42) -> dict:
                 when=when,
                 customer=src["customer"],
                 account=src["account"],
-                card=src["card"],
+                card=None,
                 device=device or src["primary"],
                 ip=src["home_ip"],
                 merchant=None,
-                amount_cents=amount,
+                amount_paise=amount,
                 status="approved",
                 txn_type="p2p_out",
                 counterparty=dst["account"]["id"],
@@ -787,7 +829,7 @@ def generate(seed: int = 42) -> dict:
                 device=dst["primary"],
                 ip=dst["home_ip"],
                 merchant=None,
-                amount_cents=amount,
+                amount_paise=amount,
                 status="approved",
                 txn_type="p2p_in",
                 counterparty=src["account"]["id"],
@@ -810,8 +852,8 @@ def generate(seed: int = 42) -> dict:
             card=mule_people[1]["card"],
             device=mule_people[1]["primary"],
             ip=mule_people[1]["home_ip"],
-            merchant=merchant_named("Keystone Crypto Desk"),
-            amount_cents=cash_amount,
+            merchant=merchant_named("Sikka Crypto Exchange"),
+            amount_paise=cash_amount,
             status="approved",
             txn_type="cash_out",
             scenario_id=scenario_id,
@@ -822,7 +864,7 @@ def generate(seed: int = 42) -> dict:
         # Third mule shares the device on a smaller pass-through the next morning,
         # so the link is visible even if an analyst opens that account.
         morning = flow_at + timedelta(hours=18)
-        p2p(mule_people[1], mule_people[2], 40000, morning, mule_people[1]["primary"])
+        p2p(mule_people[1], mule_people[2], 1600000, morning, mule_people[1]["primary"])
         side = add_txn(
             when=morning + timedelta(hours=1),
             customer=mule_people[2]["customer"],
@@ -830,8 +872,8 @@ def generate(seed: int = 42) -> dict:
             card=mule_people[2]["card"],
             device=mule_people[2]["primary"],
             ip=mule_people[2]["home_ip"],
-            merchant=merchant_named("Keystone Crypto Desk"),
-            amount_cents=38000,
+            merchant=merchant_named("Sikka Crypto Exchange"),
+            amount_paise=1520000,
             status="approved",
             txn_type="cash_out",
             scenario_id=scenario_id,
@@ -866,11 +908,11 @@ def generate(seed: int = 42) -> dict:
     collusion_device_a = add_device(("Windows laptop", "Windows 11", "Chrome"))
     collusion_device_b = add_device(("MacBook", "macOS 15", "Safari"))
     collusion_opened = datetime(2026, 7, 18, tzinfo=timezone.utc)
-    collusion_city = ("Tallinn", "EE", 59.437, 24.753)
-    for index, first in enumerate(("Colin", "Diana", "Karim", "Eva", "Nathan", "Iris")):
+    collusion_city = collusive_city
+    for index, (first, last) in enumerate(COLLUSION_BUYERS):
         person = make_person(
             first,
-            LAST_NAMES[(12 + index * 5) % len(LAST_NAMES)],
+            last,
             collusion_city,
             "student",
             collusion_opened + timedelta(days=index % 3),
@@ -881,7 +923,7 @@ def generate(seed: int = 42) -> dict:
         scenario_id = "merchant_collusion_1"
         txn_ids = []
         # A private phone for the small coffee, so the shared laptop is the collusion signal.
-        coffee_device = add_device(("Pixel 8", "Android 15", "Chrome"))
+        coffee_device = add_device(("Redmi Note 13", "Android 14", "Chrome"))
         enroll(person["customer"], coffee_device)
         add_txn(
             when=collusion_opened + timedelta(days=3, hours=index),
@@ -891,7 +933,7 @@ def generate(seed: int = 42) -> dict:
             device=coffee_device,
             ip=person["home_ip"],
             merchant=any_merchant("coffee"),
-            amount_cents=600,
+            amount_paise=24000,
             status="approved",
             txn_type="card_purchase",
             scenario_id=scenario_id,
@@ -899,7 +941,7 @@ def generate(seed: int = 42) -> dict:
         # One afternoon of round amounts so the four payments cluster into a single case.
         base = datetime(2026, 8, 3, 10, 0, tzinfo=timezone.utc) + timedelta(days=index)
         for step in range(4):
-            amount = 50000 if step % 2 == 0 else 25000
+            amount = 2000000 if step % 2 == 0 else 1000000
             txn = add_txn(
                 when=base + timedelta(hours=step * 2),
                 customer=person["customer"],
@@ -908,7 +950,7 @@ def generate(seed: int = 42) -> dict:
                 device=person["primary"],
                 ip=person["home_ip"],
                 merchant=collusive,
-                amount_cents=amount,
+                amount_paise=amount,
                 status="approved",
                 txn_type="card_purchase",
                 scenario_id=scenario_id,
@@ -941,7 +983,7 @@ def generate(seed: int = 42) -> dict:
         "scenarios": scenarios,
         "meta": {
             "seed": seed,
-            "currency": "USD",
+            "currency": CURRENCY,
             "window_start": iso(START),
             "window_end": iso(END),
             "generator": "engine.generate",

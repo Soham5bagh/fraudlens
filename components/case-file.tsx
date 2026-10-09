@@ -130,10 +130,10 @@ export function CaseFileView() {
             </div>
             <h1 style={{ fontSize: "clamp(28px, 4vw, 42px)" }}>{file.customer.name}</h1>
             <p className="lede" style={{ marginBottom: 0 }}>
-              {money(file.lead.amount_cents)} at {file.lead.merchant_name} · {when(file.lead.occurred_at)}
+              {money(file.lead.amount_paise)} {file.lead.type.startsWith("p2p") ? "by UPI transfer" : `at ${file.lead.merchant_name}`} · {when(file.lead.occurred_at)}
             </p>
             <p className="meta">
-              {file.lead.id} · card ••{file.lead.card_last4 ?? "none"} · {file.lead.device_id} · {file.customer.home_city}, {file.customer.home_country}
+              {file.lead.id} · {file.lead.card_last4 ? `card ••${file.lead.card_last4}` : "no card on this transfer"} · {file.lead.device_id} · {file.customer.home_city}, {file.customer.home_country}
             </p>
           </section>
 
@@ -205,7 +205,7 @@ export function CaseFileView() {
                     <tr key={txn.id}>
                       <td>{when(txn.occurred_at)}</td>
                       <td>{txn.id}</td>
-                      <td>{money(txn.amount_cents)}</td>
+                      <td>{money(txn.amount_paise)}</td>
                       <td>{txn.status}</td>
                       <td>{txn.merchant_name}</td>
                       <td>{txn.device_id}</td>

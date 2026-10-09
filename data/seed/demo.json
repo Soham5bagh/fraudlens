@@ -5,60 +5,60 @@
       "title": "Card testing",
       "say": "Start with the burst. Tiny amounts, many merchants, a device the customer has never used, then a gift card that actually clears. The suggestion is block. Do not press it yourself.",
       "case_id": "case_0001",
-      "customer_name": "Colin Ellis",
-      "summary": "Card testing on Colin Ellis: tiny probes, then $186.00 on a new device.",
+      "customer_name": "Debashish Mukherjee",
+      "summary": "Card testing on Debashish Mukherjee: tiny probes, then \u20b97,440.00 on a new device.",
       "action": "block",
       "risk_score": 94,
-      "amount_cents": 18600,
-      "amount": "$186.00"
+      "amount_paise": 744000,
+      "amount": "\u20b97,440.00"
     },
     {
       "slot": "account_takeover",
       "title": "Account takeover",
       "say": "Contrast this with the trip you will open last. Here the device is new, the country is new, and the spend is gift cards and crypto at many times the baseline.",
       "case_id": "case_0007",
-      "customer_name": "Anika Nguyen",
-      "summary": "Account takeover on Anika Nguyen: new device, new country, spend at 56.1\u00d7 baseline.",
+      "customer_name": "Jaspreet Bedi",
+      "summary": "Account takeover on Jaspreet Bedi: new device, new country, spend at 53.8\u00d7 baseline.",
       "action": "block",
       "risk_score": 94,
-      "amount_cents": 89000,
-      "amount": "$890.00"
+      "amount_paise": 3560000,
+      "amount": "\u20b935,600.00"
     },
     {
       "slot": "mule_chain",
       "title": "Mule-account chain",
       "say": "Follow the money, not the single payment. Shared devices, a young account, and a path that ends at a crypto cash-out the same day.",
       "case_id": "case_0023",
-      "customer_name": "Idris Bennett",
-      "summary": "Mule flow touching Idris Bennett: funds move onward to a cash-out the same day.",
+      "customer_name": "Imran Qureshi",
+      "summary": "Mule flow touching Imran Qureshi: funds move onward to a cash-out the same day.",
       "action": "escalate",
       "risk_score": 88,
-      "amount_cents": 188000,
-      "amount": "$1,880.00"
+      "amount_paise": 7520000,
+      "amount": "\u20b975,200.00"
     },
     {
       "slot": "merchant_collusion",
       "title": "Merchant collusion",
       "say": "The fourth pattern. Round amounts, one merchant, buyers who share a laptop. Escalating one card does not fix the merchant.",
       "case_id": "case_0002",
-      "customer_name": "Colin Costa",
-      "summary": "Collusive buying at Northwind Digital Keys, including Colin Costa.",
+      "customer_name": "Chirag Malhotra",
+      "summary": "Collusive buying at Vistar Digital Keys, including Chirag Malhotra.",
       "action": "escalate",
       "risk_score": 74,
-      "amount_cents": 50000,
-      "amount": "$500.00"
+      "amount_paise": 2000000,
+      "amount": "\u20b920,000.00"
     },
     {
       "slot": "legitimate",
       "title": "Genuine customer",
       "say": "This one was queued. FraudLens reads the file and approves it. This is the false alarm the rubber-stamp desk would have blocked.",
       "case_id": "case_0003",
-      "customer_name": "Marcus Costa",
-      "summary": "Marcus Costa is travelling on a device already on file. The foreign IP is the trip, not a takeover.",
+      "customer_name": "Faisal Khan",
+      "summary": "Faisal Khan is travelling on a device already on file. The foreign IP is the trip, not a takeover.",
       "action": "approve",
       "risk_score": 16,
-      "amount_cents": 28600,
-      "amount": "$286.00"
+      "amount_paise": 1144000,
+      "amount": "\u20b911,440.00"
     }
   ]
 }

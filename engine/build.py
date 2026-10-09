@@ -12,7 +12,7 @@ import sqlite3
 from pathlib import Path
 
 from engine.agent import investigate_case
-from engine.evaluate import robustness_report
+from engine.evaluate import false_alarm_examples, robustness_report
 from engine.flagging import build_cases, flag_transactions
 from engine.generate import generate, public_world
 from engine.metrics import compute_metrics
@@ -80,6 +80,7 @@ def main() -> None:
         for row in metrics["case_truth"]
     }
 
+    metrics["false_alarm_examples"] = false_alarm_examples(world, investigations)
     metrics["robustness"] = robustness_report()
     report = summary_markdown(metrics, world["meta"])
     manifest = {
@@ -167,8 +168,8 @@ def _pick_demo(investigations: list[dict], truth_by_case: dict) -> list[dict]:
                 "summary": chosen["summary"],
                 "action": chosen["action"],
                 "risk_score": chosen["risk_score"],
-                "amount_cents": chosen["lead"]["amount_cents"],
-                "amount": money(chosen["lead"]["amount_cents"]),
+                "amount_paise": chosen["lead"]["amount_paise"],
+                "amount": money(chosen["lead"]["amount_paise"]),
             }
         )
     return steps
@@ -182,7 +183,7 @@ def _queue_item(investigation: dict) -> dict:
         "customer_name": investigation["customer"]["name"],
         "home": f"{investigation['customer']['home_city']}, {investigation['customer']['home_country']}",
         "merchant_name": investigation["lead"]["merchant_name"],
-        "amount_cents": investigation["lead"]["amount_cents"],
+        "amount_paise": investigation["lead"]["amount_paise"],
         "occurred_at": investigation["lead"]["occurred_at"],
         "status": investigation["lead"]["status"],
         "flag_reasons": [item["code"] for item in investigation["flag_reasons"]],
@@ -272,7 +273,7 @@ def _write_sqlite(world: dict, investigations: list[dict]) -> None:
         """
         CREATE TABLE transactions (
             id TEXT PRIMARY KEY, ts INTEGER, occurred_at TEXT, customer_id TEXT, account_id TEXT,
-            card_last4 TEXT, device_id TEXT, ip_id TEXT, merchant_id TEXT, amount_cents INTEGER,
+            card_last4 TEXT, device_id TEXT, ip_id TEXT, merchant_id TEXT, amount_paise INTEGER,
             status TEXT, type TEXT, counterparty_account_id TEXT
         )
         """
@@ -331,7 +332,7 @@ def _write_sqlite(world: dict, investigations: list[dict]) -> None:
         """
         INSERT INTO transactions VALUES (
             :id, :ts, :occurred_at, :customer_id, :account_id, :card_last4, :device_id, :ip_id,
-            :merchant_id, :amount_cents, :status, :type, :counterparty_account_id
+            :merchant_id, :amount_paise, :status, :type, :counterparty_account_id
         )
         """,
         world["transactions"],
@@ -358,7 +359,7 @@ def _write_sqlite(world: dict, investigations: list[dict]) -> None:
         """
         CREATE VIEW analyst_transactions AS
         SELECT id, ts, occurred_at, customer_id, account_id, card_last4, device_id,
-               ip_id, merchant_id, amount_cents, status, type, counterparty_account_id
+               ip_id, merchant_id, amount_paise, status, type, counterparty_account_id
         FROM transactions
         """
     )

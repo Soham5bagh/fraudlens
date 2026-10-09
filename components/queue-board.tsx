@@ -5,7 +5,7 @@ import { useEffect, useMemo, useRef, useState, type KeyboardEvent as ReactKeyboa
 import { HowItWorks } from "@/components/how-it-works";
 import { Info } from "@/components/info-tip";
 import { ACTIONS, loadDecisions, saveDecision } from "@/lib/decisions";
-import { actionLabel, money, when } from "@/lib/format";
+import { actionLabel, countLabel, money, when } from "@/lib/format";
 import { ACTION_HELP, patternPlain, riskBand, TERM_HELP } from "@/lib/glossary";
 import type { Action, AnalystDecision, DemoStep, Metrics, QueueItem } from "@/lib/types";
 
@@ -223,7 +223,7 @@ export function QueueBoard() {
                     </div>
                     <p className="summary">{item.summary}</p>
                     <div className="meta">
-                      {item.case_id} · {money(item.amount_cents)} · {item.merchant_name} · {item.home} · {when(item.occurred_at)}
+                      {item.case_id} · {money(item.amount_paise)} · {item.merchant_name} · {item.home} · {when(item.occurred_at)}
                     </div>
                   </div>
                 </Link>
@@ -255,8 +255,8 @@ function ScoreLine({ metrics }: { metrics: Metrics }) {
   const frauds = metrics.population.fraud_transactions;
   return (
     <>
-      On this synthetic book, FraudLens caught {metrics.agent.tp} of {frauds} frauds and raised {metrics.agent.fp} false alarms.
-      A basic rule queue caught the same {metrics.naive.tp} frauds and raised {metrics.naive.fp} false alarms, which would have blocked {metrics.headline.genuine_customers_blocked_by_queue} genuine customers.
+      On this synthetic book, FraudLens caught {metrics.agent.tp} of {frauds} frauds and raised {countLabel(metrics.agent.fp, "false alarm")}.
+      A basic rule queue caught the same {metrics.naive.tp} frauds and raised {countLabel(metrics.naive.fp, "false alarm")}, which would have blocked {metrics.headline.genuine_customers_blocked_by_queue} genuine customers.
       FraudLens would have blocked {metrics.headline.genuine_customers_blocked_by_agent}.
     </>
   );
@@ -266,7 +266,7 @@ function compareQueue(a: { item: QueueItem; index: number }, b: { item: QueueIte
   const left = a.item;
   const right = b.item;
   if (sort === "risk") return right.risk_score - left.risk_score || a.index - b.index;
-  if (sort === "amount") return right.amount_cents - left.amount_cents || a.index - b.index;
+  if (sort === "amount") return right.amount_paise - left.amount_paise || a.index - b.index;
   if (sort === "time") return right.occurred_at.localeCompare(left.occurred_at) || a.index - b.index;
   if (sort === "customer") return left.customer_name.localeCompare(right.customer_name) || a.index - b.index;
   if (sort === "pattern") return left.pattern_label.localeCompare(right.pattern_label) || right.risk_score - left.risk_score;

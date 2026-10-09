@@ -1,21 +1,21 @@
 {
   "case_id": "case_0001",
-  "lead_transaction_id": "txn_005249",
+  "lead_transaction_id": "txn_005362",
   "customer_id": "cus_0031",
   "covered_transaction_ids": [
-    "txn_005237",
-    "txn_005238",
-    "txn_005239",
-    "txn_005240",
-    "txn_005241",
-    "txn_005242",
-    "txn_005243",
-    "txn_005244",
-    "txn_005245",
-    "txn_005246",
-    "txn_005247",
-    "txn_005248",
-    "txn_005249"
+    "txn_005350",
+    "txn_005351",
+    "txn_005352",
+    "txn_005353",
+    "txn_005354",
+    "txn_005355",
+    "txn_005356",
+    "txn_005357",
+    "txn_005358",
+    "txn_005359",
+    "txn_005360",
+    "txn_005361",
+    "txn_005362"
   ],
   "flag_reasons": [
     {
@@ -42,8 +42,8 @@
   "action": "block",
   "action_rationale": "Block the card. Testing already landed a larger charge, and further attempts will follow the same device.",
   "confidence": "high",
-  "summary": "Card testing on Colin Ellis: tiny probes, then $186.00 on a new device.",
-  "narrative": "A burst of tiny amounts, many merchants, declines, and a device that is new to the customer. Block the card. Testing already landed a larger charge, and further attempts will follow the same device. Lead payment txn_005249 is $186.00 approved at Parcel Gift Cards on 02 Aug 2026 02:45 UTC, card \u2022\u20222740, device dev_0342 (Windows laptop \u00b7 Windows 11 \u00b7 Chrome). Before this episode, Colin Ellis had 33 payments with a median of $39.89. Between 02:27 UTC and 02:45 UTC there were 13 attempts, 8 declined, across Parcel Gift Cards, Hearth Gift Co, Nimbus Cloud Apps, Sable Coffee, Kinfolk Streaming, Dayrate Parking, Paperwhites Books, and Quarter Pharmacy.",
+  "summary": "Card testing on Debashish Mukherjee: tiny probes, then \u20b97,440.00 on a new device.",
+  "narrative": "A burst of tiny amounts, many merchants, declines, and a device that is new to the customer. Block the card. Testing already landed a larger charge, and further attempts will follow the same device. Lead payment txn_005362 is \u20b97,440.00 approved at Uphaar Gift Cards on 02 Aug 2026 08:16 IST, card \u2022\u20226273, device dev_0342 (Windows laptop \u00b7 Windows 11 \u00b7 Chrome). Before this episode, Debashish Mukherjee had 31 payments with a median of \u20b91,638.36. Between 07:56 IST and 08:16 IST there were 13 attempts, 8 declined, across Uphaar Gift Cards, Tohfa Gift Co, Megh Cloud Apps, Filter Kaapi Co, Raga Streaming, ParkEasy Parking, Pustak Books, and Jeevan Pharmacy.",
   "signals": [
     {
       "name": "Case opened",
@@ -53,7 +53,7 @@
     {
       "name": "Probe burst",
       "points": 48,
-      "detail": "13 payments, median $2.88, 8 merchants."
+      "detail": "13 payments, median \u20b988.76, 8 merchants."
     },
     {
       "name": "Declines",
@@ -76,21 +76,21 @@
       "id": "open_case",
       "title": "Open the flagged payment",
       "status": "watch",
-      "started_at": "2026-08-11T15:00:00Z",
+      "started_at": "2026-08-11T04:30:00Z",
       "duration_ms": 420,
-      "finding": "Queue sent txn_005249 for Colin Ellis: $186.00 at Parcel Gift Cards on 02 Aug 2026 02:45 UTC. The flagger's reasons were: Device has never been used by this customer before; IP country does not match the customer's home country; The payment's shape is an outlier for the whole book; Five or more payments in the past hour.",
+      "finding": "Queue sent txn_005362 for Debashish Mukherjee: \u20b97,440.00 at Uphaar Gift Cards on 02 Aug 2026 08:16 IST. The flagger's reasons were: Device has never been used by this customer before; IP country does not match the customer's home country; The payment's shape is an outlier for the whole book; Five or more payments in the past hour.",
       "evidence": [
         {
           "label": "Transaction",
-          "value": "txn_005249"
+          "value": "txn_005362"
         },
         {
           "label": "Amount",
-          "value": "$186.00"
+          "value": "\u20b97,440.00"
         },
         {
           "label": "Customer",
-          "value": "Colin Ellis (cus_0031)"
+          "value": "Debashish Mukherjee (cus_0031)"
         },
         {
           "label": "Why it was queued",
@@ -102,25 +102,25 @@
       "id": "customer_baseline",
       "title": "Customer history and baseline",
       "status": "clear",
-      "started_at": "2026-08-11T15:00:00Z",
+      "started_at": "2026-08-11T04:30:00Z",
       "duration_ms": 680,
-      "finding": "Colin Ellis has 33 prior payments before this episode, median $39.89. Account acct_0031 is 630 days old. Usual devices: dev_0061, dev_0062. Countries already seen: GB.",
+      "finding": "Debashish Mukherjee has 31 prior payments before this episode, median \u20b91,638.36. Account acct_0031 is 1971 days old. Usual devices: dev_0061, dev_0062. Countries already seen: IN.",
       "evidence": [
         {
           "label": "Account age",
-          "value": "630 days"
+          "value": "1971 days"
         },
         {
           "label": "Prior payments",
-          "value": "33"
+          "value": "31"
         },
         {
           "label": "Median amount",
-          "value": "$39.89"
+          "value": "\u20b91,638.36"
         },
         {
           "label": "Home",
-          "value": "London, GB"
+          "value": "Mumbai, IN"
         }
       ]
     },
@@ -128,9 +128,9 @@
       "id": "velocity",
       "title": "Payment velocity",
       "status": "alert",
-      "started_at": "2026-08-11T15:00:01Z",
+      "started_at": "2026-08-11T04:30:01Z",
       "duration_ms": 540,
-      "finding": "The episode around txn_005249 holds 13 payments across 18 minutes. The busiest hour contains 13 payments. 8 declines in the episode. Merchants touched: Parcel Gift Cards, Hearth Gift Co, Nimbus Cloud Apps, Sable Coffee, Kinfolk Streaming, Dayrate Parking, Paperwhites Books, and Quarter Pharmacy.",
+      "finding": "The episode around txn_005362 holds 13 payments across 20 minutes. The busiest hour contains 13 payments. 8 declines in the episode. Merchants touched: Uphaar Gift Cards, Tohfa Gift Co, Megh Cloud Apps, Filter Kaapi Co, Raga Streaming, ParkEasy Parking, Pustak Books, and Jeevan Pharmacy.",
       "evidence": [
         {
           "label": "Payments in episode",
@@ -154,25 +154,25 @@
       "id": "amount",
       "title": "Amount versus baseline",
       "status": "alert",
-      "started_at": "2026-08-11T15:00:02Z",
+      "started_at": "2026-08-11T04:30:02Z",
       "duration_ms": 480,
-      "finding": "Episode amounts run from $0.80 to $186.00, median $2.88. The peak is 4.7\u00d7 the baseline median of $39.89.",
+      "finding": "Episode amounts run from \u20b924.20 to \u20b97,440.00, median \u20b988.76. The peak is 4.5\u00d7 the baseline median of \u20b91,638.36.",
       "evidence": [
         {
           "label": "Episode median",
-          "value": "$2.88"
+          "value": "\u20b988.76"
         },
         {
           "label": "Episode peak",
-          "value": "$186.00"
+          "value": "\u20b97,440.00"
         },
         {
           "label": "Baseline median",
-          "value": "$39.89"
+          "value": "\u20b91,638.36"
         },
         {
           "label": "Peak vs baseline",
-          "value": "4.7\u00d7"
+          "value": "4.5\u00d7"
         }
       ]
     },
@@ -180,9 +180,9 @@
       "id": "device_ip",
       "title": "Device and IP linkage",
       "status": "alert",
-      "started_at": "2026-08-11T15:00:03Z",
+      "started_at": "2026-08-11T04:30:03Z",
       "duration_ms": 730,
-      "finding": "Devices in the episode: dev_0342 (Windows laptop \u00b7 Windows 11 \u00b7 Chrome, new to this customer). IPs: 198.51.100.92 \u00b7 Ashburn, US, datacenter. The customer's home country is the United Kingdom. Every payment in this episode is outside that country.",
+      "finding": "Devices in the episode: dev_0342 (Windows laptop \u00b7 Windows 11 \u00b7 Chrome, new to this customer). IPs: 198.51.100.92 \u00b7 Ashburn, US, datacenter. The customer's home country is India. Every payment in this episode is outside that country.",
       "evidence": [
         {
           "label": "New devices",
@@ -206,9 +206,9 @@
       "id": "network",
       "title": "Linked accounts and money flow",
       "status": "clear",
-      "started_at": "2026-08-11T15:00:04Z",
+      "started_at": "2026-08-11T04:30:04Z",
       "duration_ms": 860,
-      "finding": "No other customer uses the devices in this episode. No peer-to-peer transfer or cash-out on this account in the six-day window. No cash-out path leaves this account in the six-day money graph.",
+      "finding": "No other customer uses the devices in this episode. No UPI transfer or cash-out on this account in the six-day window. No cash-out path leaves this account in the six-day money graph.",
       "evidence": [
         {
           "label": "Linked customers",
@@ -232,9 +232,9 @@
       "id": "merchant",
       "title": "Merchant check",
       "status": "clear",
-      "started_at": "2026-08-11T15:00:05Z",
+      "started_at": "2026-08-11T04:30:05Z",
       "duration_ms": 640,
-      "finding": "Parcel Gift Cards (gift card, Seattle) has 10 payments in the past 14 days from 6 customers. 0% of those customers are under 45 days old. 0% of the amounts are round (multiples of $50, at least $200). Devices shared by two or more buyers: none.",
+      "finding": "Uphaar Gift Cards (gift card, Pune) has 10 payments in the past 14 days from 6 customers. 0% of those customers are under 45 days old. 0% of the amounts are round (multiples of \u20b91,000, at least \u20b98,000). Devices shared by two or more buyers: none.",
       "evidence": [
         {
           "label": "Category",
@@ -258,7 +258,7 @@
       "id": "classify",
       "title": "Pattern classification",
       "status": "alert",
-      "started_at": "2026-08-11T15:00:06Z",
+      "started_at": "2026-08-11T04:30:06Z",
       "duration_ms": 390,
       "finding": "Card testing. A burst of tiny amounts, many merchants, declines, and a device that is new to the customer.",
       "evidence": [
@@ -276,7 +276,7 @@
       "id": "recommend",
       "title": "Suggested action",
       "status": "alert",
-      "started_at": "2026-08-11T15:00:07Z",
+      "started_at": "2026-08-11T04:30:07Z",
       "duration_ms": 360,
       "finding": "Suggested action: block. Risk score 94/100. Block the card. Testing already landed a larger charge, and further attempts will follow the same device. A person still has to confirm this. FraudLens does not apply it.",
       "evidence": [
@@ -300,7 +300,7 @@
       {
         "id": "cus_0031",
         "type": "customer",
-        "label": "Colin Ellis",
+        "label": "Debashish Mukherjee",
         "sublabel": "cus_0031",
         "x": 0.1335,
         "y": 0.7305,
@@ -336,7 +336,7 @@
       {
         "id": "mer_020",
         "type": "merchant",
-        "label": "Parcel Gift Cards",
+        "label": "Uphaar Gift Cards",
         "sublabel": "gift_card",
         "x": 0.8194,
         "y": 0.2961,
@@ -345,7 +345,7 @@
       {
         "id": "mer_021",
         "type": "merchant",
-        "label": "Hearth Gift Co",
+        "label": "Tohfa Gift Co",
         "sublabel": "gift_card",
         "x": 0.7218,
         "y": 0.8618,
@@ -354,7 +354,7 @@
       {
         "id": "mer_028",
         "type": "merchant",
-        "label": "Nimbus Cloud Apps",
+        "label": "Megh Cloud Apps",
         "sublabel": "digital_goods",
         "x": 0.2738,
         "y": 0.1401,
@@ -363,7 +363,7 @@
       {
         "id": "mer_007",
         "type": "merchant",
-        "label": "Sable Coffee",
+        "label": "Filter Kaapi Co",
         "sublabel": "coffee",
         "x": 0.3999,
         "y": 0.92,
@@ -372,7 +372,7 @@
       {
         "id": "mer_011",
         "type": "merchant",
-        "label": "Kinfolk Streaming",
+        "label": "Raga Streaming",
         "sublabel": "streaming",
         "x": 0.08,
         "y": 0.406,
@@ -433,13 +433,29 @@
   },
   "related_transactions": [
     {
-      "id": "txn_005237",
+      "id": "txn_005350",
+      "occurred_at": "2026-08-02T02:26:00Z",
+      "ts": 1785637560,
+      "amount_paise": 8307,
+      "status": "declined",
+      "type": "card_purchase",
+      "merchant_name": "Uphaar Gift Cards",
+      "merchant_category": "gift_card",
+      "device_id": "dev_0342",
+      "ip": "198.51.100.92 \u00b7 Ashburn, US, datacenter",
+      "ip_country": "US",
+      "city": "Ashburn",
+      "flagged": true,
+      "counterparty_account_id": null
+    },
+    {
+      "id": "txn_005351",
       "occurred_at": "2026-08-02T02:27:00Z",
       "ts": 1785637620,
-      "amount_cents": 118,
+      "amount_paise": 10724,
       "status": "declined",
       "type": "card_purchase",
-      "merchant_name": "Parcel Gift Cards",
+      "merchant_name": "Tohfa Gift Co",
       "merchant_category": "gift_card",
       "device_id": "dev_0342",
       "ip": "198.51.100.92 \u00b7 Ashburn, US, datacenter",
@@ -449,29 +465,13 @@
       "counterparty_account_id": null
     },
     {
-      "id": "txn_005238",
-      "occurred_at": "2026-08-02T02:28:00Z",
-      "ts": 1785637680,
-      "amount_cents": 209,
-      "status": "declined",
-      "type": "card_purchase",
-      "merchant_name": "Hearth Gift Co",
-      "merchant_category": "gift_card",
-      "device_id": "dev_0342",
-      "ip": "198.51.100.92 \u00b7 Ashburn, US, datacenter",
-      "ip_country": "US",
-      "city": "Ashburn",
-      "flagged": true,
-      "counterparty_account_id": null
-    },
-    {
-      "id": "txn_005239",
+      "id": "txn_005352",
       "occurred_at": "2026-08-02T02:29:00Z",
       "ts": 1785637740,
-      "amount_cents": 471,
+      "amount_paise": 17978,
       "status": "declined",
       "type": "card_purchase",
-      "merchant_name": "Nimbus Cloud Apps",
+      "merchant_name": "Megh Cloud Apps",
       "merchant_category": "digital_goods",
       "device_id": "dev_0342",
       "ip": "198.51.100.92 \u00b7 Ashburn, US, datacenter",
@@ -481,13 +481,13 @@
       "counterparty_account_id": null
     },
     {
-      "id": "txn_005240",
+      "id": "txn_005353",
       "occurred_at": "2026-08-02T02:31:00Z",
       "ts": 1785637860,
-      "amount_cents": 249,
+      "amount_paise": 12851,
       "status": "declined",
       "type": "card_purchase",
-      "merchant_name": "Sable Coffee",
+      "merchant_name": "Filter Kaapi Co",
       "merchant_category": "coffee",
       "device_id": "dev_0342",
       "ip": "198.51.100.92 \u00b7 Ashburn, US, datacenter",
@@ -497,13 +497,13 @@
       "counterparty_account_id": null
     },
     {
-      "id": "txn_005241",
+      "id": "txn_005354",
       "occurred_at": "2026-08-02T02:33:00Z",
       "ts": 1785637980,
-      "amount_cents": 288,
+      "amount_paise": 18049,
       "status": "declined",
       "type": "card_purchase",
-      "merchant_name": "Kinfolk Streaming",
+      "merchant_name": "Raga Streaming",
       "merchant_category": "streaming",
       "device_id": "dev_0342",
       "ip": "198.51.100.92 \u00b7 Ashburn, US, datacenter",
@@ -513,13 +513,13 @@
       "counterparty_account_id": null
     },
     {
-      "id": "txn_005242",
+      "id": "txn_005355",
       "occurred_at": "2026-08-02T02:34:00Z",
       "ts": 1785638040,
-      "amount_cents": 292,
+      "amount_paise": 9404,
       "status": "declined",
       "type": "card_purchase",
-      "merchant_name": "Dayrate Parking",
+      "merchant_name": "ParkEasy Parking",
       "merchant_category": "parking",
       "device_id": "dev_0342",
       "ip": "198.51.100.92 \u00b7 Ashburn, US, datacenter",
@@ -529,13 +529,13 @@
       "counterparty_account_id": null
     },
     {
-      "id": "txn_005243",
-      "occurred_at": "2026-08-02T02:36:00Z",
-      "ts": 1785638160,
-      "amount_cents": 253,
+      "id": "txn_005356",
+      "occurred_at": "2026-08-02T02:35:00Z",
+      "ts": 1785638100,
+      "amount_paise": 2420,
       "status": "declined",
       "type": "card_purchase",
-      "merchant_name": "Paperwhites Books",
+      "merchant_name": "Pustak Books",
       "merchant_category": "books",
       "device_id": "dev_0342",
       "ip": "198.51.100.92 \u00b7 Ashburn, US, datacenter",
@@ -545,13 +545,13 @@
       "counterparty_account_id": null
     },
     {
-      "id": "txn_005244",
-      "occurred_at": "2026-08-02T02:38:00Z",
-      "ts": 1785638280,
-      "amount_cents": 130,
+      "id": "txn_005357",
+      "occurred_at": "2026-08-02T02:36:00Z",
+      "ts": 1785638160,
+      "amount_paise": 8876,
       "status": "declined",
       "type": "card_purchase",
-      "merchant_name": "Quarter Pharmacy",
+      "merchant_name": "Jeevan Pharmacy",
       "merchant_category": "pharmacy",
       "device_id": "dev_0342",
       "ip": "198.51.100.92 \u00b7 Ashburn, US, datacenter",
@@ -561,13 +561,13 @@
       "counterparty_account_id": null
     },
     {
-      "id": "txn_005245",
-      "occurred_at": "2026-08-02T02:39:00Z",
-      "ts": 1785638340,
-      "amount_cents": 80,
+      "id": "txn_005358",
+      "occurred_at": "2026-08-02T02:38:00Z",
+      "ts": 1785638280,
+      "amount_paise": 6715,
       "status": "approved",
       "type": "card_purchase",
-      "merchant_name": "Parcel Gift Cards",
+      "merchant_name": "Uphaar Gift Cards",
       "merchant_category": "gift_card",
       "device_id": "dev_0342",
       "ip": "198.51.100.92 \u00b7 Ashburn, US, datacenter",
@@ -577,13 +577,13 @@
       "counterparty_account_id": null
     },
     {
-      "id": "txn_005246",
+      "id": "txn_005359",
       "occurred_at": "2026-08-02T02:40:00Z",
       "ts": 1785638400,
-      "amount_cents": 372,
+      "amount_paise": 7785,
       "status": "approved",
       "type": "card_purchase",
-      "merchant_name": "Hearth Gift Co",
+      "merchant_name": "Tohfa Gift Co",
       "merchant_category": "gift_card",
       "device_id": "dev_0342",
       "ip": "198.51.100.92 \u00b7 Ashburn, US, datacenter",
@@ -593,13 +593,13 @@
       "counterparty_account_id": null
     },
     {
-      "id": "txn_005247",
+      "id": "txn_005360",
       "occurred_at": "2026-08-02T02:41:00Z",
       "ts": 1785638460,
-      "amount_cents": 473,
+      "amount_paise": 3238,
       "status": "approved",
       "type": "card_purchase",
-      "merchant_name": "Nimbus Cloud Apps",
+      "merchant_name": "Megh Cloud Apps",
       "merchant_category": "digital_goods",
       "device_id": "dev_0342",
       "ip": "198.51.100.92 \u00b7 Ashburn, US, datacenter",
@@ -609,13 +609,13 @@
       "counterparty_account_id": null
     },
     {
-      "id": "txn_005248",
-      "occurred_at": "2026-08-02T02:42:00Z",
-      "ts": 1785638520,
-      "amount_cents": 362,
+      "id": "txn_005361",
+      "occurred_at": "2026-08-02T02:43:00Z",
+      "ts": 1785638580,
+      "amount_paise": 3745,
       "status": "approved",
       "type": "card_purchase",
-      "merchant_name": "Sable Coffee",
+      "merchant_name": "Filter Kaapi Co",
       "merchant_category": "coffee",
       "device_id": "dev_0342",
       "ip": "198.51.100.92 \u00b7 Ashburn, US, datacenter",
@@ -625,13 +625,13 @@
       "counterparty_account_id": null
     },
     {
-      "id": "txn_005249",
-      "occurred_at": "2026-08-02T02:45:00Z",
-      "ts": 1785638700,
-      "amount_cents": 18600,
+      "id": "txn_005362",
+      "occurred_at": "2026-08-02T02:46:00Z",
+      "ts": 1785638760,
+      "amount_paise": 744000,
       "status": "approved",
       "type": "card_purchase",
-      "merchant_name": "Parcel Gift Cards",
+      "merchant_name": "Uphaar Gift Cards",
       "merchant_category": "gift_card",
       "device_id": "dev_0342",
       "ip": "198.51.100.92 \u00b7 Ashburn, US, datacenter",
@@ -643,31 +643,31 @@
   ],
   "customer": {
     "id": "cus_0031",
-    "name": "Colin Ellis",
-    "email": "colin.ellis.30@example.com",
-    "home_city": "London",
-    "home_country": "GB",
+    "name": "Debashish Mukherjee",
+    "email": "debashish.mukherjee.30@example.com",
+    "home_city": "Mumbai",
+    "home_country": "IN",
     "segment": "everyday",
-    "customer_since": "2024-11-10T00:00:00Z",
+    "customer_since": "2021-03-10T00:00:00Z",
     "account_id": "acct_0031",
-    "account_age_days": 630
+    "account_age_days": 1971
   },
   "lead": {
-    "id": "txn_005249",
-    "occurred_at": "2026-08-02T02:45:00Z",
-    "amount_cents": 18600,
+    "id": "txn_005362",
+    "occurred_at": "2026-08-02T02:46:00Z",
+    "amount_paise": 744000,
     "status": "approved",
     "type": "card_purchase",
-    "merchant_name": "Parcel Gift Cards",
+    "merchant_name": "Uphaar Gift Cards",
     "merchant_category": "gift_card",
     "device_id": "dev_0342",
     "device_label": "Windows laptop \u00b7 Windows 11 \u00b7 Chrome",
     "ip": "198.51.100.92 \u00b7 Ashburn, US, datacenter",
     "ip_city": "Ashburn",
     "ip_country": "US",
-    "card_last4": "2740"
+    "card_last4": "6273"
   },
-  "report_markdown": "# FraudLens case case_0001\n\n**Customer.** Colin Ellis (cus_0031), London, GB.\n**Lead payment.** txn_005249 \u00b7 $186.00 \u00b7 Parcel Gift Cards \u00b7 2026-08-02T02:45:00Z.\n**Pattern.** Card testing (probe then charge).\n**Risk score.** 94 / 100.\n**Suggested action.** block \u2014 a human still has to confirm it.\n\n## Summary\n\nA burst of tiny amounts, many merchants, declines, and a device that is new to the customer. Block the card. Testing already landed a larger charge, and further attempts will follow the same device. Lead payment txn_005249 is $186.00 approved at Parcel Gift Cards on 02 Aug 2026 02:45 UTC, card \u2022\u20222740, device dev_0342 (Windows laptop \u00b7 Windows 11 \u00b7 Chrome). Before this episode, Colin Ellis had 33 payments with a median of $39.89. Between 02:27 UTC and 02:45 UTC there were 13 attempts, 8 declined, across Parcel Gift Cards, Hearth Gift Co, Nimbus Cloud Apps, Sable Coffee, Kinfolk Streaming, Dayrate Parking, Paperwhites Books, and Quarter Pharmacy.\n\n## Why this score\n\n- **Case opened** (+4): Every queued payment starts with a small residual score.\n- **Probe burst** (+48): 13 payments, median $2.88, 8 merchants.\n- **Declines** (+14): 8 declined attempts in the burst.\n- **Unfamiliar device** (+18): dev_0342\n- **Datacenter IP** (+10): The IP is in a hosting range, not a household connection.\n\n## What the agent checked\n\n### Open the flagged payment (watch)\n\nQueue sent txn_005249 for Colin Ellis: $186.00 at Parcel Gift Cards on 02 Aug 2026 02:45 UTC. The flagger's reasons were: Device has never been used by this customer before; IP country does not match the customer's home country; The payment's shape is an outlier for the whole book; Five or more payments in the past hour.\n\n- Transaction: txn_005249\n- Amount: $186.00\n- Customer: Colin Ellis (cus_0031)\n- Why it was queued: new_device, foreign_ip, isolation_forest, velocity_1h\n\n### Customer history and baseline (clear)\n\nColin Ellis has 33 prior payments before this episode, median $39.89. Account acct_0031 is 630 days old. Usual devices: dev_0061, dev_0062. Countries already seen: GB.\n\n- Account age: 630 days\n- Prior payments: 33\n- Median amount: $39.89\n- Home: London, GB\n\n### Payment velocity (alert)\n\nThe episode around txn_005249 holds 13 payments across 18 minutes. The busiest hour contains 13 payments. 8 declines in the episode. Merchants touched: Parcel Gift Cards, Hearth Gift Co, Nimbus Cloud Apps, Sable Coffee, Kinfolk Streaming, Dayrate Parking, Paperwhites Books, and Quarter Pharmacy.\n\n- Payments in episode: 13\n- Busiest hour: 13\n- Declines: 8\n- Distinct merchants: 8\n\n### Amount versus baseline (alert)\n\nEpisode amounts run from $0.80 to $186.00, median $2.88. The peak is 4.7\u00d7 the baseline median of $39.89.\n\n- Episode median: $2.88\n- Episode peak: $186.00\n- Baseline median: $39.89\n- Peak vs baseline: 4.7\u00d7\n\n### Device and IP linkage (alert)\n\nDevices in the episode: dev_0342 (Windows laptop \u00b7 Windows 11 \u00b7 Chrome, new to this customer). IPs: 198.51.100.92 \u00b7 Ashburn, US, datacenter. The customer's home country is the United Kingdom. Every payment in this episode is outside that country.\n\n- New devices: dev_0342\n- Mature devices reused: none\n- Countries: US\n- Datacenter or VPN: yes\n\n### Linked accounts and money flow (clear)\n\nNo other customer uses the devices in this episode. No peer-to-peer transfer or cash-out on this account in the six-day window. No cash-out path leaves this account in the six-day money graph.\n\n- Linked customers: 0\n- Household pattern: no\n- Reaches cash-out: no\n- Pass-through: no inbound\n\n### Merchant check (clear)\n\nParcel Gift Cards (gift card, Seattle) has 10 payments in the past 14 days from 6 customers. 0% of those customers are under 45 days old. 0% of the amounts are round (multiples of $50, at least $200). Devices shared by two or more buyers: none.\n\n- Category: gift_card\n- Recent buyers: 6\n- Young-account share: 0%\n- Round-amount share: 0%\n\n### Pattern classification (alert)\n\nCard testing. A burst of tiny amounts, many merchants, declines, and a device that is new to the customer.\n\n- Pattern: Card testing\n- Detail: probe then charge\n\n### Suggested action (alert)\n\nSuggested action: block. Risk score 94/100. Block the card. Testing already landed a larger charge, and further attempts will follow the same device. A person still has to confirm this. FraudLens does not apply it.\n\n- Suggested action: block\n- Risk score: 94/100\n- Who decides: human analyst\n\n## Payments in the episode\n\n| When | Id | Amount | Status | Merchant | Device |\n| --- | --- | --- | --- | --- | --- |\n| 2026-08-02T02:27:00Z | txn_005237 | $1.18 | declined | Parcel Gift Cards | dev_0342 |\n| 2026-08-02T02:28:00Z | txn_005238 | $2.09 | declined | Hearth Gift Co | dev_0342 |\n| 2026-08-02T02:29:00Z | txn_005239 | $4.71 | declined | Nimbus Cloud Apps | dev_0342 |\n| 2026-08-02T02:31:00Z | txn_005240 | $2.49 | declined | Sable Coffee | dev_0342 |\n| 2026-08-02T02:33:00Z | txn_005241 | $2.88 | declined | Kinfolk Streaming | dev_0342 |\n| 2026-08-02T02:34:00Z | txn_005242 | $2.92 | declined | Dayrate Parking | dev_0342 |\n| 2026-08-02T02:36:00Z | txn_005243 | $2.53 | declined | Paperwhites Books | dev_0342 |\n| 2026-08-02T02:38:00Z | txn_005244 | $1.30 | declined | Quarter Pharmacy | dev_0342 |\n| 2026-08-02T02:39:00Z | txn_005245 | $0.80 | approved | Parcel Gift Cards | dev_0342 |\n| 2026-08-02T02:40:00Z | txn_005246 | $3.72 | approved | Hearth Gift Co | dev_0342 |\n| 2026-08-02T02:41:00Z | txn_005247 | $4.73 | approved | Nimbus Cloud Apps | dev_0342 |\n| 2026-08-02T02:42:00Z | txn_005248 | $3.62 | approved | Sable Coffee | dev_0342 |\n| 2026-08-02T02:45:00Z | txn_005249 | $186.00 | approved | Parcel Gift Cards | dev_0342 |\n\n## Action rationale\n\nBlock the card. Testing already landed a larger charge, and further attempts will follow the same device.\n\n## Held-out label\n\nThis section is joined after the investigation. The agent did not see it.\n\n- Fraud: yes\n- Pattern: card_testing\n\n*FraudLens suggests. An analyst decides.*\n",
+  "report_markdown": "# FraudLens case case_0001\n\n**Customer.** Debashish Mukherjee (cus_0031), Mumbai, IN.\n**Lead payment.** txn_005362 \u00b7 \u20b97,440.00 \u00b7 Uphaar Gift Cards \u00b7 2026-08-02T02:46:00Z.\n**Pattern.** Card testing (probe then charge).\n**Risk score.** 94 / 100.\n**Suggested action.** block \u2014 a human still has to confirm it.\n\n## Summary\n\nA burst of tiny amounts, many merchants, declines, and a device that is new to the customer. Block the card. Testing already landed a larger charge, and further attempts will follow the same device. Lead payment txn_005362 is \u20b97,440.00 approved at Uphaar Gift Cards on 02 Aug 2026 08:16 IST, card \u2022\u20226273, device dev_0342 (Windows laptop \u00b7 Windows 11 \u00b7 Chrome). Before this episode, Debashish Mukherjee had 31 payments with a median of \u20b91,638.36. Between 07:56 IST and 08:16 IST there were 13 attempts, 8 declined, across Uphaar Gift Cards, Tohfa Gift Co, Megh Cloud Apps, Filter Kaapi Co, Raga Streaming, ParkEasy Parking, Pustak Books, and Jeevan Pharmacy.\n\n## Why this score\n\n- **Case opened** (+4): Every queued payment starts with a small residual score.\n- **Probe burst** (+48): 13 payments, median \u20b988.76, 8 merchants.\n- **Declines** (+14): 8 declined attempts in the burst.\n- **Unfamiliar device** (+18): dev_0342\n- **Datacenter IP** (+10): The IP is in a hosting range, not a household connection.\n\n## What the agent checked\n\n### Open the flagged payment (watch)\n\nQueue sent txn_005362 for Debashish Mukherjee: \u20b97,440.00 at Uphaar Gift Cards on 02 Aug 2026 08:16 IST. The flagger's reasons were: Device has never been used by this customer before; IP country does not match the customer's home country; The payment's shape is an outlier for the whole book; Five or more payments in the past hour.\n\n- Transaction: txn_005362\n- Amount: \u20b97,440.00\n- Customer: Debashish Mukherjee (cus_0031)\n- Why it was queued: new_device, foreign_ip, isolation_forest, velocity_1h\n\n### Customer history and baseline (clear)\n\nDebashish Mukherjee has 31 prior payments before this episode, median \u20b91,638.36. Account acct_0031 is 1971 days old. Usual devices: dev_0061, dev_0062. Countries already seen: IN.\n\n- Account age: 1971 days\n- Prior payments: 31\n- Median amount: \u20b91,638.36\n- Home: Mumbai, IN\n\n### Payment velocity (alert)\n\nThe episode around txn_005362 holds 13 payments across 20 minutes. The busiest hour contains 13 payments. 8 declines in the episode. Merchants touched: Uphaar Gift Cards, Tohfa Gift Co, Megh Cloud Apps, Filter Kaapi Co, Raga Streaming, ParkEasy Parking, Pustak Books, and Jeevan Pharmacy.\n\n- Payments in episode: 13\n- Busiest hour: 13\n- Declines: 8\n- Distinct merchants: 8\n\n### Amount versus baseline (alert)\n\nEpisode amounts run from \u20b924.20 to \u20b97,440.00, median \u20b988.76. The peak is 4.5\u00d7 the baseline median of \u20b91,638.36.\n\n- Episode median: \u20b988.76\n- Episode peak: \u20b97,440.00\n- Baseline median: \u20b91,638.36\n- Peak vs baseline: 4.5\u00d7\n\n### Device and IP linkage (alert)\n\nDevices in the episode: dev_0342 (Windows laptop \u00b7 Windows 11 \u00b7 Chrome, new to this customer). IPs: 198.51.100.92 \u00b7 Ashburn, US, datacenter. The customer's home country is India. Every payment in this episode is outside that country.\n\n- New devices: dev_0342\n- Mature devices reused: none\n- Countries: US\n- Datacenter or VPN: yes\n\n### Linked accounts and money flow (clear)\n\nNo other customer uses the devices in this episode. No UPI transfer or cash-out on this account in the six-day window. No cash-out path leaves this account in the six-day money graph.\n\n- Linked customers: 0\n- Household pattern: no\n- Reaches cash-out: no\n- Pass-through: no inbound\n\n### Merchant check (clear)\n\nUphaar Gift Cards (gift card, Pune) has 10 payments in the past 14 days from 6 customers. 0% of those customers are under 45 days old. 0% of the amounts are round (multiples of \u20b91,000, at least \u20b98,000). Devices shared by two or more buyers: none.\n\n- Category: gift_card\n- Recent buyers: 6\n- Young-account share: 0%\n- Round-amount share: 0%\n\n### Pattern classification (alert)\n\nCard testing. A burst of tiny amounts, many merchants, declines, and a device that is new to the customer.\n\n- Pattern: Card testing\n- Detail: probe then charge\n\n### Suggested action (alert)\n\nSuggested action: block. Risk score 94/100. Block the card. Testing already landed a larger charge, and further attempts will follow the same device. A person still has to confirm this. FraudLens does not apply it.\n\n- Suggested action: block\n- Risk score: 94/100\n- Who decides: human analyst\n\n## Payments in the episode\n\n| When | Id | Amount | Status | Merchant | Device |\n| --- | --- | --- | --- | --- | --- |\n| 2026-08-02T02:26:00Z | txn_005350 | \u20b983.07 | declined | Uphaar Gift Cards | dev_0342 |\n| 2026-08-02T02:27:00Z | txn_005351 | \u20b9107.24 | declined | Tohfa Gift Co | dev_0342 |\n| 2026-08-02T02:29:00Z | txn_005352 | \u20b9179.78 | declined | Megh Cloud Apps | dev_0342 |\n| 2026-08-02T02:31:00Z | txn_005353 | \u20b9128.51 | declined | Filter Kaapi Co | dev_0342 |\n| 2026-08-02T02:33:00Z | txn_005354 | \u20b9180.49 | declined | Raga Streaming | dev_0342 |\n| 2026-08-02T02:34:00Z | txn_005355 | \u20b994.04 | declined | ParkEasy Parking | dev_0342 |\n| 2026-08-02T02:35:00Z | txn_005356 | \u20b924.20 | declined | Pustak Books | dev_0342 |\n| 2026-08-02T02:36:00Z | txn_005357 | \u20b988.76 | declined | Jeevan Pharmacy | dev_0342 |\n| 2026-08-02T02:38:00Z | txn_005358 | \u20b967.15 | approved | Uphaar Gift Cards | dev_0342 |\n| 2026-08-02T02:40:00Z | txn_005359 | \u20b977.85 | approved | Tohfa Gift Co | dev_0342 |\n| 2026-08-02T02:41:00Z | txn_005360 | \u20b932.38 | approved | Megh Cloud Apps | dev_0342 |\n| 2026-08-02T02:43:00Z | txn_005361 | \u20b937.45 | approved | Filter Kaapi Co | dev_0342 |\n| 2026-08-02T02:46:00Z | txn_005362 | \u20b97,440.00 | approved | Uphaar Gift Cards | dev_0342 |\n\n## Action rationale\n\nBlock the card. Testing already landed a larger charge, and further attempts will follow the same device.\n\n## Held-out label\n\nThis section is joined after the investigation. The agent did not see it.\n\n- Fraud: yes\n- Pattern: card_testing\n\n*FraudLens suggests. An analyst decides.*\n",
   "showcase": {
     "slot": "card_testing",
     "order": 1,

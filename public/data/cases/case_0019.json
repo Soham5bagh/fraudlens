@@ -1,9 +1,9 @@
 {
   "case_id": "case_0019",
-  "lead_transaction_id": "txn_005236",
+  "lead_transaction_id": "txn_005349",
   "customer_id": "cus_0169",
   "covered_transaction_ids": [
-    "txn_005236"
+    "txn_005349"
   ],
   "flag_reasons": [
     {
@@ -20,10 +20,10 @@
   "pattern_label": "Legitimate activity",
   "pattern_detail": "household",
   "action": "approve",
-  "action_rationale": "Approve. Sharing a MacBook with the same surname, in the same city, is a household. Nothing is passed through, so it is not a mule chain.",
+  "action_rationale": "Approve. Sharing a Windows laptop with the same surname, in the same city, is a household. Nothing is passed through, so it is not a mule chain.",
   "confidence": "high",
-  "summary": "Ruth Hart shares a device with someone of the same surname in the same city. Nothing passes through.",
-  "narrative": "The shared device belongs to someone with the same surname and city, and nothing is passed through. Approve. Sharing a MacBook with the same surname, in the same city, is a household. Nothing is passed through, so it is not a mule chain. Lead payment txn_005236 is $64.00 approved at Greenmarket Co-op on 08 Aug 2026 10:15 UTC, card \u2022\u20222236, device dev_0018 (MacBook \u00b7 macOS 15 \u00b7 Safari). Before this episode, Ruth Hart had 24 payments with a median of $34.24.",
+  "summary": "Revathi Nair shares a device with someone of the same surname in the same city. Nothing passes through.",
+  "narrative": "The shared device belongs to someone with the same surname and city, and nothing is passed through. Approve. Sharing a Windows laptop with the same surname, in the same city, is a household. Nothing is passed through, so it is not a mule chain. Lead payment txn_005349 is \u20b92,560.00 approved at Kirana Junction on 08 Aug 2026 15:45 IST, card \u2022\u20223404, device dev_0018 (Windows laptop \u00b7 Windows 11 \u00b7 Chrome). Before this episode, Revathi Nair had 37 payments with a median of \u20b91,544.05.",
   "signals": [
     {
       "name": "Case opened",
@@ -41,21 +41,21 @@
       "id": "open_case",
       "title": "Open the flagged payment",
       "status": "watch",
-      "started_at": "2026-08-11T15:00:00Z",
+      "started_at": "2026-08-11T04:30:00Z",
       "duration_ms": 420,
-      "finding": "Queue sent txn_005236 for Ruth Hart: $64.00 at Greenmarket Co-op on 08 Aug 2026 10:15 UTC. The flagger's reasons were: Device has never been used by this customer before; Device is already linked to a different customer.",
+      "finding": "Queue sent txn_005349 for Revathi Nair: \u20b92,560.00 at Kirana Junction on 08 Aug 2026 15:45 IST. The flagger's reasons were: Device has never been used by this customer before; Device is already linked to a different customer.",
       "evidence": [
         {
           "label": "Transaction",
-          "value": "txn_005236"
+          "value": "txn_005349"
         },
         {
           "label": "Amount",
-          "value": "$64.00"
+          "value": "\u20b92,560.00"
         },
         {
           "label": "Customer",
-          "value": "Ruth Hart (cus_0169)"
+          "value": "Revathi Nair (cus_0169)"
         },
         {
           "label": "Why it was queued",
@@ -67,9 +67,9 @@
       "id": "customer_baseline",
       "title": "Customer history and baseline",
       "status": "clear",
-      "started_at": "2026-08-11T15:00:00Z",
+      "started_at": "2026-08-11T04:30:00Z",
       "duration_ms": 680,
-      "finding": "Ruth Hart has 24 prior payments before this episode, median $34.24. Account acct_0169 is 1944 days old. Usual devices: dev_0340, dev_0341. Countries already seen: IE.",
+      "finding": "Revathi Nair has 37 prior payments before this episode, median \u20b91,544.05. Account acct_0169 is 1944 days old. Usual devices: dev_0340, dev_0341. Countries already seen: IN.",
       "evidence": [
         {
           "label": "Account age",
@@ -77,15 +77,15 @@
         },
         {
           "label": "Prior payments",
-          "value": "24"
+          "value": "37"
         },
         {
           "label": "Median amount",
-          "value": "$34.24"
+          "value": "\u20b91,544.05"
         },
         {
           "label": "Home",
-          "value": "Dublin, IE"
+          "value": "Jaipur, IN"
         }
       ]
     },
@@ -93,9 +93,9 @@
       "id": "velocity",
       "title": "Payment velocity",
       "status": "clear",
-      "started_at": "2026-08-11T15:00:01Z",
+      "started_at": "2026-08-11T04:30:01Z",
       "duration_ms": 540,
-      "finding": "The episode around txn_005236 holds 1 payment across 0 minutes. The busiest hour contains 1 payment. 0 declines in the episode. Merchants touched: Greenmarket Co-op.",
+      "finding": "The episode around txn_005349 holds 1 payment across 0 minutes. The busiest hour contains 1 payment. 0 declines in the episode. Merchants touched: Kirana Junction.",
       "evidence": [
         {
           "label": "Payments in episode",
@@ -119,25 +119,25 @@
       "id": "amount",
       "title": "Amount versus baseline",
       "status": "clear",
-      "started_at": "2026-08-11T15:00:02Z",
+      "started_at": "2026-08-11T04:30:02Z",
       "duration_ms": 480,
-      "finding": "Episode amounts run from $64.00 to $64.00, median $64.00. The peak is in line with a baseline median of $34.24 (peak is 1.9\u00d7).",
+      "finding": "Episode amounts run from \u20b92,560.00 to \u20b92,560.00, median \u20b92,560.00. The peak is in line with a baseline median of \u20b91,544.05 (peak is 1.7\u00d7).",
       "evidence": [
         {
           "label": "Episode median",
-          "value": "$64.00"
+          "value": "\u20b92,560.00"
         },
         {
           "label": "Episode peak",
-          "value": "$64.00"
+          "value": "\u20b92,560.00"
         },
         {
           "label": "Baseline median",
-          "value": "$34.24"
+          "value": "\u20b91,544.05"
         },
         {
           "label": "Peak vs baseline",
-          "value": "1.9\u00d7"
+          "value": "1.7\u00d7"
         }
       ]
     },
@@ -145,9 +145,9 @@
       "id": "device_ip",
       "title": "Device and IP linkage",
       "status": "watch",
-      "started_at": "2026-08-11T15:00:03Z",
+      "started_at": "2026-08-11T04:30:03Z",
       "duration_ms": 730,
-      "finding": "Devices in the episode: dev_0018 (MacBook \u00b7 macOS 15 \u00b7 Safari, new to this customer). IPs: 198.51.100.90 \u00b7 Dublin, IE. The customer's home country is Ireland. Every payment in this episode is there.",
+      "finding": "Devices in the episode: dev_0018 (Windows laptop \u00b7 Windows 11 \u00b7 Chrome, new to this customer). IPs: 198.51.100.90 \u00b7 Jaipur, IN. The customer's home country is India. Every payment in this episode is there.",
       "evidence": [
         {
           "label": "New devices",
@@ -159,7 +159,7 @@
         },
         {
           "label": "Countries",
-          "value": "IE"
+          "value": "IN"
         },
         {
           "label": "Datacenter or VPN",
@@ -171,9 +171,9 @@
       "id": "network",
       "title": "Linked accounts and money flow",
       "status": "watch",
-      "started_at": "2026-08-11T15:00:04Z",
+      "started_at": "2026-08-11T04:30:04Z",
       "duration_ms": 860,
-      "finding": "These devices are also used by Noah Hart (cus_0009) via dev_0018. No peer-to-peer transfer or cash-out on this account in the six-day window. No cash-out path leaves this account in the six-day money graph. The other names share a surname and city, which fits a household rather than a mule ring.",
+      "finding": "These devices are also used by Lakshmi Nair (cus_0009) via dev_0018. No UPI transfer or cash-out on this account in the six-day window. No cash-out path leaves this account in the six-day money graph. The other names share a surname and city, which fits a household rather than a mule ring.",
       "evidence": [
         {
           "label": "Linked customers",
@@ -197,9 +197,9 @@
       "id": "merchant",
       "title": "Merchant check",
       "status": "clear",
-      "started_at": "2026-08-11T15:00:05Z",
+      "started_at": "2026-08-11T04:30:05Z",
       "duration_ms": 640,
-      "finding": "Greenmarket Co-op (grocery, Madrid) has 52 payments in the past 14 days from 42 customers. 0% of those customers are under 45 days old. 0% of the amounts are round (multiples of $50, at least $200). Devices shared by two or more buyers: none.",
+      "finding": "Kirana Junction (grocery, Chandigarh) has 49 payments in the past 14 days from 46 customers. 0% of those customers are under 45 days old. 0% of the amounts are round (multiples of \u20b91,000, at least \u20b98,000). Devices shared by two or more buyers: none.",
       "evidence": [
         {
           "label": "Category",
@@ -207,7 +207,7 @@
         },
         {
           "label": "Recent buyers",
-          "value": "42"
+          "value": "46"
         },
         {
           "label": "Young-account share",
@@ -223,7 +223,7 @@
       "id": "classify",
       "title": "Pattern classification",
       "status": "clear",
-      "started_at": "2026-08-11T15:00:06Z",
+      "started_at": "2026-08-11T04:30:06Z",
       "duration_ms": 390,
       "finding": "Legitimate activity. The shared device belongs to someone with the same surname and city, and nothing is passed through.",
       "evidence": [
@@ -241,9 +241,9 @@
       "id": "recommend",
       "title": "Suggested action",
       "status": "clear",
-      "started_at": "2026-08-11T15:00:07Z",
+      "started_at": "2026-08-11T04:30:07Z",
       "duration_ms": 360,
-      "finding": "Suggested action: approve. Risk score 14/100. Approve. Sharing a MacBook with the same surname, in the same city, is a household. Nothing is passed through, so it is not a mule chain. A person still has to confirm this. FraudLens does not apply it.",
+      "finding": "Suggested action: approve. Risk score 14/100. Approve. Sharing a Windows laptop with the same surname, in the same city, is a household. Nothing is passed through, so it is not a mule chain. A person still has to confirm this. FraudLens does not apply it.",
       "evidence": [
         {
           "label": "Suggested action",
@@ -265,7 +265,7 @@
       {
         "id": "cus_0169",
         "type": "customer",
-        "label": "Ruth Hart",
+        "label": "Revathi Nair",
         "sublabel": "cus_0169",
         "x": 0.1769,
         "y": 0.9001,
@@ -283,7 +283,7 @@
       {
         "id": "dev_0018",
         "type": "device",
-        "label": "MacBook",
+        "label": "Windows laptop",
         "sublabel": "dev_0018",
         "x": 0.8338,
         "y": 0.5011,
@@ -292,7 +292,7 @@
       {
         "id": "ip_0339",
         "type": "ip",
-        "label": "Dublin",
+        "label": "Jaipur",
         "sublabel": "198.51.100.90",
         "x": 0.6314,
         "y": 0.08,
@@ -301,7 +301,7 @@
       {
         "id": "mer_002",
         "type": "merchant",
-        "label": "Greenmarket Co-op",
+        "label": "Kirana Junction",
         "sublabel": "grocery",
         "x": 0.08,
         "y": 0.416,
@@ -310,7 +310,7 @@
       {
         "id": "cus_0009",
         "type": "customer",
-        "label": "Noah Hart",
+        "label": "Lakshmi Nair",
         "sublabel": "cus_0009",
         "x": 0.92,
         "y": 0.92,
@@ -364,52 +364,52 @@
         "label": "owns"
       }
     ],
-    "caption": "Devices in this episode are shared with Noah Hart"
+    "caption": "Devices in this episode are shared with Lakshmi Nair"
   },
   "related_transactions": [
     {
-      "id": "txn_005236",
+      "id": "txn_005349",
       "occurred_at": "2026-08-08T10:15:00Z",
       "ts": 1786184100,
-      "amount_cents": 6400,
+      "amount_paise": 256000,
       "status": "approved",
       "type": "card_purchase",
-      "merchant_name": "Greenmarket Co-op",
+      "merchant_name": "Kirana Junction",
       "merchant_category": "grocery",
       "device_id": "dev_0018",
-      "ip": "198.51.100.90 \u00b7 Dublin, IE",
-      "ip_country": "IE",
-      "city": "Dublin",
+      "ip": "198.51.100.90 \u00b7 Jaipur, IN",
+      "ip_country": "IN",
+      "city": "Jaipur",
       "flagged": true,
       "counterparty_account_id": null
     }
   ],
   "customer": {
     "id": "cus_0169",
-    "name": "Ruth Hart",
-    "email": "ruth.hart.desk@example.com",
-    "home_city": "Dublin",
-    "home_country": "IE",
+    "name": "Revathi Nair",
+    "email": "revathi.nair.desk@example.com",
+    "home_city": "Jaipur",
+    "home_country": "IN",
     "segment": "everyday",
     "customer_since": "2021-04-12T00:00:00Z",
     "account_id": "acct_0169",
     "account_age_days": 1944
   },
   "lead": {
-    "id": "txn_005236",
+    "id": "txn_005349",
     "occurred_at": "2026-08-08T10:15:00Z",
-    "amount_cents": 6400,
+    "amount_paise": 256000,
     "status": "approved",
     "type": "card_purchase",
-    "merchant_name": "Greenmarket Co-op",
+    "merchant_name": "Kirana Junction",
     "merchant_category": "grocery",
     "device_id": "dev_0018",
-    "device_label": "MacBook \u00b7 macOS 15 \u00b7 Safari",
-    "ip": "198.51.100.90 \u00b7 Dublin, IE",
-    "ip_city": "Dublin",
-    "ip_country": "IE",
-    "card_last4": "2236"
+    "device_label": "Windows laptop \u00b7 Windows 11 \u00b7 Chrome",
+    "ip": "198.51.100.90 \u00b7 Jaipur, IN",
+    "ip_city": "Jaipur",
+    "ip_country": "IN",
+    "card_last4": "3404"
   },
-  "report_markdown": "# FraudLens case case_0019\n\n**Customer.** Ruth Hart (cus_0169), Dublin, IE.\n**Lead payment.** txn_005236 \u00b7 $64.00 \u00b7 Greenmarket Co-op \u00b7 2026-08-08T10:15:00Z.\n**Pattern.** Legitimate activity (household).\n**Risk score.** 14 / 100.\n**Suggested action.** approve \u2014 a human still has to confirm it.\n\n## Summary\n\nThe shared device belongs to someone with the same surname and city, and nothing is passed through. Approve. Sharing a MacBook with the same surname, in the same city, is a household. Nothing is passed through, so it is not a mule chain. Lead payment txn_005236 is $64.00 approved at Greenmarket Co-op on 08 Aug 2026 10:15 UTC, card \u2022\u20222236, device dev_0018 (MacBook \u00b7 macOS 15 \u00b7 Safari). Before this episode, Ruth Hart had 24 payments with a median of $34.24.\n\n## Why this score\n\n- **Case opened** (+4): Every queued payment starts with a small residual score.\n- **Household device** (+10): Shared with the same surname in the same city, with no pass-through.\n\n## What the agent checked\n\n### Open the flagged payment (watch)\n\nQueue sent txn_005236 for Ruth Hart: $64.00 at Greenmarket Co-op on 08 Aug 2026 10:15 UTC. The flagger's reasons were: Device has never been used by this customer before; Device is already linked to a different customer.\n\n- Transaction: txn_005236\n- Amount: $64.00\n- Customer: Ruth Hart (cus_0169)\n- Why it was queued: new_device, shared_device\n\n### Customer history and baseline (clear)\n\nRuth Hart has 24 prior payments before this episode, median $34.24. Account acct_0169 is 1944 days old. Usual devices: dev_0340, dev_0341. Countries already seen: IE.\n\n- Account age: 1944 days\n- Prior payments: 24\n- Median amount: $34.24\n- Home: Dublin, IE\n\n### Payment velocity (clear)\n\nThe episode around txn_005236 holds 1 payment across 0 minutes. The busiest hour contains 1 payment. 0 declines in the episode. Merchants touched: Greenmarket Co-op.\n\n- Payments in episode: 1\n- Busiest hour: 1\n- Declines: 0\n- Distinct merchants: 1\n\n### Amount versus baseline (clear)\n\nEpisode amounts run from $64.00 to $64.00, median $64.00. The peak is in line with a baseline median of $34.24 (peak is 1.9\u00d7).\n\n- Episode median: $64.00\n- Episode peak: $64.00\n- Baseline median: $34.24\n- Peak vs baseline: 1.9\u00d7\n\n### Device and IP linkage (watch)\n\nDevices in the episode: dev_0018 (MacBook \u00b7 macOS 15 \u00b7 Safari, new to this customer). IPs: 198.51.100.90 \u00b7 Dublin, IE. The customer's home country is Ireland. Every payment in this episode is there.\n\n- New devices: dev_0018\n- Mature devices reused: none\n- Countries: IE\n- Datacenter or VPN: no\n\n### Linked accounts and money flow (watch)\n\nThese devices are also used by Noah Hart (cus_0009) via dev_0018. No peer-to-peer transfer or cash-out on this account in the six-day window. No cash-out path leaves this account in the six-day money graph. The other names share a surname and city, which fits a household rather than a mule ring.\n\n- Linked customers: 1\n- Household pattern: yes\n- Reaches cash-out: no\n- Pass-through: no inbound\n\n### Merchant check (clear)\n\nGreenmarket Co-op (grocery, Madrid) has 52 payments in the past 14 days from 42 customers. 0% of those customers are under 45 days old. 0% of the amounts are round (multiples of $50, at least $200). Devices shared by two or more buyers: none.\n\n- Category: grocery\n- Recent buyers: 42\n- Young-account share: 0%\n- Round-amount share: 0%\n\n### Pattern classification (clear)\n\nLegitimate activity. The shared device belongs to someone with the same surname and city, and nothing is passed through.\n\n- Pattern: Legitimate activity\n- Detail: household\n\n### Suggested action (clear)\n\nSuggested action: approve. Risk score 14/100. Approve. Sharing a MacBook with the same surname, in the same city, is a household. Nothing is passed through, so it is not a mule chain. A person still has to confirm this. FraudLens does not apply it.\n\n- Suggested action: approve\n- Risk score: 14/100\n- Who decides: human analyst\n\n## Payments in the episode\n\n| When | Id | Amount | Status | Merchant | Device |\n| --- | --- | --- | --- | --- | --- |\n| 2026-08-08T10:15:00Z | txn_005236 | $64.00 | approved | Greenmarket Co-op | dev_0018 |\n\n## Action rationale\n\nApprove. Sharing a MacBook with the same surname, in the same city, is a household. Nothing is passed through, so it is not a mule chain.\n\n## Held-out label\n\nThis section is joined after the investigation. The agent did not see it.\n\n- Fraud: no\n- Pattern: legitimate\n\n*FraudLens suggests. An analyst decides.*\n",
+  "report_markdown": "# FraudLens case case_0019\n\n**Customer.** Revathi Nair (cus_0169), Jaipur, IN.\n**Lead payment.** txn_005349 \u00b7 \u20b92,560.00 \u00b7 Kirana Junction \u00b7 2026-08-08T10:15:00Z.\n**Pattern.** Legitimate activity (household).\n**Risk score.** 14 / 100.\n**Suggested action.** approve \u2014 a human still has to confirm it.\n\n## Summary\n\nThe shared device belongs to someone with the same surname and city, and nothing is passed through. Approve. Sharing a Windows laptop with the same surname, in the same city, is a household. Nothing is passed through, so it is not a mule chain. Lead payment txn_005349 is \u20b92,560.00 approved at Kirana Junction on 08 Aug 2026 15:45 IST, card \u2022\u20223404, device dev_0018 (Windows laptop \u00b7 Windows 11 \u00b7 Chrome). Before this episode, Revathi Nair had 37 payments with a median of \u20b91,544.05.\n\n## Why this score\n\n- **Case opened** (+4): Every queued payment starts with a small residual score.\n- **Household device** (+10): Shared with the same surname in the same city, with no pass-through.\n\n## What the agent checked\n\n### Open the flagged payment (watch)\n\nQueue sent txn_005349 for Revathi Nair: \u20b92,560.00 at Kirana Junction on 08 Aug 2026 15:45 IST. The flagger's reasons were: Device has never been used by this customer before; Device is already linked to a different customer.\n\n- Transaction: txn_005349\n- Amount: \u20b92,560.00\n- Customer: Revathi Nair (cus_0169)\n- Why it was queued: new_device, shared_device\n\n### Customer history and baseline (clear)\n\nRevathi Nair has 37 prior payments before this episode, median \u20b91,544.05. Account acct_0169 is 1944 days old. Usual devices: dev_0340, dev_0341. Countries already seen: IN.\n\n- Account age: 1944 days\n- Prior payments: 37\n- Median amount: \u20b91,544.05\n- Home: Jaipur, IN\n\n### Payment velocity (clear)\n\nThe episode around txn_005349 holds 1 payment across 0 minutes. The busiest hour contains 1 payment. 0 declines in the episode. Merchants touched: Kirana Junction.\n\n- Payments in episode: 1\n- Busiest hour: 1\n- Declines: 0\n- Distinct merchants: 1\n\n### Amount versus baseline (clear)\n\nEpisode amounts run from \u20b92,560.00 to \u20b92,560.00, median \u20b92,560.00. The peak is in line with a baseline median of \u20b91,544.05 (peak is 1.7\u00d7).\n\n- Episode median: \u20b92,560.00\n- Episode peak: \u20b92,560.00\n- Baseline median: \u20b91,544.05\n- Peak vs baseline: 1.7\u00d7\n\n### Device and IP linkage (watch)\n\nDevices in the episode: dev_0018 (Windows laptop \u00b7 Windows 11 \u00b7 Chrome, new to this customer). IPs: 198.51.100.90 \u00b7 Jaipur, IN. The customer's home country is India. Every payment in this episode is there.\n\n- New devices: dev_0018\n- Mature devices reused: none\n- Countries: IN\n- Datacenter or VPN: no\n\n### Linked accounts and money flow (watch)\n\nThese devices are also used by Lakshmi Nair (cus_0009) via dev_0018. No UPI transfer or cash-out on this account in the six-day window. No cash-out path leaves this account in the six-day money graph. The other names share a surname and city, which fits a household rather than a mule ring.\n\n- Linked customers: 1\n- Household pattern: yes\n- Reaches cash-out: no\n- Pass-through: no inbound\n\n### Merchant check (clear)\n\nKirana Junction (grocery, Chandigarh) has 49 payments in the past 14 days from 46 customers. 0% of those customers are under 45 days old. 0% of the amounts are round (multiples of \u20b91,000, at least \u20b98,000). Devices shared by two or more buyers: none.\n\n- Category: grocery\n- Recent buyers: 46\n- Young-account share: 0%\n- Round-amount share: 0%\n\n### Pattern classification (clear)\n\nLegitimate activity. The shared device belongs to someone with the same surname and city, and nothing is passed through.\n\n- Pattern: Legitimate activity\n- Detail: household\n\n### Suggested action (clear)\n\nSuggested action: approve. Risk score 14/100. Approve. Sharing a Windows laptop with the same surname, in the same city, is a household. Nothing is passed through, so it is not a mule chain. A person still has to confirm this. FraudLens does not apply it.\n\n- Suggested action: approve\n- Risk score: 14/100\n- Who decides: human analyst\n\n## Payments in the episode\n\n| When | Id | Amount | Status | Merchant | Device |\n| --- | --- | --- | --- | --- | --- |\n| 2026-08-08T10:15:00Z | txn_005349 | \u20b92,560.00 | approved | Kirana Junction | dev_0018 |\n\n## Action rationale\n\nApprove. Sharing a Windows laptop with the same surname, in the same city, is a household. Nothing is passed through, so it is not a mule chain.\n\n## Held-out label\n\nThis section is joined after the investigation. The agent did not see it.\n\n- Fraud: no\n- Pattern: legitimate\n\n*FraudLens suggests. An analyst decides.*\n",
   "showcase": null
 }

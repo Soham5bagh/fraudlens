@@ -19,7 +19,7 @@ export type Txn = {
   device_id: string;
   ip_id: string;
   merchant_id: string | null;
-  amount_cents: number;
+  amount_paise: number;
   status: string;
   type: string;
   counterparty_account_id: string | null;
@@ -143,16 +143,17 @@ export type Investigation = {
   };
   lead: {
     id: string;
-    amountCents: number;
+    amountPaise: number;
     merchantName: string;
     occurredAt: string;
     deviceId: string;
     cardLast4: string | null;
+    type: string;
   };
   related: {
     id: string;
     occurredAt: string;
-    amountCents: number;
+    amountPaise: number;
     status: string;
     merchantName: string;
     deviceId: string;

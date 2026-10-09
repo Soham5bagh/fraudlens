@@ -28,8 +28,8 @@ export function MetricsBoard() {
       <p className="kicker">Synthetic book · the answers were hidden from FraudLens</p>
       <h1>Did it catch the fraud without stopping real customers?</h1>
       <p className="lede">
-        On {population.transactions.toLocaleString()} synthetic payments, FraudLens caught {agent.tp} of {population.fraud_transactions} frauds and raised {agent.fp} false alarms.
-        A basic rule queue caught the same {naive.tp} frauds and raised {naive.fp} false alarms. Following that queue would have blocked {headline.genuine_customers_blocked_by_queue} genuine customers. Following FraudLens would have blocked {headline.genuine_customers_blocked_by_agent}.
+        On {population.transactions.toLocaleString()} synthetic payments, FraudLens caught {agent.tp} of {population.fraud_transactions} frauds and raised {countLabel(agent.fp, "false alarm")}.
+        A basic rule queue caught the same {naive.tp} frauds and raised {countLabel(naive.fp, "false alarm")}. Following that queue would have blocked {headline.genuine_customers_blocked_by_queue} genuine customers. Following FraudLens would have blocked {headline.genuine_customers_blocked_by_agent}.
       </p>
       <div className="compare-plain">
         <article className="panel">
@@ -37,7 +37,7 @@ export function MetricsBoard() {
           <div className="figure">
             <div><b>{naive.tp}</b><span>frauds caught, of {population.fraud_transactions}</span></div>
             <div><b>{headline.genuine_customers_blocked_by_queue}</b><span>genuine customers wrongly blocked</span></div>
-            <div><b>{naive.fp}</b><span>false alarms <Info text={TERM_HELP.falseAlarms} /></span></div>
+            <div><b>{naive.fp}</b><span>{naive.fp === 1 ? "false alarm" : "false alarms"} <Info text={TERM_HELP.falseAlarms} /></span></div>
           </div>
         </article>
         <article className="panel fraudlens">
@@ -45,13 +45,19 @@ export function MetricsBoard() {
           <div className="figure">
             <div><b>{agent.tp}</b><span>frauds caught, of {population.fraud_transactions}</span></div>
             <div><b>{headline.genuine_customers_blocked_by_agent}</b><span>genuine customers wrongly blocked</span></div>
-            <div><b>{agent.fp}</b><span>false alarms <Info text={TERM_HELP.falseAlarms} /></span></div>
+            <div><b>{agent.fp}</b><span>{agent.fp === 1 ? "false alarm" : "false alarms"} <Info text={TERM_HELP.falseAlarms} /></span></div>
           </div>
         </article>
       </div>
       <details className="fold" open>
         <summary>Scorecard note</summary>
         <p>{metrics.narrative}</p>
+        {(metrics.false_alarm_examples ?? []).map((example) => (
+          <p className="note" key={example.transaction_id}>
+            The false alarm is {example.transaction_id}, a legitimate {money(example.amount_paise)} payment at {example.merchant_name} by {example.customer_name}.
+            It falls inside the time window of {example.case_id}, a {patternName(example.predicted_pattern).toLowerCase()} case on the same account, so it is scored with that case.
+          </p>
+        ))}
       </details>
       <div className="stats">
         <article className="stat">
@@ -164,7 +170,7 @@ export function MetricsBoard() {
           {metrics.robustness.seeds.flatMap((row) =>
             (row.false_alarm_examples ?? []).map((example) => (
               <p className="note" key={`${row.seed}-${example.transaction_id}`}>
-                Seed {row.seed} counts {example.transaction_id} ({money(example.amount_cents)} at {example.merchant_name}, {example.customer_name}) with {example.case_id} ({patternName(example.predicted_pattern)}).
+                Seed {row.seed} counts {example.transaction_id} ({money(example.amount_paise)} at {example.merchant_name}, {example.customer_name}) with {example.case_id} ({patternName(example.predicted_pattern)}).
                 The payment is legitimate and sits inside that case&apos;s time window, so it is scored with the case.
               </p>
             )),

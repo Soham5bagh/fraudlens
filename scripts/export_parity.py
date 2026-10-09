@@ -25,7 +25,7 @@ KEEP_TXN = (
     "device_id",
     "ip_id",
     "merchant_id",
-    "amount_cents",
+    "amount_paise",
     "status",
     "type",
     "counterparty_account_id",

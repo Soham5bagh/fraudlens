@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from engine.textutil import money, plural
+from engine.textutil import money, pct, plural
 
 
 def case_markdown(investigation: dict, truth: dict | None = None) -> str:
@@ -12,7 +12,7 @@ def case_markdown(investigation: dict, truth: dict | None = None) -> str:
         f"# FraudLens case {investigation['case_id']}",
         "",
         f"**Customer.** {customer['name']} ({customer['id']}), {customer['home_city']}, {customer['home_country']}.",
-        f"**Lead payment.** {lead['id']} · {money(lead['amount_cents'])} · {lead['merchant_name']} · {lead['occurred_at']}.",
+        f"**Lead payment.** {lead['id']} · {money(lead['amount_paise'])} · {lead['merchant_name']} · {lead['occurred_at']}.",
         f"**Pattern.** {investigation['pattern_label']} ({investigation['pattern_detail'].replace('_', ' ')}).",
         f"**Risk score.** {investigation['risk_score']} / 100.",
         f"**Suggested action.** {investigation['action']} — a human still has to confirm it.",
@@ -40,7 +40,7 @@ def case_markdown(investigation: dict, truth: dict | None = None) -> str:
     lines.append("| --- | --- | --- | --- | --- | --- |")
     for txn in investigation["related_transactions"]:
         lines.append(
-            f"| {txn['occurred_at']} | {txn['id']} | {money(txn['amount_cents'])} | {txn['status']} | {txn['merchant_name']} | {txn['device_id']} |"
+            f"| {txn['occurred_at']} | {txn['id']} | {money(txn['amount_paise'])} | {txn['status']} | {txn['merchant_name']} | {txn['device_id']} |"
         )
     lines += ["", "## Action rationale", "", investigation["action_rationale"], ""]
     if truth:
@@ -82,11 +82,11 @@ def summary_markdown(metrics: dict, meta: dict) -> str:
         "| | Frauds caught (recall) | Precision | False positive rate | False alarms (payments) | Genuine customers blocked |",
         "| --- | --- | --- | --- | --- | --- |",
         (
-            f"| Rubber-stamp the queue | {_pct(naive['recall'])} | {_pct(naive['precision'])} | {_pct(naive['fpr'])} | "
+            f"| Rubber-stamp the queue | {pct(naive['recall'])} | {pct(naive['precision'])} | {pct(naive['fpr'])} | "
             f"{naive['fp']} | {harm['naive']} |"
         ),
         (
-            f"| Follow FraudLens | {_pct(agent['recall'])} | {_pct(agent['precision'])} | {_pct(agent['fpr'])} | "
+            f"| Follow FraudLens | {pct(agent['recall'])} | {pct(agent['precision'])} | {pct(agent['fpr'])} | "
             f"{agent['fp']} | {harm['agent_block']} |"
         ),
         "",
@@ -119,7 +119,7 @@ def summary_markdown(metrics: dict, meta: dict) -> str:
     for row in metrics["by_pattern"]:
         lines.append(
             f"| {labels[row['pattern']]} | {row['fraud_transactions']} | {row['caught_by_agent']} | "
-            f"{row['agent_recall']:.0%} | {row['cases_named_correctly']} / {row['cases_with_pattern']} |"
+            f"{pct(row['agent_recall'])} | {row['cases_named_correctly']} / {row['cases_with_pattern']} |"
         )
     lines += [
         "",
@@ -140,6 +140,11 @@ def summary_markdown(metrics: dict, meta: dict) -> str:
             lines.append(
                 f"- {row['name']} ({row['customer_id']}), {plural(row['payments'], 'queued payment')}"
             )
+    examples = metrics.get("false_alarm_examples") or []
+    if examples:
+        lines += ["", "### False alarms on this seed", ""]
+        for example in examples:
+            lines.append(_false_alarm_sentence(f"Seed `{meta['seed']}`", example))
     robustness = metrics.get("robustness")
     if robustness:
         lines += [
@@ -153,7 +158,7 @@ def summary_markdown(metrics: dict, meta: dict) -> str:
         ]
         for row in robustness["seeds"]:
             lines.append(
-                f"| {row['seed']} | {_pct(row['agent_recall'])} | {_pct(row['agent_precision'])} | {row['agent_false_alarms']} | "
+                f"| {row['seed']} | {pct(row['agent_recall'])} | {pct(row['agent_precision'])} | {row['agent_false_alarms']} | "
                 f"{row['genuine_blocked_by_agent']} (queue would block {row['genuine_blocked_by_queue']}) | "
                 f"{row['fraud_cases_named_correctly']} / {row['fraud_cases']} | "
                 f"{row['legitimate_cases_approved']} / {row['legitimate_cases']} |"
@@ -161,12 +166,7 @@ def summary_markdown(metrics: dict, meta: dict) -> str:
         lines.append("")
         for row in robustness["seeds"]:
             for example in row.get("false_alarm_examples") or []:
-                lines.append(
-                    f"Seed {row['seed']} counts {example['transaction_id']} "
-                    f"({money(example['amount_cents'])} at {example['merchant_name']}, {example['customer_name']}) "
-                    f"with {example['case_id']} ({example['predicted_pattern'].replace('_', ' ')}). "
-                    "The payment is legitimate and sits inside that case's time window, so it is scored with the case."
-                )
+                lines.append(_false_alarm_sentence(f"Seed {row['seed']}", example))
         lines += ["", robustness["limitations"], ""]
     lines += [
         "",
@@ -180,8 +180,10 @@ def summary_markdown(metrics: dict, meta: dict) -> str:
     return "\n".join(lines)
 
 
-def _pct(value: float) -> str:
-    points = value * 100
-    if abs(points - round(points)) < 1e-6:
-        return f"{round(points):.0f}%"
-    return f"{points:.2f}%"
+def _false_alarm_sentence(prefix: str, example: dict) -> str:
+    return (
+        f"{prefix} counts {example['transaction_id']} "
+        f"({money(example['amount_paise'])} at {example['merchant_name']}, {example['customer_name']}) "
+        f"with {example['case_id']} ({example['predicted_pattern'].replace('_', ' ')}). "
+        "The payment is legitimate and sits inside that case's time window, so it is scored with the case."
+    )

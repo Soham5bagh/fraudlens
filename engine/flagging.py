@@ -54,7 +54,7 @@ def flag_transactions(world: dict, seed: int = 42) -> list[dict]:
         vel_24h = 1 + sum(1 for ts in times if txn["ts"] - ts <= 86400)
         history = prior_amounts[txn["customer_id"]]
         median = _median(history[-40:]) if len(history) >= 5 else float(median_fallback(history))
-        ratio = (txn["amount_cents"] / median) if median else float(txn["amount_cents"])
+        ratio = (txn["amount_paise"] / median) if median else float(txn["amount_paise"])
         known = seen_devices[txn["customer_id"]]
         on_profile = txn["device_id"] in enrolled[txn["customer_id"]]
         # A phone already saved on the profile is not "new", even on its first payment.
@@ -67,7 +67,7 @@ def flag_transactions(world: dict, seed: int = 42) -> list[dict]:
         reasons: list[str] = []
         if vel_1h >= 5:
             reasons.append("velocity_1h")
-        if len(history) >= 5 and txn["amount_cents"] > max(40000, 6 * median):
+        if len(history) >= 5 and txn["amount_paise"] > max(1_600_000, 6 * median):
             reasons.append("amount_outlier")
         if is_new_device:
             reasons.append("new_device")
@@ -75,12 +75,12 @@ def flag_transactions(world: dict, seed: int = 42) -> list[dict]:
             reasons.append("foreign_ip")
         if is_link:
             reasons.append("shared_device")
-        if age_days < 30 and txn["amount_cents"] >= 20000:
+        if age_days < 30 and txn["amount_paise"] >= 800_000:
             reasons.append("new_account_amount")
 
         features.append(
             [
-                float(np.log1p(txn["amount_cents"])),
+                float(np.log1p(txn["amount_paise"])),
                 float(vel_1h),
                 float(vel_24h),
                 float(min(ratio, 50)),
@@ -99,11 +99,11 @@ def flag_transactions(world: dict, seed: int = 42) -> list[dict]:
                 "is_new_device": is_new_device,
                 "is_foreign": is_foreign,
                 "age_days": age_days,
-                "amount": txn["amount_cents"],
+                "amount": txn["amount_paise"],
             }
         )
         times.append(txn["ts"])
-        history.append(txn["amount_cents"])
+        history.append(txn["amount_paise"])
         known.add(txn["device_id"])
         device_customers[txn["device_id"]].add(txn["customer_id"])
 
@@ -125,11 +125,11 @@ def flag_transactions(world: dict, seed: int = 42) -> list[dict]:
             or row["ratio"] >= 5
             or row["is_new_device"]
             or row["is_foreign"]
-            or (row["age_days"] < 30 and row["amount"] >= 20000)
+            or (row["age_days"] < 30 and row["amount"] >= 800_000)
         )
-        # The forest may be the only reason on a sharp spike the dollar rule missed.
-        # Organic tickets are capped below $400, so this does not sweep everyday spend.
-        sole = prediction == -1 and row["ratio"] >= 8 and row["amount"] >= 45000
+        # The forest may be the only reason on a sharp spike the amount rule missed.
+        # Organic tickets are capped at ₹12,800, so this does not sweep everyday spend.
+        sole = prediction == -1 and row["ratio"] >= 8 and row["amount"] >= 1_800_000
         if prediction == -1 and (companion or sole):
             if "isolation_forest" not in reasons:
                 reasons.append("isolation_forest")
@@ -143,7 +143,7 @@ def flag_transactions(world: dict, seed: int = 42) -> list[dict]:
                 "transaction_id": txn["id"],
                 "customer_id": txn["customer_id"],
                 "ts": txn["ts"],
-                "amount_cents": txn["amount_cents"],
+                "amount_paise": txn["amount_paise"],
                 "reasons": reasons,
                 "isolation_score": float(score),
             }
@@ -183,7 +183,7 @@ def build_cases(world: dict, flagged: list[dict]) -> list[dict]:
 
     cases: list[dict] = []
     for cluster in clusters:
-        lead_flag = max(cluster, key=lambda item: (item["amount_cents"], item["ts"], item["transaction_id"]))
+        lead_flag = max(cluster, key=lambda item: (item["amount_paise"], item["ts"], item["transaction_id"]))
         start = cluster[0]["ts"]
         end = cluster[-1]["ts"]
         customer_id = lead_flag["customer_id"]

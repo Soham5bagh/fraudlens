@@ -8,6 +8,8 @@ from __future__ import annotations
 
 from collections import Counter, defaultdict
 
+from engine.textutil import pct
+
 POSITIVE = {"hold", "escalate", "block"}
 PATTERNS = ("card_testing", "account_takeover", "mule_chain", "merchant_collusion")
 
@@ -130,10 +132,10 @@ def compute_metrics(world: dict, flagged: list[dict], investigations: list[dict]
 
     narrative = (
         f"The flagger queued {naive['predicted_positive']} payments, catching "
-        f"{naive['recall']:.0%} of fraud transactions and also pulling in "
+        f"{pct(naive['recall'])} of fraud transactions and also pulling in "
         f"{len(naive_blocked_customers)} genuine customers. "
-        f"FraudLens, reviewing only that queue, caught {agent['recall']:.0%} of fraud transactions "
-        f"at {agent['precision']:.0%} precision and would have blocked "
+        f"FraudLens, reviewing only that queue, caught {pct(agent['recall'])} of fraud transactions "
+        f"at {pct(agent['precision'])} precision and would have blocked "
         f"{len(agent_blocked_customers)} genuine customers. "
         f"It cleared {len(saved)} genuine customers the queue would otherwise have stopped."
     )

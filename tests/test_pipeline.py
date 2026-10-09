@@ -10,6 +10,7 @@ from engine.flagging import build_cases, flag_transactions
 from engine.generate import generate, public_world
 from engine.metrics import compute_metrics
 from engine.reports import summary_markdown
+from engine.textutil import money
 
 PATTERNS = ("card_testing", "account_takeover", "mule_chain", "merchant_collusion")
 
@@ -24,11 +25,21 @@ def _run(seed: int = 42):
     return world, visible, flagged, cases, investigations, metrics
 
 
+def test_book_is_indian_and_in_rupees():
+    world = generate(42)
+    assert world["meta"]["currency"] == "INR"
+    assert {row["currency"] for row in world["transactions"]} == {"INR"}
+    assert {row["home_country"] for row in world["customers"]} == {"IN"}
+    assert all(isinstance(row["amount_paise"], int) and row["amount_paise"] > 0 for row in world["transactions"])
+    assert all(row["card_last4"] is None for row in world["transactions"] if row["type"].startswith("p2p"))
+    assert money(12345678) == "₹1,23,456.78"
+
+
 def test_generator_is_reproducible():
     first = generate(42)
     second = generate(42)
     assert [row["id"] for row in first["transactions"]] == [row["id"] for row in second["transactions"]]
-    assert [row["amount_cents"] for row in first["transactions"]] == [row["amount_cents"] for row in second["transactions"]]
+    assert [row["amount_paise"] for row in first["transactions"]] == [row["amount_paise"] for row in second["transactions"]]
     assert first["labels"] == second["labels"]
 
 
@@ -91,6 +102,12 @@ def test_explanations_cite_concrete_evidence_and_read_cleanly():
         "one or two ordinary",
         "digital_goods",
         "1 queued payments",
+        "$",
+        "USD",
+        "UTC",
+        "P2P transfer",
+        "at UPI transfer",
+        "peer-to-peer",
     )
     for investigation in investigations:
         blob = " ".join(
@@ -105,8 +122,10 @@ def test_explanations_cite_concrete_evidence_and_read_cleanly():
             assert phrase not in blob, (investigation["case_id"], phrase)
         assert "planted" not in investigation["customer"]["email"]
         assert investigation["lead"]["id"] in investigation["narrative"]
-        dollars = f"${investigation['lead']['amount_cents'] / 100:,.2f}"
-        assert dollars in investigation["narrative"]
+        rupees = money(investigation["lead"]["amount_paise"])
+        assert rupees.startswith("₹")
+        assert rupees in investigation["narrative"]
+        assert "IST" in investigation["narrative"]
         if investigation["pattern"] == "card_testing":
             declines = sum(1 for txn in investigation["related_transactions"] if txn["status"] == "declined")
             assert f"{declines} declined" in investigation["narrative"]
@@ -126,21 +145,31 @@ def test_explanations_cite_concrete_evidence_and_read_cleanly():
             assert hardware in investigation["action_rationale"]
 
 
-def test_holdout_seed_still_catches_fraud_without_blocking_customers():
+def test_holdout_seeds_still_catch_fraud_without_blocking_customers():
+    from engine.evaluate import HOLDOUT_SEEDS, run_seed
+
+    for seed in HOLDOUT_SEEDS:
+        held = run_seed(seed)
+        assert held["agent_recall"] == 1.0, seed
+        assert held["genuine_blocked_by_agent"] == 0, seed
+        assert held["fraud_cases_named_correctly"] == held["fraud_cases"], seed
+        assert held["legitimate_cases_approved"] == held["legitimate_cases"], seed
+        assert all(row["cases"] >= 1 and row["named"] == row["cases"] for row in held["patterns"]), seed
+        assert held["agent_false_alarms"] == len(held["false_alarm_examples"]), seed
+
+
+def test_demo_seed_false_alarm_is_reported_not_hidden():
     from engine.evaluate import run_seed
 
-    held = run_seed(99)
-    assert held["agent_recall"] == 1.0
-    assert held["genuine_blocked_by_agent"] == 0
-    assert held["agent_false_alarms"] == 1
-    assert held["agent_precision"] < 1
-    assert held["fraud_cases_named_correctly"] == held["fraud_cases"]
-    assert all(row["cases"] >= 1 and row["named"] == row["cases"] for row in held["patterns"])
-    example = held["false_alarm_examples"][0]
-    assert example["transaction_id"] == "txn_001034"
-    assert example["amount_cents"] == 2421
-    assert example["merchant_name"] == "Quarter Pharmacy"
-    assert example["predicted_pattern"] == "account_takeover"
+    demo = run_seed(42)
+    assert demo["agent_false_alarms"] == 1
+    assert demo["agent_precision"] < 1
+    assert demo["genuine_blocked_by_agent"] == 0
+    example = demo["false_alarm_examples"][0]
+    assert example["transaction_id"] == "txn_002343"
+    assert example["amount_paise"] == 79830
+    assert example["merchant_name"] == "Pustak Books"
+    assert example["predicted_pattern"] == "mule_chain"
 
 
 def test_explanations_cite_concrete_evidence():
@@ -152,7 +181,7 @@ def test_explanations_cite_concrete_evidence():
         inv = by_pattern[pattern]
         text = inv["narrative"] + " " + " ".join(step["finding"] for step in inv["timeline"])
         assert "txn_" in text
-        assert "$" in text
+        assert "₹" in text
         assert inv["action"] in {"approve", "hold", "escalate", "block"}
         assert 0 <= inv["risk_score"] <= 100
         assert len(inv["timeline"]) >= 8

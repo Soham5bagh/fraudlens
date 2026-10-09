@@ -1,9 +1,9 @@
 {
   "case_id": "case_0018",
-  "lead_transaction_id": "txn_005203",
+  "lead_transaction_id": "txn_005303",
   "customer_id": "cus_0019",
   "covered_transaction_ids": [
-    "txn_005203"
+    "txn_005303"
   ],
   "flag_reasons": [
     {
@@ -22,8 +22,8 @@
   "action": "approve",
   "action_rationale": "Approve. The amount is unusual and the rest of the session is not. Holding it punishes a real purchase.",
   "confidence": "high",
-  "summary": "Samir Hughes made one large purchase on their usual device, at home.",
-  "narrative": "One large purchase on the usual device at home, from a long-standing customer. Approve. The amount is unusual and the rest of the session is not. Holding it punishes a real purchase. Lead payment txn_005203 is $1,865.00 approved at Lumen Electronics on 07 Aug 2026 19:20 UTC, card \u2022\u20226722, device dev_0037 (iPhone \u00b7 iOS 18 \u00b7 Safari). Before this episode, Samir Hughes had 25 payments with a median of $16.60.",
+  "summary": "Farhan Siddiqui made one large purchase on their usual device, at home.",
+  "narrative": "One large purchase on the usual device at home, from a long-standing customer. Approve. The amount is unusual and the rest of the session is not. Holding it punishes a real purchase. Lead payment txn_005303 is \u20b974,600.00 approved at Prism Electronics on 08 Aug 2026 00:50 IST, card \u2022\u20226619, device dev_0037 (iPhone \u00b7 iOS 18 \u00b7 Safari). Before this episode, Farhan Siddiqui had 13 payments with a median of \u20b9630.47.",
   "signals": [
     {
       "name": "Case opened",
@@ -41,21 +41,21 @@
       "id": "open_case",
       "title": "Open the flagged payment",
       "status": "watch",
-      "started_at": "2026-08-11T15:00:00Z",
+      "started_at": "2026-08-11T04:30:00Z",
       "duration_ms": 420,
-      "finding": "Queue sent txn_005203 for Samir Hughes: $1,865.00 at Lumen Electronics on 07 Aug 2026 19:20 UTC. The flagger's reasons were: Amount is far above this customer's own baseline; The payment's shape is an outlier for the whole book.",
+      "finding": "Queue sent txn_005303 for Farhan Siddiqui: \u20b974,600.00 at Prism Electronics on 08 Aug 2026 00:50 IST. The flagger's reasons were: Amount is far above this customer's own baseline; The payment's shape is an outlier for the whole book.",
       "evidence": [
         {
           "label": "Transaction",
-          "value": "txn_005203"
+          "value": "txn_005303"
         },
         {
           "label": "Amount",
-          "value": "$1,865.00"
+          "value": "\u20b974,600.00"
         },
         {
           "label": "Customer",
-          "value": "Samir Hughes (cus_0019)"
+          "value": "Farhan Siddiqui (cus_0019)"
         },
         {
           "label": "Why it was queued",
@@ -67,25 +67,25 @@
       "id": "customer_baseline",
       "title": "Customer history and baseline",
       "status": "clear",
-      "started_at": "2026-08-11T15:00:00Z",
+      "started_at": "2026-08-11T04:30:00Z",
       "duration_ms": 680,
-      "finding": "Samir Hughes has 25 prior payments before this episode, median $16.60. Account acct_0019 is 1118 days old. Usual devices: dev_0037. Countries already seen: GB.",
+      "finding": "Farhan Siddiqui has 13 prior payments before this episode, median \u20b9630.47. Account acct_0019 is 1674 days old. Usual devices: dev_0037, dev_0038. Countries already seen: IN.",
       "evidence": [
         {
           "label": "Account age",
-          "value": "1118 days"
+          "value": "1674 days"
         },
         {
           "label": "Prior payments",
-          "value": "25"
+          "value": "13"
         },
         {
           "label": "Median amount",
-          "value": "$16.60"
+          "value": "\u20b9630.47"
         },
         {
           "label": "Home",
-          "value": "Bristol, GB"
+          "value": "Chennai, IN"
         }
       ]
     },
@@ -93,9 +93,9 @@
       "id": "velocity",
       "title": "Payment velocity",
       "status": "clear",
-      "started_at": "2026-08-11T15:00:01Z",
+      "started_at": "2026-08-11T04:30:01Z",
       "duration_ms": 540,
-      "finding": "The episode around txn_005203 holds 1 payment across 0 minutes. The busiest hour contains 1 payment. 0 declines in the episode. Merchants touched: Lumen Electronics.",
+      "finding": "The episode around txn_005303 holds 1 payment across 0 minutes. The busiest hour contains 1 payment. 0 declines in the episode. Merchants touched: Prism Electronics.",
       "evidence": [
         {
           "label": "Payments in episode",
@@ -119,25 +119,25 @@
       "id": "amount",
       "title": "Amount versus baseline",
       "status": "alert",
-      "started_at": "2026-08-11T15:00:02Z",
+      "started_at": "2026-08-11T04:30:02Z",
       "duration_ms": 480,
-      "finding": "Episode amounts run from $1,865.00 to $1,865.00, median $1,865.00. The peak is 112.3\u00d7 the baseline median of $16.60.",
+      "finding": "Episode amounts run from \u20b974,600.00 to \u20b974,600.00, median \u20b974,600.00. The peak is 118.3\u00d7 the baseline median of \u20b9630.47.",
       "evidence": [
         {
           "label": "Episode median",
-          "value": "$1,865.00"
+          "value": "\u20b974,600.00"
         },
         {
           "label": "Episode peak",
-          "value": "$1,865.00"
+          "value": "\u20b974,600.00"
         },
         {
           "label": "Baseline median",
-          "value": "$16.60"
+          "value": "\u20b9630.47"
         },
         {
           "label": "Peak vs baseline",
-          "value": "112.3\u00d7"
+          "value": "118.3\u00d7"
         }
       ]
     },
@@ -145,9 +145,9 @@
       "id": "device_ip",
       "title": "Device and IP linkage",
       "status": "clear",
-      "started_at": "2026-08-11T15:00:03Z",
+      "started_at": "2026-08-11T04:30:03Z",
       "duration_ms": 730,
-      "finding": "Devices in the episode: dev_0037 (iPhone \u00b7 iOS 18 \u00b7 Safari, already on file). IPs: 203.0.113.38 \u00b7 Bristol, GB. The customer's home country is the United Kingdom. Every payment in this episode is there.",
+      "finding": "Devices in the episode: dev_0037 (iPhone \u00b7 iOS 18 \u00b7 Safari, already on file). IPs: 203.0.113.38 \u00b7 Chennai, IN. The customer's home country is India. Every payment in this episode is there.",
       "evidence": [
         {
           "label": "New devices",
@@ -159,7 +159,7 @@
         },
         {
           "label": "Countries",
-          "value": "GB"
+          "value": "IN"
         },
         {
           "label": "Datacenter or VPN",
@@ -171,9 +171,9 @@
       "id": "network",
       "title": "Linked accounts and money flow",
       "status": "clear",
-      "started_at": "2026-08-11T15:00:04Z",
+      "started_at": "2026-08-11T04:30:04Z",
       "duration_ms": 860,
-      "finding": "No other customer uses the devices in this episode. No peer-to-peer transfer or cash-out on this account in the six-day window. No cash-out path leaves this account in the six-day money graph.",
+      "finding": "No other customer uses the devices in this episode. No UPI transfer or cash-out on this account in the six-day window. No cash-out path leaves this account in the six-day money graph.",
       "evidence": [
         {
           "label": "Linked customers",
@@ -197,9 +197,9 @@
       "id": "merchant",
       "title": "Merchant check",
       "status": "clear",
-      "started_at": "2026-08-11T15:00:05Z",
+      "started_at": "2026-08-11T04:30:05Z",
       "duration_ms": 640,
-      "finding": "Lumen Electronics (electronics, Madrid) has 5 payments in the past 14 days from 5 customers. 0% of those customers are under 45 days old. 0% of the amounts are round (multiples of $50, at least $200). Devices shared by two or more buyers: none.",
+      "finding": "Prism Electronics (electronics, Chandigarh) has 5 payments in the past 14 days from 5 customers. 0% of those customers are under 45 days old. 0% of the amounts are round (multiples of \u20b91,000, at least \u20b98,000). Devices shared by two or more buyers: none.",
       "evidence": [
         {
           "label": "Category",
@@ -223,7 +223,7 @@
       "id": "classify",
       "title": "Pattern classification",
       "status": "clear",
-      "started_at": "2026-08-11T15:00:06Z",
+      "started_at": "2026-08-11T04:30:06Z",
       "duration_ms": 390,
       "finding": "Legitimate activity. One large purchase on the usual device at home, from a long-standing customer.",
       "evidence": [
@@ -241,7 +241,7 @@
       "id": "recommend",
       "title": "Suggested action",
       "status": "clear",
-      "started_at": "2026-08-11T15:00:07Z",
+      "started_at": "2026-08-11T04:30:07Z",
       "duration_ms": 360,
       "finding": "Suggested action: approve. Risk score 20/100. Approve. The amount is unusual and the rest of the session is not. Holding it punishes a real purchase. A person still has to confirm this. FraudLens does not apply it.",
       "evidence": [
@@ -265,7 +265,7 @@
       {
         "id": "cus_0019",
         "type": "customer",
-        "label": "Samir Hughes",
+        "label": "Farhan Siddiqui",
         "sublabel": "cus_0019",
         "x": 0.2976,
         "y": 0.92,
@@ -292,7 +292,7 @@
       {
         "id": "ip_0037",
         "type": "ip",
-        "label": "Bristol",
+        "label": "Chennai",
         "sublabel": "203.0.113.38",
         "x": 0.7021,
         "y": 0.08,
@@ -301,7 +301,7 @@
       {
         "id": "mer_013",
         "type": "merchant",
-        "label": "Lumen Electronics",
+        "label": "Prism Electronics",
         "sublabel": "electronics",
         "x": 0.08,
         "y": 0.2982,
@@ -338,48 +338,48 @@
   },
   "related_transactions": [
     {
-      "id": "txn_005203",
+      "id": "txn_005303",
       "occurred_at": "2026-08-07T19:20:00Z",
       "ts": 1786130400,
-      "amount_cents": 186500,
+      "amount_paise": 7460000,
       "status": "approved",
       "type": "card_purchase",
-      "merchant_name": "Lumen Electronics",
+      "merchant_name": "Prism Electronics",
       "merchant_category": "electronics",
       "device_id": "dev_0037",
-      "ip": "203.0.113.38 \u00b7 Bristol, GB",
-      "ip_country": "GB",
-      "city": "Bristol",
+      "ip": "203.0.113.38 \u00b7 Chennai, IN",
+      "ip_country": "IN",
+      "city": "Chennai",
       "flagged": true,
       "counterparty_account_id": null
     }
   ],
   "customer": {
     "id": "cus_0019",
-    "name": "Samir Hughes",
-    "email": "samir.hughes.18@example.com",
-    "home_city": "Bristol",
-    "home_country": "GB",
+    "name": "Farhan Siddiqui",
+    "email": "farhan.siddiqui.18@example.com",
+    "home_city": "Chennai",
+    "home_country": "IN",
     "segment": "student",
-    "customer_since": "2023-07-16T00:00:00Z",
+    "customer_since": "2022-01-06T00:00:00Z",
     "account_id": "acct_0019",
-    "account_age_days": 1118
+    "account_age_days": 1674
   },
   "lead": {
-    "id": "txn_005203",
+    "id": "txn_005303",
     "occurred_at": "2026-08-07T19:20:00Z",
-    "amount_cents": 186500,
+    "amount_paise": 7460000,
     "status": "approved",
     "type": "card_purchase",
-    "merchant_name": "Lumen Electronics",
+    "merchant_name": "Prism Electronics",
     "merchant_category": "electronics",
     "device_id": "dev_0037",
     "device_label": "iPhone \u00b7 iOS 18 \u00b7 Safari",
-    "ip": "203.0.113.38 \u00b7 Bristol, GB",
-    "ip_city": "Bristol",
-    "ip_country": "GB",
-    "card_last4": "6722"
+    "ip": "203.0.113.38 \u00b7 Chennai, IN",
+    "ip_city": "Chennai",
+    "ip_country": "IN",
+    "card_last4": "6619"
   },
-  "report_markdown": "# FraudLens case case_0018\n\n**Customer.** Samir Hughes (cus_0019), Bristol, GB.\n**Lead payment.** txn_005203 \u00b7 $1,865.00 \u00b7 Lumen Electronics \u00b7 2026-08-07T19:20:00Z.\n**Pattern.** Legitimate activity (large purchase).\n**Risk score.** 20 / 100.\n**Suggested action.** approve \u2014 a human still has to confirm it.\n\n## Summary\n\nOne large purchase on the usual device at home, from a long-standing customer. Approve. The amount is unusual and the rest of the session is not. Holding it punishes a real purchase. Lead payment txn_005203 is $1,865.00 approved at Lumen Electronics on 07 Aug 2026 19:20 UTC, card \u2022\u20226722, device dev_0037 (iPhone \u00b7 iOS 18 \u00b7 Safari). Before this episode, Samir Hughes had 25 payments with a median of $16.60.\n\n## Why this score\n\n- **Case opened** (+4): Every queued payment starts with a small residual score.\n- **Explained one-off** (+16): Single large ticket, usual device, home IP, long tenure.\n\n## What the agent checked\n\n### Open the flagged payment (watch)\n\nQueue sent txn_005203 for Samir Hughes: $1,865.00 at Lumen Electronics on 07 Aug 2026 19:20 UTC. The flagger's reasons were: Amount is far above this customer's own baseline; The payment's shape is an outlier for the whole book.\n\n- Transaction: txn_005203\n- Amount: $1,865.00\n- Customer: Samir Hughes (cus_0019)\n- Why it was queued: amount_outlier, isolation_forest\n\n### Customer history and baseline (clear)\n\nSamir Hughes has 25 prior payments before this episode, median $16.60. Account acct_0019 is 1118 days old. Usual devices: dev_0037. Countries already seen: GB.\n\n- Account age: 1118 days\n- Prior payments: 25\n- Median amount: $16.60\n- Home: Bristol, GB\n\n### Payment velocity (clear)\n\nThe episode around txn_005203 holds 1 payment across 0 minutes. The busiest hour contains 1 payment. 0 declines in the episode. Merchants touched: Lumen Electronics.\n\n- Payments in episode: 1\n- Busiest hour: 1\n- Declines: 0\n- Distinct merchants: 1\n\n### Amount versus baseline (alert)\n\nEpisode amounts run from $1,865.00 to $1,865.00, median $1,865.00. The peak is 112.3\u00d7 the baseline median of $16.60.\n\n- Episode median: $1,865.00\n- Episode peak: $1,865.00\n- Baseline median: $16.60\n- Peak vs baseline: 112.3\u00d7\n\n### Device and IP linkage (clear)\n\nDevices in the episode: dev_0037 (iPhone \u00b7 iOS 18 \u00b7 Safari, already on file). IPs: 203.0.113.38 \u00b7 Bristol, GB. The customer's home country is the United Kingdom. Every payment in this episode is there.\n\n- New devices: none\n- Mature devices reused: dev_0037\n- Countries: GB\n- Datacenter or VPN: no\n\n### Linked accounts and money flow (clear)\n\nNo other customer uses the devices in this episode. No peer-to-peer transfer or cash-out on this account in the six-day window. No cash-out path leaves this account in the six-day money graph.\n\n- Linked customers: 0\n- Household pattern: no\n- Reaches cash-out: no\n- Pass-through: no inbound\n\n### Merchant check (clear)\n\nLumen Electronics (electronics, Madrid) has 5 payments in the past 14 days from 5 customers. 0% of those customers are under 45 days old. 0% of the amounts are round (multiples of $50, at least $200). Devices shared by two or more buyers: none.\n\n- Category: electronics\n- Recent buyers: 5\n- Young-account share: 0%\n- Round-amount share: 0%\n\n### Pattern classification (clear)\n\nLegitimate activity. One large purchase on the usual device at home, from a long-standing customer.\n\n- Pattern: Legitimate activity\n- Detail: large purchase\n\n### Suggested action (clear)\n\nSuggested action: approve. Risk score 20/100. Approve. The amount is unusual and the rest of the session is not. Holding it punishes a real purchase. A person still has to confirm this. FraudLens does not apply it.\n\n- Suggested action: approve\n- Risk score: 20/100\n- Who decides: human analyst\n\n## Payments in the episode\n\n| When | Id | Amount | Status | Merchant | Device |\n| --- | --- | --- | --- | --- | --- |\n| 2026-08-07T19:20:00Z | txn_005203 | $1,865.00 | approved | Lumen Electronics | dev_0037 |\n\n## Action rationale\n\nApprove. The amount is unusual and the rest of the session is not. Holding it punishes a real purchase.\n\n## Held-out label\n\nThis section is joined after the investigation. The agent did not see it.\n\n- Fraud: no\n- Pattern: legitimate\n\n*FraudLens suggests. An analyst decides.*\n",
+  "report_markdown": "# FraudLens case case_0018\n\n**Customer.** Farhan Siddiqui (cus_0019), Chennai, IN.\n**Lead payment.** txn_005303 \u00b7 \u20b974,600.00 \u00b7 Prism Electronics \u00b7 2026-08-07T19:20:00Z.\n**Pattern.** Legitimate activity (large purchase).\n**Risk score.** 20 / 100.\n**Suggested action.** approve \u2014 a human still has to confirm it.\n\n## Summary\n\nOne large purchase on the usual device at home, from a long-standing customer. Approve. The amount is unusual and the rest of the session is not. Holding it punishes a real purchase. Lead payment txn_005303 is \u20b974,600.00 approved at Prism Electronics on 08 Aug 2026 00:50 IST, card \u2022\u20226619, device dev_0037 (iPhone \u00b7 iOS 18 \u00b7 Safari). Before this episode, Farhan Siddiqui had 13 payments with a median of \u20b9630.47.\n\n## Why this score\n\n- **Case opened** (+4): Every queued payment starts with a small residual score.\n- **Explained one-off** (+16): Single large ticket, usual device, home IP, long tenure.\n\n## What the agent checked\n\n### Open the flagged payment (watch)\n\nQueue sent txn_005303 for Farhan Siddiqui: \u20b974,600.00 at Prism Electronics on 08 Aug 2026 00:50 IST. The flagger's reasons were: Amount is far above this customer's own baseline; The payment's shape is an outlier for the whole book.\n\n- Transaction: txn_005303\n- Amount: \u20b974,600.00\n- Customer: Farhan Siddiqui (cus_0019)\n- Why it was queued: amount_outlier, isolation_forest\n\n### Customer history and baseline (clear)\n\nFarhan Siddiqui has 13 prior payments before this episode, median \u20b9630.47. Account acct_0019 is 1674 days old. Usual devices: dev_0037, dev_0038. Countries already seen: IN.\n\n- Account age: 1674 days\n- Prior payments: 13\n- Median amount: \u20b9630.47\n- Home: Chennai, IN\n\n### Payment velocity (clear)\n\nThe episode around txn_005303 holds 1 payment across 0 minutes. The busiest hour contains 1 payment. 0 declines in the episode. Merchants touched: Prism Electronics.\n\n- Payments in episode: 1\n- Busiest hour: 1\n- Declines: 0\n- Distinct merchants: 1\n\n### Amount versus baseline (alert)\n\nEpisode amounts run from \u20b974,600.00 to \u20b974,600.00, median \u20b974,600.00. The peak is 118.3\u00d7 the baseline median of \u20b9630.47.\n\n- Episode median: \u20b974,600.00\n- Episode peak: \u20b974,600.00\n- Baseline median: \u20b9630.47\n- Peak vs baseline: 118.3\u00d7\n\n### Device and IP linkage (clear)\n\nDevices in the episode: dev_0037 (iPhone \u00b7 iOS 18 \u00b7 Safari, already on file). IPs: 203.0.113.38 \u00b7 Chennai, IN. The customer's home country is India. Every payment in this episode is there.\n\n- New devices: none\n- Mature devices reused: dev_0037\n- Countries: IN\n- Datacenter or VPN: no\n\n### Linked accounts and money flow (clear)\n\nNo other customer uses the devices in this episode. No UPI transfer or cash-out on this account in the six-day window. No cash-out path leaves this account in the six-day money graph.\n\n- Linked customers: 0\n- Household pattern: no\n- Reaches cash-out: no\n- Pass-through: no inbound\n\n### Merchant check (clear)\n\nPrism Electronics (electronics, Chandigarh) has 5 payments in the past 14 days from 5 customers. 0% of those customers are under 45 days old. 0% of the amounts are round (multiples of \u20b91,000, at least \u20b98,000). Devices shared by two or more buyers: none.\n\n- Category: electronics\n- Recent buyers: 5\n- Young-account share: 0%\n- Round-amount share: 0%\n\n### Pattern classification (clear)\n\nLegitimate activity. One large purchase on the usual device at home, from a long-standing customer.\n\n- Pattern: Legitimate activity\n- Detail: large purchase\n\n### Suggested action (clear)\n\nSuggested action: approve. Risk score 20/100. Approve. The amount is unusual and the rest of the session is not. Holding it punishes a real purchase. A person still has to confirm this. FraudLens does not apply it.\n\n- Suggested action: approve\n- Risk score: 20/100\n- Who decides: human analyst\n\n## Payments in the episode\n\n| When | Id | Amount | Status | Merchant | Device |\n| --- | --- | --- | --- | --- | --- |\n| 2026-08-07T19:20:00Z | txn_005303 | \u20b974,600.00 | approved | Prism Electronics | dev_0037 |\n\n## Action rationale\n\nApprove. The amount is unusual and the rest of the session is not. Holding it punishes a real purchase.\n\n## Held-out label\n\nThis section is joined after the investigation. The agent did not see it.\n\n- Fraud: no\n- Pattern: legitimate\n\n*FraudLens suggests. An analyst decides.*\n",
   "showcase": null
 }

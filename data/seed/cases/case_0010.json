@@ -1,12 +1,12 @@
 {
   "case_id": "case_0010",
-  "lead_transaction_id": "txn_005284",
+  "lead_transaction_id": "txn_005397",
   "customer_id": "cus_0048",
   "covered_transaction_ids": [
-    "txn_005283",
-    "txn_005284",
-    "txn_005285",
-    "txn_005286"
+    "txn_005396",
+    "txn_005397",
+    "txn_005398",
+    "txn_005399"
   ],
   "flag_reasons": [
     {
@@ -33,8 +33,8 @@
   "action": "block",
   "action_rationale": "Block and force a step-up with the real customer. The session does not match the device or the country on file.",
   "confidence": "high",
-  "summary": "Account takeover on Sofia Cohen: new device, new country, spend at 26.0\u00d7 baseline.",
-  "narrative": "A new device in a new country spends far above baseline at gift cards, electronics, or crypto. Block and force a step-up with the real customer. The session does not match the device or the country on file. Lead payment txn_005284 is $905.00 approved at Keystone Crypto Desk on 05 Aug 2026 20:40 UTC, card \u2022\u20226519, device dev_0346 (Pixel 8 \u00b7 Android 15 \u00b7 Chrome). Before this episode, Sofia Cohen had 32 payments with a median of $34.81.",
+  "summary": "Account takeover on Harpreet Sandhu: new device, new country, spend at 20.0\u00d7 baseline.",
+  "narrative": "A new device in a new country spends far above baseline at gift cards, electronics, or crypto. Block and force a step-up with the real customer. The session does not match the device or the country on file. Lead payment txn_005397 is \u20b936,200.00 approved at Sikka Crypto Exchange on 06 Aug 2026 02:07 IST, card \u2022\u20220909, device dev_0346 (Redmi Note 13 \u00b7 Android 14 \u00b7 Chrome). Before this episode, Harpreet Sandhu had 36 payments with a median of \u20b91,806.34.",
   "signals": [
     {
       "name": "Case opened",
@@ -49,7 +49,7 @@
     {
       "name": "Spend spike",
       "points": 28,
-      "detail": "Peak $905.00 against a median of $34.81."
+      "detail": "Peak \u20b936,200.00 against a median of \u20b91,806.34."
     },
     {
       "name": "Risky merchants",
@@ -67,21 +67,21 @@
       "id": "open_case",
       "title": "Open the flagged payment",
       "status": "watch",
-      "started_at": "2026-08-11T15:00:00Z",
+      "started_at": "2026-08-11T04:30:00Z",
       "duration_ms": 420,
-      "finding": "Queue sent txn_005284 for Sofia Cohen: $905.00 at Keystone Crypto Desk on 05 Aug 2026 20:40 UTC. The flagger's reasons were: Amount is far above this customer's own baseline; Device has never been used by this customer before; IP country does not match the customer's home country; The payment's shape is an outlier for the whole book.",
+      "finding": "Queue sent txn_005397 for Harpreet Sandhu: \u20b936,200.00 at Sikka Crypto Exchange on 06 Aug 2026 02:07 IST. The flagger's reasons were: Amount is far above this customer's own baseline; Device has never been used by this customer before; IP country does not match the customer's home country; The payment's shape is an outlier for the whole book.",
       "evidence": [
         {
           "label": "Transaction",
-          "value": "txn_005284"
+          "value": "txn_005397"
         },
         {
           "label": "Amount",
-          "value": "$905.00"
+          "value": "\u20b936,200.00"
         },
         {
           "label": "Customer",
-          "value": "Sofia Cohen (cus_0048)"
+          "value": "Harpreet Sandhu (cus_0048)"
         },
         {
           "label": "Why it was queued",
@@ -93,25 +93,25 @@
       "id": "customer_baseline",
       "title": "Customer history and baseline",
       "status": "clear",
-      "started_at": "2026-08-11T15:00:00Z",
+      "started_at": "2026-08-11T04:30:00Z",
       "duration_ms": 680,
-      "finding": "Sofia Cohen has 32 prior payments before this episode, median $34.81. Account acct_0048 is 1811 days old. Usual devices: dev_0095, dev_0096. Countries already seen: GB.",
+      "finding": "Harpreet Sandhu has 36 prior payments before this episode, median \u20b91,806.34. Account acct_0048 is 574 days old. Usual devices: dev_0095, dev_0096. Countries already seen: IN.",
       "evidence": [
         {
           "label": "Account age",
-          "value": "1811 days"
+          "value": "574 days"
         },
         {
           "label": "Prior payments",
-          "value": "32"
+          "value": "36"
         },
         {
           "label": "Median amount",
-          "value": "$34.81"
+          "value": "\u20b91,806.34"
         },
         {
           "label": "Home",
-          "value": "Edinburgh, GB"
+          "value": "Bengaluru, IN"
         }
       ]
     },
@@ -119,9 +119,9 @@
       "id": "velocity",
       "title": "Payment velocity",
       "status": "clear",
-      "started_at": "2026-08-11T15:00:01Z",
+      "started_at": "2026-08-11T04:30:01Z",
       "duration_ms": 540,
-      "finding": "The episode around txn_005284 holds 4 payments across 47 minutes. The busiest hour contains 4 payments. 0 declines in the episode. Merchants touched: Lumen Electronics, Keystone Crypto Desk, Hearth Gift Co, and Parcel Gift Cards.",
+      "finding": "The episode around txn_005397 holds 4 payments across 37 minutes. The busiest hour contains 4 payments. 0 declines in the episode. Merchants touched: Prism Electronics, Sikka Crypto Exchange, Tohfa Gift Co, and Uphaar Gift Cards.",
       "evidence": [
         {
           "label": "Payments in episode",
@@ -145,25 +145,25 @@
       "id": "amount",
       "title": "Amount versus baseline",
       "status": "alert",
-      "started_at": "2026-08-11T15:00:02Z",
+      "started_at": "2026-08-11T04:30:02Z",
       "duration_ms": 480,
-      "finding": "Episode amounts run from $280.00 to $905.00, median $545.00. The peak is 26.0\u00d7 the baseline median of $34.81.",
+      "finding": "Episode amounts run from \u20b911,200.00 to \u20b936,200.00, median \u20b921,800.00. The peak is 20.0\u00d7 the baseline median of \u20b91,806.34.",
       "evidence": [
         {
           "label": "Episode median",
-          "value": "$545.00"
+          "value": "\u20b921,800.00"
         },
         {
           "label": "Episode peak",
-          "value": "$905.00"
+          "value": "\u20b936,200.00"
         },
         {
           "label": "Baseline median",
-          "value": "$34.81"
+          "value": "\u20b91,806.34"
         },
         {
           "label": "Peak vs baseline",
-          "value": "26.0\u00d7"
+          "value": "20.0\u00d7"
         }
       ]
     },
@@ -171,9 +171,9 @@
       "id": "device_ip",
       "title": "Device and IP linkage",
       "status": "alert",
-      "started_at": "2026-08-11T15:00:03Z",
+      "started_at": "2026-08-11T04:30:03Z",
       "duration_ms": 730,
-      "finding": "Devices in the episode: dev_0346 (Pixel 8 \u00b7 Android 15 \u00b7 Chrome, new to this customer). IPs: 198.51.100.96 \u00b7 Sao Paulo, BR, VPN. The customer's home country is the United Kingdom. Every payment in this episode is outside that country.",
+      "finding": "Devices in the episode: dev_0346 (Redmi Note 13 \u00b7 Android 14 \u00b7 Chrome, new to this customer). IPs: 198.51.100.96 \u00b7 Sao Paulo, BR, VPN. The customer's home country is India. Every payment in this episode is outside that country.",
       "evidence": [
         {
           "label": "New devices",
@@ -197,9 +197,9 @@
       "id": "network",
       "title": "Linked accounts and money flow",
       "status": "clear",
-      "started_at": "2026-08-11T15:00:04Z",
+      "started_at": "2026-08-11T04:30:04Z",
       "duration_ms": 860,
-      "finding": "No other customer uses the devices in this episode. No peer-to-peer transfer or cash-out on this account in the six-day window. No cash-out path leaves this account in the six-day money graph.",
+      "finding": "No other customer uses the devices in this episode. No UPI transfer or cash-out on this account in the six-day window. No cash-out path leaves this account in the six-day money graph.",
       "evidence": [
         {
           "label": "Linked customers",
@@ -223,9 +223,9 @@
       "id": "merchant",
       "title": "Merchant check",
       "status": "clear",
-      "started_at": "2026-08-11T15:00:05Z",
+      "started_at": "2026-08-11T04:30:05Z",
       "duration_ms": 640,
-      "finding": "Keystone Crypto Desk (crypto, Austin) has 7 payments in the past 14 days from 7 customers. 57% of those customers are under 45 days old. 14% of the amounts are round (multiples of $50, at least $200). Devices shared by two or more buyers: none.",
+      "finding": "Sikka Crypto Exchange (crypto, Hyderabad) has 7 payments in the past 14 days from 7 customers. 57% of those customers are under 45 days old. 14% of the amounts are round (multiples of \u20b91,000, at least \u20b98,000). Devices shared by two or more buyers: none.",
       "evidence": [
         {
           "label": "Category",
@@ -249,7 +249,7 @@
       "id": "classify",
       "title": "Pattern classification",
       "status": "alert",
-      "started_at": "2026-08-11T15:00:06Z",
+      "started_at": "2026-08-11T04:30:06Z",
       "duration_ms": 390,
       "finding": "Account takeover. A new device in a new country spends far above baseline at gift cards, electronics, or crypto.",
       "evidence": [
@@ -267,7 +267,7 @@
       "id": "recommend",
       "title": "Suggested action",
       "status": "alert",
-      "started_at": "2026-08-11T15:00:07Z",
+      "started_at": "2026-08-11T04:30:07Z",
       "duration_ms": 360,
       "finding": "Suggested action: block. Risk score 94/100. Block and force a step-up with the real customer. The session does not match the device or the country on file. A person still has to confirm this. FraudLens does not apply it.",
       "evidence": [
@@ -291,7 +291,7 @@
       {
         "id": "cus_0048",
         "type": "customer",
-        "label": "Sofia Cohen",
+        "label": "Harpreet Sandhu",
         "sublabel": "cus_0048",
         "x": 0.103,
         "y": 0.7052,
@@ -309,7 +309,7 @@
       {
         "id": "dev_0346",
         "type": "device",
-        "label": "Pixel 8",
+        "label": "Redmi Note 13",
         "sublabel": "dev_0346",
         "x": 0.92,
         "y": 0.4675,
@@ -327,7 +327,7 @@
       {
         "id": "mer_013",
         "type": "merchant",
-        "label": "Lumen Electronics",
+        "label": "Prism Electronics",
         "sublabel": "electronics",
         "x": 0.08,
         "y": 0.3314,
@@ -336,7 +336,7 @@
       {
         "id": "mer_022",
         "type": "merchant",
-        "label": "Keystone Crypto Desk",
+        "label": "Sikka Crypto Exchange",
         "sublabel": "crypto",
         "x": 0.7765,
         "y": 0.8144,
@@ -345,7 +345,7 @@
       {
         "id": "mer_021",
         "type": "merchant",
-        "label": "Hearth Gift Co",
+        "label": "Tohfa Gift Co",
         "sublabel": "gift_card",
         "x": 0.3608,
         "y": 0.08,
@@ -354,7 +354,7 @@
       {
         "id": "mer_020",
         "type": "merchant",
-        "label": "Parcel Gift Cards",
+        "label": "Uphaar Gift Cards",
         "sublabel": "gift_card",
         "x": 0.4132,
         "y": 0.92,
@@ -409,13 +409,13 @@
   },
   "related_transactions": [
     {
-      "id": "txn_005283",
-      "occurred_at": "2026-08-05T20:22:00Z",
-      "ts": 1785961320,
-      "amount_cents": 43500,
+      "id": "txn_005396",
+      "occurred_at": "2026-08-05T20:29:00Z",
+      "ts": 1785961740,
+      "amount_paise": 1740000,
       "status": "approved",
       "type": "card_purchase",
-      "merchant_name": "Lumen Electronics",
+      "merchant_name": "Prism Electronics",
       "merchant_category": "electronics",
       "device_id": "dev_0346",
       "ip": "198.51.100.96 \u00b7 Sao Paulo, BR, VPN",
@@ -425,13 +425,13 @@
       "counterparty_account_id": null
     },
     {
-      "id": "txn_005284",
-      "occurred_at": "2026-08-05T20:40:00Z",
-      "ts": 1785962400,
-      "amount_cents": 90500,
+      "id": "txn_005397",
+      "occurred_at": "2026-08-05T20:37:00Z",
+      "ts": 1785962220,
+      "amount_paise": 3620000,
       "status": "approved",
       "type": "card_purchase",
-      "merchant_name": "Keystone Crypto Desk",
+      "merchant_name": "Sikka Crypto Exchange",
       "merchant_category": "crypto",
       "device_id": "dev_0346",
       "ip": "198.51.100.96 \u00b7 Sao Paulo, BR, VPN",
@@ -441,13 +441,13 @@
       "counterparty_account_id": null
     },
     {
-      "id": "txn_005285",
+      "id": "txn_005398",
       "occurred_at": "2026-08-05T20:52:00Z",
       "ts": 1785963120,
-      "amount_cents": 28000,
+      "amount_paise": 1120000,
       "status": "approved",
       "type": "card_purchase",
-      "merchant_name": "Hearth Gift Co",
+      "merchant_name": "Tohfa Gift Co",
       "merchant_category": "gift_card",
       "device_id": "dev_0346",
       "ip": "198.51.100.96 \u00b7 Sao Paulo, BR, VPN",
@@ -457,13 +457,13 @@
       "counterparty_account_id": null
     },
     {
-      "id": "txn_005286",
-      "occurred_at": "2026-08-05T21:09:00Z",
-      "ts": 1785964140,
-      "amount_cents": 65500,
+      "id": "txn_005399",
+      "occurred_at": "2026-08-05T21:06:00Z",
+      "ts": 1785963960,
+      "amount_paise": 2620000,
       "status": "approved",
       "type": "card_purchase",
-      "merchant_name": "Parcel Gift Cards",
+      "merchant_name": "Uphaar Gift Cards",
       "merchant_category": "gift_card",
       "device_id": "dev_0346",
       "ip": "198.51.100.96 \u00b7 Sao Paulo, BR, VPN",
@@ -475,30 +475,30 @@
   ],
   "customer": {
     "id": "cus_0048",
-    "name": "Sofia Cohen",
-    "email": "sofia.cohen.47@example.com",
-    "home_city": "Edinburgh",
-    "home_country": "GB",
+    "name": "Harpreet Sandhu",
+    "email": "harpreet.sandhu.47@example.com",
+    "home_city": "Bengaluru",
+    "home_country": "IN",
     "segment": "everyday",
-    "customer_since": "2021-08-20T00:00:00Z",
+    "customer_since": "2025-01-08T00:00:00Z",
     "account_id": "acct_0048",
-    "account_age_days": 1811
+    "account_age_days": 574
   },
   "lead": {
-    "id": "txn_005284",
-    "occurred_at": "2026-08-05T20:40:00Z",
-    "amount_cents": 90500,
+    "id": "txn_005397",
+    "occurred_at": "2026-08-05T20:37:00Z",
+    "amount_paise": 3620000,
     "status": "approved",
     "type": "card_purchase",
-    "merchant_name": "Keystone Crypto Desk",
+    "merchant_name": "Sikka Crypto Exchange",
     "merchant_category": "crypto",
     "device_id": "dev_0346",
-    "device_label": "Pixel 8 \u00b7 Android 15 \u00b7 Chrome",
+    "device_label": "Redmi Note 13 \u00b7 Android 14 \u00b7 Chrome",
     "ip": "198.51.100.96 \u00b7 Sao Paulo, BR, VPN",
     "ip_city": "Sao Paulo",
     "ip_country": "BR",
-    "card_last4": "6519"
+    "card_last4": "0909"
   },
-  "report_markdown": "# FraudLens case case_0010\n\n**Customer.** Sofia Cohen (cus_0048), Edinburgh, GB.\n**Lead payment.** txn_005284 \u00b7 $905.00 \u00b7 Keystone Crypto Desk \u00b7 2026-08-05T20:40:00Z.\n**Pattern.** Account takeover (new device foreign spike).\n**Risk score.** 94 / 100.\n**Suggested action.** block \u2014 a human still has to confirm it.\n\n## Summary\n\nA new device in a new country spends far above baseline at gift cards, electronics, or crypto. Block and force a step-up with the real customer. The session does not match the device or the country on file. Lead payment txn_005284 is $905.00 approved at Keystone Crypto Desk on 05 Aug 2026 20:40 UTC, card \u2022\u20226519, device dev_0346 (Pixel 8 \u00b7 Android 15 \u00b7 Chrome). Before this episode, Sofia Cohen had 32 payments with a median of $34.81.\n\n## Why this score\n\n- **Case opened** (+4): Every queued payment starts with a small residual score.\n- **New device abroad** (+36): Device dev_0346 in Brazil.\n- **Spend spike** (+28): Peak $905.00 against a median of $34.81.\n- **Risky merchants** (+18): Gift cards, electronics, or crypto, rather than travel.\n- **VPN** (+8): The session is coming through a VPN.\n\n## What the agent checked\n\n### Open the flagged payment (watch)\n\nQueue sent txn_005284 for Sofia Cohen: $905.00 at Keystone Crypto Desk on 05 Aug 2026 20:40 UTC. The flagger's reasons were: Amount is far above this customer's own baseline; Device has never been used by this customer before; IP country does not match the customer's home country; The payment's shape is an outlier for the whole book.\n\n- Transaction: txn_005284\n- Amount: $905.00\n- Customer: Sofia Cohen (cus_0048)\n- Why it was queued: amount_outlier, new_device, foreign_ip, isolation_forest\n\n### Customer history and baseline (clear)\n\nSofia Cohen has 32 prior payments before this episode, median $34.81. Account acct_0048 is 1811 days old. Usual devices: dev_0095, dev_0096. Countries already seen: GB.\n\n- Account age: 1811 days\n- Prior payments: 32\n- Median amount: $34.81\n- Home: Edinburgh, GB\n\n### Payment velocity (clear)\n\nThe episode around txn_005284 holds 4 payments across 47 minutes. The busiest hour contains 4 payments. 0 declines in the episode. Merchants touched: Lumen Electronics, Keystone Crypto Desk, Hearth Gift Co, and Parcel Gift Cards.\n\n- Payments in episode: 4\n- Busiest hour: 4\n- Declines: 0\n- Distinct merchants: 4\n\n### Amount versus baseline (alert)\n\nEpisode amounts run from $280.00 to $905.00, median $545.00. The peak is 26.0\u00d7 the baseline median of $34.81.\n\n- Episode median: $545.00\n- Episode peak: $905.00\n- Baseline median: $34.81\n- Peak vs baseline: 26.0\u00d7\n\n### Device and IP linkage (alert)\n\nDevices in the episode: dev_0346 (Pixel 8 \u00b7 Android 15 \u00b7 Chrome, new to this customer). IPs: 198.51.100.96 \u00b7 Sao Paulo, BR, VPN. The customer's home country is the United Kingdom. Every payment in this episode is outside that country.\n\n- New devices: dev_0346\n- Mature devices reused: none\n- Countries: BR\n- Datacenter or VPN: yes\n\n### Linked accounts and money flow (clear)\n\nNo other customer uses the devices in this episode. No peer-to-peer transfer or cash-out on this account in the six-day window. No cash-out path leaves this account in the six-day money graph.\n\n- Linked customers: 0\n- Household pattern: no\n- Reaches cash-out: no\n- Pass-through: no inbound\n\n### Merchant check (clear)\n\nKeystone Crypto Desk (crypto, Austin) has 7 payments in the past 14 days from 7 customers. 57% of those customers are under 45 days old. 14% of the amounts are round (multiples of $50, at least $200). Devices shared by two or more buyers: none.\n\n- Category: crypto\n- Recent buyers: 7\n- Young-account share: 57%\n- Round-amount share: 14%\n\n### Pattern classification (alert)\n\nAccount takeover. A new device in a new country spends far above baseline at gift cards, electronics, or crypto.\n\n- Pattern: Account takeover\n- Detail: new device foreign spike\n\n### Suggested action (alert)\n\nSuggested action: block. Risk score 94/100. Block and force a step-up with the real customer. The session does not match the device or the country on file. A person still has to confirm this. FraudLens does not apply it.\n\n- Suggested action: block\n- Risk score: 94/100\n- Who decides: human analyst\n\n## Payments in the episode\n\n| When | Id | Amount | Status | Merchant | Device |\n| --- | --- | --- | --- | --- | --- |\n| 2026-08-05T20:22:00Z | txn_005283 | $435.00 | approved | Lumen Electronics | dev_0346 |\n| 2026-08-05T20:40:00Z | txn_005284 | $905.00 | approved | Keystone Crypto Desk | dev_0346 |\n| 2026-08-05T20:52:00Z | txn_005285 | $280.00 | approved | Hearth Gift Co | dev_0346 |\n| 2026-08-05T21:09:00Z | txn_005286 | $655.00 | approved | Parcel Gift Cards | dev_0346 |\n\n## Action rationale\n\nBlock and force a step-up with the real customer. The session does not match the device or the country on file.\n\n## Held-out label\n\nThis section is joined after the investigation. The agent did not see it.\n\n- Fraud: yes\n- Pattern: account_takeover\n\n*FraudLens suggests. An analyst decides.*\n",
+  "report_markdown": "# FraudLens case case_0010\n\n**Customer.** Harpreet Sandhu (cus_0048), Bengaluru, IN.\n**Lead payment.** txn_005397 \u00b7 \u20b936,200.00 \u00b7 Sikka Crypto Exchange \u00b7 2026-08-05T20:37:00Z.\n**Pattern.** Account takeover (new device foreign spike).\n**Risk score.** 94 / 100.\n**Suggested action.** block \u2014 a human still has to confirm it.\n\n## Summary\n\nA new device in a new country spends far above baseline at gift cards, electronics, or crypto. Block and force a step-up with the real customer. The session does not match the device or the country on file. Lead payment txn_005397 is \u20b936,200.00 approved at Sikka Crypto Exchange on 06 Aug 2026 02:07 IST, card \u2022\u20220909, device dev_0346 (Redmi Note 13 \u00b7 Android 14 \u00b7 Chrome). Before this episode, Harpreet Sandhu had 36 payments with a median of \u20b91,806.34.\n\n## Why this score\n\n- **Case opened** (+4): Every queued payment starts with a small residual score.\n- **New device abroad** (+36): Device dev_0346 in Brazil.\n- **Spend spike** (+28): Peak \u20b936,200.00 against a median of \u20b91,806.34.\n- **Risky merchants** (+18): Gift cards, electronics, or crypto, rather than travel.\n- **VPN** (+8): The session is coming through a VPN.\n\n## What the agent checked\n\n### Open the flagged payment (watch)\n\nQueue sent txn_005397 for Harpreet Sandhu: \u20b936,200.00 at Sikka Crypto Exchange on 06 Aug 2026 02:07 IST. The flagger's reasons were: Amount is far above this customer's own baseline; Device has never been used by this customer before; IP country does not match the customer's home country; The payment's shape is an outlier for the whole book.\n\n- Transaction: txn_005397\n- Amount: \u20b936,200.00\n- Customer: Harpreet Sandhu (cus_0048)\n- Why it was queued: amount_outlier, new_device, foreign_ip, isolation_forest\n\n### Customer history and baseline (clear)\n\nHarpreet Sandhu has 36 prior payments before this episode, median \u20b91,806.34. Account acct_0048 is 574 days old. Usual devices: dev_0095, dev_0096. Countries already seen: IN.\n\n- Account age: 574 days\n- Prior payments: 36\n- Median amount: \u20b91,806.34\n- Home: Bengaluru, IN\n\n### Payment velocity (clear)\n\nThe episode around txn_005397 holds 4 payments across 37 minutes. The busiest hour contains 4 payments. 0 declines in the episode. Merchants touched: Prism Electronics, Sikka Crypto Exchange, Tohfa Gift Co, and Uphaar Gift Cards.\n\n- Payments in episode: 4\n- Busiest hour: 4\n- Declines: 0\n- Distinct merchants: 4\n\n### Amount versus baseline (alert)\n\nEpisode amounts run from \u20b911,200.00 to \u20b936,200.00, median \u20b921,800.00. The peak is 20.0\u00d7 the baseline median of \u20b91,806.34.\n\n- Episode median: \u20b921,800.00\n- Episode peak: \u20b936,200.00\n- Baseline median: \u20b91,806.34\n- Peak vs baseline: 20.0\u00d7\n\n### Device and IP linkage (alert)\n\nDevices in the episode: dev_0346 (Redmi Note 13 \u00b7 Android 14 \u00b7 Chrome, new to this customer). IPs: 198.51.100.96 \u00b7 Sao Paulo, BR, VPN. The customer's home country is India. Every payment in this episode is outside that country.\n\n- New devices: dev_0346\n- Mature devices reused: none\n- Countries: BR\n- Datacenter or VPN: yes\n\n### Linked accounts and money flow (clear)\n\nNo other customer uses the devices in this episode. No UPI transfer or cash-out on this account in the six-day window. No cash-out path leaves this account in the six-day money graph.\n\n- Linked customers: 0\n- Household pattern: no\n- Reaches cash-out: no\n- Pass-through: no inbound\n\n### Merchant check (clear)\n\nSikka Crypto Exchange (crypto, Hyderabad) has 7 payments in the past 14 days from 7 customers. 57% of those customers are under 45 days old. 14% of the amounts are round (multiples of \u20b91,000, at least \u20b98,000). Devices shared by two or more buyers: none.\n\n- Category: crypto\n- Recent buyers: 7\n- Young-account share: 57%\n- Round-amount share: 14%\n\n### Pattern classification (alert)\n\nAccount takeover. A new device in a new country spends far above baseline at gift cards, electronics, or crypto.\n\n- Pattern: Account takeover\n- Detail: new device foreign spike\n\n### Suggested action (alert)\n\nSuggested action: block. Risk score 94/100. Block and force a step-up with the real customer. The session does not match the device or the country on file. A person still has to confirm this. FraudLens does not apply it.\n\n- Suggested action: block\n- Risk score: 94/100\n- Who decides: human analyst\n\n## Payments in the episode\n\n| When | Id | Amount | Status | Merchant | Device |\n| --- | --- | --- | --- | --- | --- |\n| 2026-08-05T20:29:00Z | txn_005396 | \u20b917,400.00 | approved | Prism Electronics | dev_0346 |\n| 2026-08-05T20:37:00Z | txn_005397 | \u20b936,200.00 | approved | Sikka Crypto Exchange | dev_0346 |\n| 2026-08-05T20:52:00Z | txn_005398 | \u20b911,200.00 | approved | Tohfa Gift Co | dev_0346 |\n| 2026-08-05T21:06:00Z | txn_005399 | \u20b926,200.00 | approved | Uphaar Gift Cards | dev_0346 |\n\n## Action rationale\n\nBlock and force a step-up with the real customer. The session does not match the device or the country on file.\n\n## Held-out label\n\nThis section is joined after the investigation. The agent did not see it.\n\n- Fraud: yes\n- Pattern: account_takeover\n\n*FraudLens suggests. An analyst decides.*\n",
   "showcase": null
 }

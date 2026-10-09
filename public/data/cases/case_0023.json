@@ -1,11 +1,11 @@
 {
   "case_id": "case_0023",
-  "lead_transaction_id": "txn_005298",
+  "lead_transaction_id": "txn_005411",
   "customer_id": "cus_0170",
   "covered_transaction_ids": [
-    "txn_005295",
-    "txn_005297",
-    "txn_005298"
+    "txn_005408",
+    "txn_005410",
+    "txn_005411"
   ],
   "flag_reasons": [
     {
@@ -24,8 +24,8 @@
   "action": "escalate",
   "action_rationale": "Escalate the chain so the receiving accounts can be frozen together.",
   "confidence": "high",
-  "summary": "Mule flow touching Idris Bennett: funds move onward to a cash-out the same day.",
-  "narrative": "Funds arrive and leave again toward a cash-out, with little of the money staying on the account. Escalate the chain so the receiving accounts can be frozen together. Lead payment txn_005298 is $1,880.00 approved at peer-to-peer transfer on 08 Aug 2026 15:10 UTC, card \u2022\u20222118, device dev_0348 (Windows laptop \u00b7 Windows 11 \u00b7 Chrome). Before this episode, Idris Bennett had 1 payment with a median of $4.50.",
+  "summary": "Mule flow touching Imran Qureshi: funds move onward to a cash-out the same day.",
+  "narrative": "Funds arrive and leave again toward a cash-out, with little of the money staying on the account. Escalate the chain so the receiving accounts can be frozen together. Lead payment txn_005411 is \u20b975,200.00 approved by UPI transfer on 08 Aug 2026 20:40 IST, no card on this transfer, device dev_0348 (Windows laptop \u00b7 Windows 11 \u00b7 Chrome). Before this episode, Imran Qureshi had 1 payment with a median of \u20b9180.00.",
   "signals": [
     {
       "name": "Case opened",
@@ -35,7 +35,7 @@
     {
       "name": "Cash-out path",
       "points": 40,
-      "detail": "Idris Bennett (acct_0170) \u2192 Nora Almeida (acct_0171) \u2192 Keystone Crypto Desk"
+      "detail": "Imran Qureshi (acct_0170) \u2192 Sravya Goud (acct_0171) \u2192 Sikka Crypto Exchange"
     },
     {
       "name": "Shared infrastructure",
@@ -45,7 +45,7 @@
     {
       "name": "Funds do not stay",
       "points": 16,
-      "detail": "Inbound $2,000.00, outbound $1,880.00."
+      "detail": "Inbound \u20b980,000.00, outbound \u20b975,200.00."
     },
     {
       "name": "Young account",
@@ -58,21 +58,21 @@
       "id": "open_case",
       "title": "Open the flagged payment",
       "status": "watch",
-      "started_at": "2026-08-11T15:00:00Z",
+      "started_at": "2026-08-11T04:30:00Z",
       "duration_ms": 420,
-      "finding": "Queue sent txn_005298 for Idris Bennett: $1,880.00 at peer-to-peer transfer on 08 Aug 2026 15:10 UTC. The flagger's reasons were: Account is under 30 days old and the amount is large; The payment's shape is an outlier for the whole book.",
+      "finding": "Queue sent txn_005411 for Imran Qureshi: \u20b975,200.00 by UPI transfer on 08 Aug 2026 20:40 IST. The flagger's reasons were: Account is under 30 days old and the amount is large; The payment's shape is an outlier for the whole book.",
       "evidence": [
         {
           "label": "Transaction",
-          "value": "txn_005298"
+          "value": "txn_005411"
         },
         {
           "label": "Amount",
-          "value": "$1,880.00"
+          "value": "\u20b975,200.00"
         },
         {
           "label": "Customer",
-          "value": "Idris Bennett (cus_0170)"
+          "value": "Imran Qureshi (cus_0170)"
         },
         {
           "label": "Why it was queued",
@@ -84,9 +84,9 @@
       "id": "customer_baseline",
       "title": "Customer history and baseline",
       "status": "clear",
-      "started_at": "2026-08-11T15:00:00Z",
+      "started_at": "2026-08-11T04:30:00Z",
       "duration_ms": 680,
-      "finding": "Idris Bennett has 1 prior payment before this episode, median $4.50. Account acct_0170 is 17 days old. Usual devices: dev_0352. Countries already seen: US.",
+      "finding": "Imran Qureshi has 1 prior payment before this episode, median \u20b9180.00. Account acct_0170 is 17 days old. Usual devices: dev_0352. Countries already seen: IN.",
       "evidence": [
         {
           "label": "Account age",
@@ -98,11 +98,11 @@
         },
         {
           "label": "Median amount",
-          "value": "$4.50"
+          "value": "\u20b9180.00"
         },
         {
           "label": "Home",
-          "value": "Austin, US"
+          "value": "Hyderabad, IN"
         }
       ]
     },
@@ -110,9 +110,9 @@
       "id": "velocity",
       "title": "Payment velocity",
       "status": "clear",
-      "started_at": "2026-08-11T15:00:01Z",
+      "started_at": "2026-08-11T04:30:01Z",
       "duration_ms": 540,
-      "finding": "The episode around txn_005298 holds 3 payments across 130 minutes. The busiest hour contains 2 payments. 0 declines in the episode. Merchants touched: P2P transfer.",
+      "finding": "The episode around txn_005411 holds 3 payments across 130 minutes. The busiest hour contains 2 payments. 0 declines in the episode. Merchants touched: UPI transfer.",
       "evidence": [
         {
           "label": "Payments in episode",
@@ -136,21 +136,21 @@
       "id": "amount",
       "title": "Amount versus baseline",
       "status": "alert",
-      "started_at": "2026-08-11T15:00:02Z",
+      "started_at": "2026-08-11T04:30:02Z",
       "duration_ms": 480,
-      "finding": "Episode amounts run from $800.00 to $1,880.00, median $1,200.00. The peak is 417.8\u00d7 the baseline median of $4.50.",
+      "finding": "Episode amounts run from \u20b932,000.00 to \u20b975,200.00, median \u20b948,000.00. The peak is 417.8\u00d7 the baseline median of \u20b9180.00.",
       "evidence": [
         {
           "label": "Episode median",
-          "value": "$1,200.00"
+          "value": "\u20b948,000.00"
         },
         {
           "label": "Episode peak",
-          "value": "$1,880.00"
+          "value": "\u20b975,200.00"
         },
         {
           "label": "Baseline median",
-          "value": "$4.50"
+          "value": "\u20b9180.00"
         },
         {
           "label": "Peak vs baseline",
@@ -162,9 +162,9 @@
       "id": "device_ip",
       "title": "Device and IP linkage",
       "status": "clear",
-      "started_at": "2026-08-11T15:00:03Z",
+      "started_at": "2026-08-11T04:30:03Z",
       "duration_ms": 730,
-      "finding": "Devices in the episode: dev_0348 (Windows laptop \u00b7 Windows 11 \u00b7 Chrome, already on file). IPs: 198.51.100.100 \u00b7 Austin, US, datacenter. The customer's home country is the United States. Every payment in this episode is there.",
+      "finding": "Devices in the episode: dev_0348 (Windows laptop \u00b7 Windows 11 \u00b7 Chrome, already on file). IPs: 198.51.100.100 \u00b7 Hyderabad, IN, datacenter. The customer's home country is India. Every payment in this episode is there.",
       "evidence": [
         {
           "label": "New devices",
@@ -176,7 +176,7 @@
         },
         {
           "label": "Countries",
-          "value": "US"
+          "value": "IN"
         },
         {
           "label": "Datacenter or VPN",
@@ -188,9 +188,9 @@
       "id": "network",
       "title": "Linked accounts and money flow",
       "status": "alert",
-      "started_at": "2026-08-11T15:00:04Z",
+      "started_at": "2026-08-11T04:30:04Z",
       "duration_ms": 860,
-      "finding": "These devices are also used by Nora Almeida (cus_0171) via dev_0348. Inbound transfers $2,000.00, outbound $1,880.00, pass-through 94%. Funds from acct_0170 reach a cash-out inside the graph (Idris Bennett (acct_0170) \u2192 Nora Almeida (acct_0171) \u2192 Keystone Crypto Desk).",
+      "finding": "These devices are also used by Sravya Goud (cus_0171) via dev_0348. Inbound transfers \u20b980,000.00, outbound \u20b975,200.00, pass-through 94%. Funds from acct_0170 reach a cash-out inside the graph (Imran Qureshi (acct_0170) \u2192 Sravya Goud (acct_0171) \u2192 Sikka Crypto Exchange).",
       "evidence": [
         {
           "label": "Linked customers",
@@ -214,7 +214,7 @@
       "id": "merchant",
       "title": "Merchant check",
       "status": "watch",
-      "started_at": "2026-08-11T15:00:05Z",
+      "started_at": "2026-08-11T04:30:05Z",
       "duration_ms": 300,
       "finding": "The lead movement is a transfer, not a card purchase, so there is no merchant to underwrite. The money-flow step carries that evidence.",
       "evidence": [
@@ -228,7 +228,7 @@
       "id": "classify",
       "title": "Pattern classification",
       "status": "alert",
-      "started_at": "2026-08-11T15:00:06Z",
+      "started_at": "2026-08-11T04:30:06Z",
       "duration_ms": 390,
       "finding": "Mule-account chain. Funds arrive and leave again toward a cash-out, with little of the money staying on the account.",
       "evidence": [
@@ -246,7 +246,7 @@
       "id": "recommend",
       "title": "Suggested action",
       "status": "alert",
-      "started_at": "2026-08-11T15:00:07Z",
+      "started_at": "2026-08-11T04:30:07Z",
       "duration_ms": 360,
       "finding": "Suggested action: escalate. Risk score 88/100. Escalate the chain so the receiving accounts can be frozen together. A person still has to confirm this. FraudLens does not apply it.",
       "evidence": [
@@ -270,7 +270,7 @@
       {
         "id": "cus_0170",
         "type": "customer",
-        "label": "Idris Bennett",
+        "label": "Imran Qureshi",
         "sublabel": "cus_0170",
         "x": 0.2825,
         "y": 0.92,
@@ -297,7 +297,7 @@
       {
         "id": "ip_0349",
         "type": "ip",
-        "label": "Austin",
+        "label": "Hyderabad",
         "sublabel": "198.51.100.100",
         "x": 0.7486,
         "y": 0.08,
@@ -306,7 +306,7 @@
       {
         "id": "cus_0171",
         "type": "customer",
-        "label": "Nora Almeida",
+        "label": "Sravya Goud",
         "sublabel": "cus_0171",
         "x": 0.08,
         "y": 0.5936,
@@ -345,7 +345,7 @@
         "source": "acct_0170",
         "target": "acct_0171",
         "kind": "p2p",
-        "label": "$1,880.00"
+        "label": "\u20b975,200.00"
       },
       {
         "source": "dev_0348",
@@ -360,85 +360,85 @@
         "label": "owns"
       }
     ],
-    "caption": "Money path: Idris Bennett (acct_0170) \u2192 Nora Almeida (acct_0171) \u2192 Keystone Crypto Desk"
+    "caption": "Money path: Imran Qureshi (acct_0170) \u2192 Sravya Goud (acct_0171) \u2192 Sikka Crypto Exchange"
   },
   "related_transactions": [
     {
-      "id": "txn_005295",
+      "id": "txn_005408",
       "occurred_at": "2026-08-08T13:00:08Z",
       "ts": 1786194008,
-      "amount_cents": 120000,
+      "amount_paise": 4800000,
       "status": "approved",
       "type": "p2p_in",
-      "merchant_name": "P2P transfer",
+      "merchant_name": "UPI transfer",
       "merchant_category": "transfer",
       "device_id": "dev_0348",
-      "ip": "198.51.100.100 \u00b7 Austin, US, datacenter",
-      "ip_country": "US",
-      "city": "Austin",
+      "ip": "198.51.100.100 \u00b7 Hyderabad, IN, datacenter",
+      "ip_country": "IN",
+      "city": "Hyderabad",
       "flagged": true,
       "counterparty_account_id": "acct_0071"
     },
     {
-      "id": "txn_005297",
+      "id": "txn_005410",
       "occurred_at": "2026-08-08T13:22:08Z",
       "ts": 1786195328,
-      "amount_cents": 80000,
+      "amount_paise": 3200000,
       "status": "approved",
       "type": "p2p_in",
-      "merchant_name": "P2P transfer",
+      "merchant_name": "UPI transfer",
       "merchant_category": "transfer",
       "device_id": "dev_0348",
-      "ip": "198.51.100.100 \u00b7 Austin, US, datacenter",
-      "ip_country": "US",
-      "city": "Austin",
+      "ip": "198.51.100.100 \u00b7 Hyderabad, IN, datacenter",
+      "ip_country": "IN",
+      "city": "Hyderabad",
       "flagged": true,
       "counterparty_account_id": "acct_0072"
     },
     {
-      "id": "txn_005298",
+      "id": "txn_005411",
       "occurred_at": "2026-08-08T15:10:00Z",
       "ts": 1786201800,
-      "amount_cents": 188000,
+      "amount_paise": 7520000,
       "status": "approved",
       "type": "p2p_out",
-      "merchant_name": "P2P transfer",
+      "merchant_name": "UPI transfer",
       "merchant_category": "transfer",
       "device_id": "dev_0348",
-      "ip": "198.51.100.100 \u00b7 Austin, US, datacenter",
-      "ip_country": "US",
-      "city": "Austin",
+      "ip": "198.51.100.100 \u00b7 Hyderabad, IN, datacenter",
+      "ip_country": "IN",
+      "city": "Hyderabad",
       "flagged": true,
       "counterparty_account_id": "acct_0171"
     }
   ],
   "customer": {
     "id": "cus_0170",
-    "name": "Idris Bennett",
-    "email": "idris.bennett.desk@example.com",
-    "home_city": "Austin",
-    "home_country": "US",
+    "name": "Imran Qureshi",
+    "email": "imran.qureshi.desk@example.com",
+    "home_city": "Hyderabad",
+    "home_country": "IN",
     "segment": "student",
     "customer_since": "2026-07-22T00:00:00Z",
     "account_id": "acct_0170",
     "account_age_days": 17
   },
   "lead": {
-    "id": "txn_005298",
+    "id": "txn_005411",
     "occurred_at": "2026-08-08T15:10:00Z",
-    "amount_cents": 188000,
+    "amount_paise": 7520000,
     "status": "approved",
     "type": "p2p_out",
-    "merchant_name": "peer-to-peer transfer",
+    "merchant_name": "UPI transfer",
     "merchant_category": "transfer",
     "device_id": "dev_0348",
     "device_label": "Windows laptop \u00b7 Windows 11 \u00b7 Chrome",
-    "ip": "198.51.100.100 \u00b7 Austin, US, datacenter",
-    "ip_city": "Austin",
-    "ip_country": "US",
-    "card_last4": "2118"
+    "ip": "198.51.100.100 \u00b7 Hyderabad, IN, datacenter",
+    "ip_city": "Hyderabad",
+    "ip_country": "IN",
+    "card_last4": null
   },
-  "report_markdown": "# FraudLens case case_0023\n\n**Customer.** Idris Bennett (cus_0170), Austin, US.\n**Lead payment.** txn_005298 \u00b7 $1,880.00 \u00b7 peer-to-peer transfer \u00b7 2026-08-08T15:10:00Z.\n**Pattern.** Mule-account chain (pass through).\n**Risk score.** 88 / 100.\n**Suggested action.** escalate \u2014 a human still has to confirm it.\n\n## Summary\n\nFunds arrive and leave again toward a cash-out, with little of the money staying on the account. Escalate the chain so the receiving accounts can be frozen together. Lead payment txn_005298 is $1,880.00 approved at peer-to-peer transfer on 08 Aug 2026 15:10 UTC, card \u2022\u20222118, device dev_0348 (Windows laptop \u00b7 Windows 11 \u00b7 Chrome). Before this episode, Idris Bennett had 1 payment with a median of $4.50.\n\n## Why this score\n\n- **Case opened** (+4): Every queued payment starts with a small residual score.\n- **Cash-out path** (+40): Idris Bennett (acct_0170) \u2192 Nora Almeida (acct_0171) \u2192 Keystone Crypto Desk\n- **Shared infrastructure** (+18): 1 other customer uses a device in this episode.\n- **Funds do not stay** (+16): Inbound $2,000.00, outbound $1,880.00.\n- **Young account** (+10): Opened 17 days ago.\n\n## What the agent checked\n\n### Open the flagged payment (watch)\n\nQueue sent txn_005298 for Idris Bennett: $1,880.00 at peer-to-peer transfer on 08 Aug 2026 15:10 UTC. The flagger's reasons were: Account is under 30 days old and the amount is large; The payment's shape is an outlier for the whole book.\n\n- Transaction: txn_005298\n- Amount: $1,880.00\n- Customer: Idris Bennett (cus_0170)\n- Why it was queued: new_account_amount, isolation_forest\n\n### Customer history and baseline (clear)\n\nIdris Bennett has 1 prior payment before this episode, median $4.50. Account acct_0170 is 17 days old. Usual devices: dev_0352. Countries already seen: US.\n\n- Account age: 17 days\n- Prior payments: 1\n- Median amount: $4.50\n- Home: Austin, US\n\n### Payment velocity (clear)\n\nThe episode around txn_005298 holds 3 payments across 130 minutes. The busiest hour contains 2 payments. 0 declines in the episode. Merchants touched: P2P transfer.\n\n- Payments in episode: 3\n- Busiest hour: 2\n- Declines: 0\n- Distinct merchants: 1\n\n### Amount versus baseline (alert)\n\nEpisode amounts run from $800.00 to $1,880.00, median $1,200.00. The peak is 417.8\u00d7 the baseline median of $4.50.\n\n- Episode median: $1,200.00\n- Episode peak: $1,880.00\n- Baseline median: $4.50\n- Peak vs baseline: 417.8\u00d7\n\n### Device and IP linkage (clear)\n\nDevices in the episode: dev_0348 (Windows laptop \u00b7 Windows 11 \u00b7 Chrome, already on file). IPs: 198.51.100.100 \u00b7 Austin, US, datacenter. The customer's home country is the United States. Every payment in this episode is there.\n\n- New devices: none\n- Mature devices reused: none\n- Countries: US\n- Datacenter or VPN: yes\n\n### Linked accounts and money flow (alert)\n\nThese devices are also used by Nora Almeida (cus_0171) via dev_0348. Inbound transfers $2,000.00, outbound $1,880.00, pass-through 94%. Funds from acct_0170 reach a cash-out inside the graph (Idris Bennett (acct_0170) \u2192 Nora Almeida (acct_0171) \u2192 Keystone Crypto Desk).\n\n- Linked customers: 1\n- Household pattern: no\n- Reaches cash-out: yes\n- Pass-through: 94%\n\n### Merchant check (watch)\n\nThe lead movement is a transfer, not a card purchase, so there is no merchant to underwrite. The money-flow step carries that evidence.\n\n- Merchant: none (transfer)\n\n### Pattern classification (alert)\n\nMule-account chain. Funds arrive and leave again toward a cash-out, with little of the money staying on the account.\n\n- Pattern: Mule-account chain\n- Detail: pass through\n\n### Suggested action (alert)\n\nSuggested action: escalate. Risk score 88/100. Escalate the chain so the receiving accounts can be frozen together. A person still has to confirm this. FraudLens does not apply it.\n\n- Suggested action: escalate\n- Risk score: 88/100\n- Who decides: human analyst\n\n## Payments in the episode\n\n| When | Id | Amount | Status | Merchant | Device |\n| --- | --- | --- | --- | --- | --- |\n| 2026-08-08T13:00:08Z | txn_005295 | $1,200.00 | approved | P2P transfer | dev_0348 |\n| 2026-08-08T13:22:08Z | txn_005297 | $800.00 | approved | P2P transfer | dev_0348 |\n| 2026-08-08T15:10:00Z | txn_005298 | $1,880.00 | approved | P2P transfer | dev_0348 |\n\n## Action rationale\n\nEscalate the chain so the receiving accounts can be frozen together.\n\n## Held-out label\n\nThis section is joined after the investigation. The agent did not see it.\n\n- Fraud: yes\n- Pattern: mule_chain\n\n*FraudLens suggests. An analyst decides.*\n",
+  "report_markdown": "# FraudLens case case_0023\n\n**Customer.** Imran Qureshi (cus_0170), Hyderabad, IN.\n**Lead payment.** txn_005411 \u00b7 \u20b975,200.00 \u00b7 UPI transfer \u00b7 2026-08-08T15:10:00Z.\n**Pattern.** Mule-account chain (pass through).\n**Risk score.** 88 / 100.\n**Suggested action.** escalate \u2014 a human still has to confirm it.\n\n## Summary\n\nFunds arrive and leave again toward a cash-out, with little of the money staying on the account. Escalate the chain so the receiving accounts can be frozen together. Lead payment txn_005411 is \u20b975,200.00 approved by UPI transfer on 08 Aug 2026 20:40 IST, no card on this transfer, device dev_0348 (Windows laptop \u00b7 Windows 11 \u00b7 Chrome). Before this episode, Imran Qureshi had 1 payment with a median of \u20b9180.00.\n\n## Why this score\n\n- **Case opened** (+4): Every queued payment starts with a small residual score.\n- **Cash-out path** (+40): Imran Qureshi (acct_0170) \u2192 Sravya Goud (acct_0171) \u2192 Sikka Crypto Exchange\n- **Shared infrastructure** (+18): 1 other customer uses a device in this episode.\n- **Funds do not stay** (+16): Inbound \u20b980,000.00, outbound \u20b975,200.00.\n- **Young account** (+10): Opened 17 days ago.\n\n## What the agent checked\n\n### Open the flagged payment (watch)\n\nQueue sent txn_005411 for Imran Qureshi: \u20b975,200.00 by UPI transfer on 08 Aug 2026 20:40 IST. The flagger's reasons were: Account is under 30 days old and the amount is large; The payment's shape is an outlier for the whole book.\n\n- Transaction: txn_005411\n- Amount: \u20b975,200.00\n- Customer: Imran Qureshi (cus_0170)\n- Why it was queued: new_account_amount, isolation_forest\n\n### Customer history and baseline (clear)\n\nImran Qureshi has 1 prior payment before this episode, median \u20b9180.00. Account acct_0170 is 17 days old. Usual devices: dev_0352. Countries already seen: IN.\n\n- Account age: 17 days\n- Prior payments: 1\n- Median amount: \u20b9180.00\n- Home: Hyderabad, IN\n\n### Payment velocity (clear)\n\nThe episode around txn_005411 holds 3 payments across 130 minutes. The busiest hour contains 2 payments. 0 declines in the episode. Merchants touched: UPI transfer.\n\n- Payments in episode: 3\n- Busiest hour: 2\n- Declines: 0\n- Distinct merchants: 1\n\n### Amount versus baseline (alert)\n\nEpisode amounts run from \u20b932,000.00 to \u20b975,200.00, median \u20b948,000.00. The peak is 417.8\u00d7 the baseline median of \u20b9180.00.\n\n- Episode median: \u20b948,000.00\n- Episode peak: \u20b975,200.00\n- Baseline median: \u20b9180.00\n- Peak vs baseline: 417.8\u00d7\n\n### Device and IP linkage (clear)\n\nDevices in the episode: dev_0348 (Windows laptop \u00b7 Windows 11 \u00b7 Chrome, already on file). IPs: 198.51.100.100 \u00b7 Hyderabad, IN, datacenter. The customer's home country is India. Every payment in this episode is there.\n\n- New devices: none\n- Mature devices reused: none\n- Countries: IN\n- Datacenter or VPN: yes\n\n### Linked accounts and money flow (alert)\n\nThese devices are also used by Sravya Goud (cus_0171) via dev_0348. Inbound transfers \u20b980,000.00, outbound \u20b975,200.00, pass-through 94%. Funds from acct_0170 reach a cash-out inside the graph (Imran Qureshi (acct_0170) \u2192 Sravya Goud (acct_0171) \u2192 Sikka Crypto Exchange).\n\n- Linked customers: 1\n- Household pattern: no\n- Reaches cash-out: yes\n- Pass-through: 94%\n\n### Merchant check (watch)\n\nThe lead movement is a transfer, not a card purchase, so there is no merchant to underwrite. The money-flow step carries that evidence.\n\n- Merchant: none (transfer)\n\n### Pattern classification (alert)\n\nMule-account chain. Funds arrive and leave again toward a cash-out, with little of the money staying on the account.\n\n- Pattern: Mule-account chain\n- Detail: pass through\n\n### Suggested action (alert)\n\nSuggested action: escalate. Risk score 88/100. Escalate the chain so the receiving accounts can be frozen together. A person still has to confirm this. FraudLens does not apply it.\n\n- Suggested action: escalate\n- Risk score: 88/100\n- Who decides: human analyst\n\n## Payments in the episode\n\n| When | Id | Amount | Status | Merchant | Device |\n| --- | --- | --- | --- | --- | --- |\n| 2026-08-08T13:00:08Z | txn_005408 | \u20b948,000.00 | approved | UPI transfer | dev_0348 |\n| 2026-08-08T13:22:08Z | txn_005410 | \u20b932,000.00 | approved | UPI transfer | dev_0348 |\n| 2026-08-08T15:10:00Z | txn_005411 | \u20b975,200.00 | approved | UPI transfer | dev_0348 |\n\n## Action rationale\n\nEscalate the chain so the receiving accounts can be frozen together.\n\n## Held-out label\n\nThis section is joined after the investigation. The agent did not see it.\n\n- Fraud: yes\n- Pattern: mule_chain\n\n*FraudLens suggests. An analyst decides.*\n",
   "showcase": {
     "slot": "mule_chain",
     "order": 3,

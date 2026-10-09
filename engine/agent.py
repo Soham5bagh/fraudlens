@@ -22,9 +22,14 @@ from langgraph.graph import END, START, StateGraph
 
 from engine.catalog import Catalog
 from engine.flagging import REASON_TEXT
-from engine.textutil import clock, iso, minutes_between, money, plural, short_clock
+from engine.textutil import clock, iso, minutes_between, money, plural, short_clock, whole_rupees
 
-REVIEW_CLOCK = datetime(2026, 8, 11, 15, 0, tzinfo=timezone.utc)
+# 10:00 IST on the morning after the book closes.
+REVIEW_CLOCK = datetime(2026, 8, 11, 4, 30, tzinfo=timezone.utc)
+
+# Amounts are paise. A round amount is a whole multiple of ₹1,000, and at least ₹8,000.
+ROUND_PAISE = 100_000
+ROUND_FLOOR_PAISE = 800_000
 
 TRAVEL_CATEGORIES = {"airline", "hotel", "transit", "restaurant"}
 RISKY_CATEGORIES = {"gift_card", "crypto", "electronics", "wire"}
@@ -176,7 +181,7 @@ def open_case(state: dict) -> None:
     lead = next(txn for txn in catalog.txns if txn["id"] == case["lead_transaction_id"])
     customer = catalog.customer(case["customer_id"])
     merchant = catalog.merchant(lead["merchant_id"])
-    merchant_name = merchant["name"] if merchant else "peer-to-peer transfer"
+    merchant_name = merchant["name"] if merchant else "UPI transfer"
     reasons = [REASON_TEXT[code] for code in case["flag_reasons"]]
     state["facts"]["lead"] = lead
     state["facts"]["customer"] = customer
@@ -187,13 +192,13 @@ def open_case(state: dict) -> None:
         "Open the flagged payment",
         "watch",
         (
-            f"Queue sent {lead['id']} for {customer['name']}: {money(lead['amount_cents'])} "
-            f"at {merchant_name} on {clock(lead['ts'])}. "
+            f"Queue sent {lead['id']} for {customer['name']}: {money(lead['amount_paise'])} "
+            f"{_where(merchant)} on {clock(lead['ts'])}. "
             f"The flagger's reasons were: {'; '.join(reasons)}."
         ),
         [
             {"label": "Transaction", "value": lead["id"]},
-            {"label": "Amount", "value": money(lead["amount_cents"])},
+            {"label": "Amount", "value": money(lead["amount_paise"])},
             {"label": "Customer", "value": f"{customer['name']} ({customer['id']})"},
             {"label": "Why it was queued", "value": ", ".join(case["flag_reasons"])},
         ],
@@ -207,7 +212,7 @@ def customer_baseline(state: dict) -> None:
     account = catalog.account_for_customer(customer["id"])
     baseline = _baseline(state)
     lead = state["facts"]["lead"]
-    amounts = [txn["amount_cents"] for txn in baseline if txn["status"] == "approved"]
+    amounts = [txn["amount_paise"] for txn in baseline if txn["status"] == "approved"]
     median = int(np_median(amounts)) if amounts else 0
     age_days = max(0, int((lead["ts"] - account["opened_ts"]) / 86400))
     devices = sorted({txn["device_id"] for txn in baseline})
@@ -269,7 +274,7 @@ def velocity_check(state: dict) -> None:
     merchants = []
     for txn in episode:
         merchant = state["catalog"].merchant(txn["merchant_id"])
-        name = merchant["name"] if merchant else "P2P transfer"
+        name = merchant["name"] if merchant else "UPI transfer"
         if name not in merchants:
             merchants.append(name)
     state["facts"].update(
@@ -279,7 +284,7 @@ def velocity_check(state: dict) -> None:
             "decline_count": len(declines),
             "span_minutes": span,
             "episode_merchants": merchants,
-            "episode_amounts": [txn["amount_cents"] for txn in episode],
+            "episode_amounts": [txn["amount_paise"] for txn in episode],
         }
     )
     status = "alert" if peak >= 5 or len(declines) >= 3 else "clear"
@@ -458,13 +463,13 @@ def linked_accounts(state: dict) -> None:
                 txn["account_id"],
                 txn["counterparty_account_id"],
                 kind="p2p",
-                amount=txn["amount_cents"],
+                amount=txn["amount_paise"],
                 txn_id=txn["id"],
             )
             edges.append(txn)
         elif txn["type"] == "cash_out":
             node = f"cash:{txn['merchant_id']}"
-            graph.add_edge(txn["account_id"], node, kind="cash_out", amount=txn["amount_cents"], txn_id=txn["id"])
+            graph.add_edge(txn["account_id"], node, kind="cash_out", amount=txn["amount_paise"], txn_id=txn["id"])
             edges.append(txn)
 
     reaches_cash = False
@@ -478,12 +483,12 @@ def linked_accounts(state: dict) -> None:
         chain_labels = _describe_chain(catalog, graph, account["id"])
 
     inbound = [
-        txn["amount_cents"]
+        txn["amount_paise"]
         for txn in catalog.by_account[account["id"]]
         if txn["type"] == "p2p_in" and txn["ts"] >= window_start
     ]
     outbound = [
-        txn["amount_cents"]
+        txn["amount_paise"]
         for txn in catalog.by_account[account["id"]]
         if txn["type"] in {"p2p_out", "cash_out"} and txn["ts"] >= window_start
     ]
@@ -611,7 +616,7 @@ def merchant_check(state: dict) -> None:
             account = catalog.accounts[txn["account_id"]]
             if (txn["ts"] - account["opened_ts"]) / 86400 < 45:
                 young.append(txn["customer_id"])
-        if txn["amount_cents"] % 5000 == 0 and txn["amount_cents"] >= 20000:
+        if txn["amount_paise"] % ROUND_PAISE == 0 and txn["amount_paise"] >= ROUND_FLOOR_PAISE:
             round_hits += 1
         devices.setdefault(txn["device_id"], set()).add(txn["customer_id"])
     shared_devices = [device_id for device_id, owners in devices.items() if len(owners) >= 2]
@@ -642,7 +647,7 @@ def merchant_check(state: dict) -> None:
             f"{merchant['name']} ({merchant['category'].replace('_', ' ')}, {merchant['city']}) has {plural(len(recent), 'payment')} "
             f"in the past 14 days from {plural(len(buyers), 'customer')}. "
             f"{young_share:.0%} of those customers are under 45 days old. "
-            f"{round_share:.0%} of the amounts are round (multiples of $50, at least $200). "
+            f"{round_share:.0%} of the amounts are round (multiples of {whole_rupees(ROUND_PAISE)}, at least {whole_rupees(ROUND_FLOOR_PAISE)}). "
             f"Devices shared by two or more buyers: {', '.join(shared_devices) if shared_devices else 'none'}."
         ),
         [
@@ -706,7 +711,7 @@ def _flow_sentence(inbound_sum: int, outbound_sum: int, ratio: float) -> str:
         return f"No inbound transfer in this window. {money(outbound_sum)} was sent on."
     if inbound_sum:
         return f"Inbound transfers {money(inbound_sum)}. Nothing was sent on."
-    return "No peer-to-peer transfer or cash-out on this account in the six-day window."
+    return "No UPI transfer or cash-out on this account in the six-day window."
 
 
 def _others_on_device(count: int) -> str:
@@ -749,7 +754,7 @@ def classify(state: dict) -> None:
 
     card_testing = (
         len(episode) >= 6
-        and episode_median < 2000
+        and episode_median < 80_000
         and len(facts["episode_merchants"]) >= 4
         and (declines >= 3 or (len(episode) and declines / len(episode) >= 0.25))
         and bool(facts["new_devices"])
@@ -761,7 +766,7 @@ def classify(state: dict) -> None:
     # Judge the new device on its own, instead of letting that purchase veto the pattern.
     new_txns = [txn for txn in episode if txn["device_id"] in set(facts["new_devices"])]
     new_categories = _categories(state["catalog"], new_txns)
-    new_peak = max((txn["amount_cents"] for txn in new_txns), default=0)
+    new_peak = max((txn["amount_paise"] for txn in new_txns), default=0)
     new_ratio = (new_peak / facts["baseline_median"]) if facts["baseline_median"] else 0
     new_foreign = any(
         state["catalog"].ips[txn["ip_id"]]["country"] != facts["customer"]["home_country"] for txn in new_txns
@@ -775,7 +780,7 @@ def classify(state: dict) -> None:
             and stats["young_share"] >= 0.5
             and stats["round_share"] >= 0.5
             and bool(stats["shared_devices"])
-            and lead["amount_cents"] % 5000 == 0
+            and lead["amount_paise"] % ROUND_PAISE == 0
             and facts["account_age_days"] < 45
         )
     money_movement = lead["type"] in {"p2p_out", "p2p_in", "cash_out"} or facts["reaches_cash"] or facts["outbound_sum"] > 0
@@ -785,14 +790,14 @@ def classify(state: dict) -> None:
             facts["reaches_cash"]
             or facts.get("counterparty_young")
             or facts["passthrough_ratio"] >= 0.6
-            or (facts["account_age_days"] < 45 and (facts["inbound_sum"] >= 20000 or facts["outbound_sum"] >= 20000))
-            or (not facts["same_household"] and len(facts["linked_customers"]) >= 1 and facts["outbound_sum"] >= 20000)
+            or (facts["account_age_days"] < 45 and (facts["inbound_sum"] >= 800_000 or facts["outbound_sum"] >= 800_000))
+            or (not facts["same_household"] and len(facts["linked_customers"]) >= 1 and facts["outbound_sum"] >= 800_000)
         )
     ato = (
         bool(new_txns)
         and new_foreign
         and new_ratio >= 4
-        and new_peak >= 30000
+        and new_peak >= 1_200_000
         and bool(new_categories & RISKY_CATEGORIES)
         and "airline" not in new_categories
     )
@@ -817,18 +822,18 @@ def classify(state: dict) -> None:
         facts["foreign"]
         and facts["known_mature_devices"]
         and travel_spend
-        and facts["episode_peak"] < 80000
+        and facts["episode_peak"] < 3_200_000
         and declines == 0
     ):
         pattern, detail = "legitimate", "travel"
         reasons.append("Foreign IP, but the device is the one this customer has used for weeks, and the merchants are travel.")
-    elif facts["same_household"] and not facts["foreign"] and facts["episode_peak"] < 40000 and not mule:
+    elif facts["same_household"] and not facts["foreign"] and facts["episode_peak"] < 1_600_000 and not mule:
         pattern, detail = "legitimate", "household"
         reasons.append("The shared device belongs to someone with the same surname and city, and nothing is passed through.")
     elif (
         facts["peak_velocity"] >= 5
         and declines == 0
-        and episode_median >= 2000
+        and episode_median >= 80_000
         and not facts["new_devices"]
         and not facts["foreign"]
         and len(facts["episode_merchants"]) <= 3
@@ -847,7 +852,7 @@ def classify(state: dict) -> None:
     elif (
         facts["new_devices"]
         and not facts["foreign"]
-        and facts["episode_peak"] < 15000
+        and facts["episode_peak"] < 600_000
         and facts["peak_velocity"] <= 2
         and not risky_spend
     ):
@@ -863,7 +868,7 @@ def classify(state: dict) -> None:
         and facts["peak_velocity"] <= 2
         and lead["type"] == "card_purchase"
         and len(episode) <= 2
-        and facts["episode_peak"] >= 40000
+        and facts["episode_peak"] >= 1_600_000
         and facts["account_age_days"] > 180
         and (not merchant_categories or merchant_categories <= {"electronics", "fashion", "airline", "hotel", "furniture"})
     ):
@@ -1031,10 +1036,10 @@ def assemble(state: dict) -> dict:
                 "id": txn["id"],
                 "occurred_at": txn["occurred_at"],
                 "ts": txn["ts"],
-                "amount_cents": txn["amount_cents"],
+                "amount_paise": txn["amount_paise"],
                 "status": txn["status"],
                 "type": txn["type"],
-                "merchant_name": merchant["name"] if merchant else "P2P transfer",
+                "merchant_name": merchant["name"] if merchant else "UPI transfer",
                 "merchant_category": merchant["category"] if merchant else "transfer",
                 "device_id": txn["device_id"],
                 "ip": catalog.ip_label(txn["ip_id"]),
@@ -1078,7 +1083,7 @@ def assemble(state: dict) -> dict:
         "lead": {
             "id": lead["id"],
             "occurred_at": lead["occurred_at"],
-            "amount_cents": lead["amount_cents"],
+            "amount_paise": lead["amount_paise"],
             "status": lead["status"],
             "type": lead["type"],
             "merchant_name": facts["merchant_name"],
@@ -1117,6 +1122,10 @@ def _summary(state: dict) -> str:
     )
 
 
+def _where(merchant: dict | None) -> str:
+    return f"at {merchant['name']}" if merchant else "by UPI transfer"
+
+
 def _narrative(state: dict) -> str:
     facts = state["facts"]
     lead = facts["lead"]
@@ -1124,9 +1133,9 @@ def _narrative(state: dict) -> str:
     bits = [facts["pattern_reasons"][0], facts["rationale"]]
     card = f", card ••{lead['card_last4']}" if lead.get("card_last4") else ", no card on this transfer"
     bits.append(
-        f"Lead payment {lead['id']} is {money(lead['amount_cents'])} "
+        f"Lead payment {lead['id']} is {money(lead['amount_paise'])} "
         f"{'declined' if lead['status'] == 'declined' else 'approved'} "
-        f"at {facts['merchant_name']} on {clock(lead['ts'])}{card}, "
+        f"{_where(state['catalog'].merchant(lead['merchant_id']))} on {clock(lead['ts'])}{card}, "
         f"device {lead['device_id']} ({state['catalog'].device_label(lead['device_id'])})."
     )
     if facts["baseline_count"]:

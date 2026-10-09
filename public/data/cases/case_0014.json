@@ -1,9 +1,9 @@
 {
   "case_id": "case_0014",
-  "lead_transaction_id": "txn_005202",
+  "lead_transaction_id": "txn_005302",
   "customer_id": "cus_0008",
   "covered_transaction_ids": [
-    "txn_005202"
+    "txn_005302"
   ],
   "flag_reasons": [
     {
@@ -22,8 +22,8 @@
   "action": "approve",
   "action_rationale": "Approve. The amount is unusual and the rest of the session is not. Holding it punishes a real purchase.",
   "confidence": "high",
-  "summary": "Sofia Fischer made one large purchase on their usual device, at home.",
-  "narrative": "One large purchase on the usual device at home, from a long-standing customer. Approve. The amount is unusual and the rest of the session is not. Holding it punishes a real purchase. Lead payment txn_005202 is $2,140.00 approved at Lumen Electronics on 06 Aug 2026 19:20 UTC, card \u2022\u20226824, device dev_0015 (Windows laptop \u00b7 Windows 11 \u00b7 Chrome). Before this episode, Sofia Fischer had 31 payments with a median of $41.20.",
+  "summary": "Priya Gupta made one large purchase on their usual device, at home.",
+  "narrative": "One large purchase on the usual device at home, from a long-standing customer. Approve. The amount is unusual and the rest of the session is not. Holding it punishes a real purchase. Lead payment txn_005302 is \u20b985,600.00 approved at Prism Electronics on 07 Aug 2026 00:50 IST, card \u2022\u20225644, device dev_0015 (Windows laptop \u00b7 Windows 11 \u00b7 Chrome). Before this episode, Priya Gupta had 32 payments with a median of \u20b91,737.98.",
   "signals": [
     {
       "name": "Case opened",
@@ -41,21 +41,21 @@
       "id": "open_case",
       "title": "Open the flagged payment",
       "status": "watch",
-      "started_at": "2026-08-11T15:00:00Z",
+      "started_at": "2026-08-11T04:30:00Z",
       "duration_ms": 420,
-      "finding": "Queue sent txn_005202 for Sofia Fischer: $2,140.00 at Lumen Electronics on 06 Aug 2026 19:20 UTC. The flagger's reasons were: Amount is far above this customer's own baseline; The payment's shape is an outlier for the whole book.",
+      "finding": "Queue sent txn_005302 for Priya Gupta: \u20b985,600.00 at Prism Electronics on 07 Aug 2026 00:50 IST. The flagger's reasons were: Amount is far above this customer's own baseline; The payment's shape is an outlier for the whole book.",
       "evidence": [
         {
           "label": "Transaction",
-          "value": "txn_005202"
+          "value": "txn_005302"
         },
         {
           "label": "Amount",
-          "value": "$2,140.00"
+          "value": "\u20b985,600.00"
         },
         {
           "label": "Customer",
-          "value": "Sofia Fischer (cus_0008)"
+          "value": "Priya Gupta (cus_0008)"
         },
         {
           "label": "Why it was queued",
@@ -67,25 +67,25 @@
       "id": "customer_baseline",
       "title": "Customer history and baseline",
       "status": "clear",
-      "started_at": "2026-08-11T15:00:00Z",
+      "started_at": "2026-08-11T04:30:00Z",
       "duration_ms": 680,
-      "finding": "Sofia Fischer has 31 prior payments before this episode, median $41.20. Account acct_0008 is 2141 days old. Usual devices: dev_0015, dev_0016. Countries already seen: CA.",
+      "finding": "Priya Gupta has 32 prior payments before this episode, median \u20b91,737.98. Account acct_0008 is 2171 days old. Usual devices: dev_0015, dev_0016. Countries already seen: IN.",
       "evidence": [
         {
           "label": "Account age",
-          "value": "2141 days"
+          "value": "2171 days"
         },
         {
           "label": "Prior payments",
-          "value": "31"
+          "value": "32"
         },
         {
           "label": "Median amount",
-          "value": "$41.20"
+          "value": "\u20b91,737.98"
         },
         {
           "label": "Home",
-          "value": "Toronto, CA"
+          "value": "Ahmedabad, IN"
         }
       ]
     },
@@ -93,9 +93,9 @@
       "id": "velocity",
       "title": "Payment velocity",
       "status": "clear",
-      "started_at": "2026-08-11T15:00:01Z",
+      "started_at": "2026-08-11T04:30:01Z",
       "duration_ms": 540,
-      "finding": "The episode around txn_005202 holds 1 payment across 0 minutes. The busiest hour contains 1 payment. 0 declines in the episode. Merchants touched: Lumen Electronics.",
+      "finding": "The episode around txn_005302 holds 1 payment across 0 minutes. The busiest hour contains 1 payment. 0 declines in the episode. Merchants touched: Prism Electronics.",
       "evidence": [
         {
           "label": "Payments in episode",
@@ -119,25 +119,25 @@
       "id": "amount",
       "title": "Amount versus baseline",
       "status": "alert",
-      "started_at": "2026-08-11T15:00:02Z",
+      "started_at": "2026-08-11T04:30:02Z",
       "duration_ms": 480,
-      "finding": "Episode amounts run from $2,140.00 to $2,140.00, median $2,140.00. The peak is 51.9\u00d7 the baseline median of $41.20.",
+      "finding": "Episode amounts run from \u20b985,600.00 to \u20b985,600.00, median \u20b985,600.00. The peak is 49.3\u00d7 the baseline median of \u20b91,737.98.",
       "evidence": [
         {
           "label": "Episode median",
-          "value": "$2,140.00"
+          "value": "\u20b985,600.00"
         },
         {
           "label": "Episode peak",
-          "value": "$2,140.00"
+          "value": "\u20b985,600.00"
         },
         {
           "label": "Baseline median",
-          "value": "$41.20"
+          "value": "\u20b91,737.98"
         },
         {
           "label": "Peak vs baseline",
-          "value": "51.9\u00d7"
+          "value": "49.3\u00d7"
         }
       ]
     },
@@ -145,9 +145,9 @@
       "id": "device_ip",
       "title": "Device and IP linkage",
       "status": "clear",
-      "started_at": "2026-08-11T15:00:03Z",
+      "started_at": "2026-08-11T04:30:03Z",
       "duration_ms": 730,
-      "finding": "Devices in the episode: dev_0015 (Windows laptop \u00b7 Windows 11 \u00b7 Chrome, already on file). IPs: 203.0.113.16 \u00b7 Toronto, CA. The customer's home country is Canada. Every payment in this episode is there.",
+      "finding": "Devices in the episode: dev_0015 (Windows laptop \u00b7 Windows 11 \u00b7 Chrome, already on file). IPs: 203.0.113.16 \u00b7 Ahmedabad, IN. The customer's home country is India. Every payment in this episode is there.",
       "evidence": [
         {
           "label": "New devices",
@@ -159,7 +159,7 @@
         },
         {
           "label": "Countries",
-          "value": "CA"
+          "value": "IN"
         },
         {
           "label": "Datacenter or VPN",
@@ -171,9 +171,9 @@
       "id": "network",
       "title": "Linked accounts and money flow",
       "status": "clear",
-      "started_at": "2026-08-11T15:00:04Z",
+      "started_at": "2026-08-11T04:30:04Z",
       "duration_ms": 860,
-      "finding": "No other customer uses the devices in this episode. No peer-to-peer transfer or cash-out on this account in the six-day window. No cash-out path leaves this account in the six-day money graph.",
+      "finding": "No other customer uses the devices in this episode. No UPI transfer or cash-out on this account in the six-day window. No cash-out path leaves this account in the six-day money graph.",
       "evidence": [
         {
           "label": "Linked customers",
@@ -197,9 +197,9 @@
       "id": "merchant",
       "title": "Merchant check",
       "status": "clear",
-      "started_at": "2026-08-11T15:00:05Z",
+      "started_at": "2026-08-11T04:30:05Z",
       "duration_ms": 640,
-      "finding": "Lumen Electronics (electronics, Madrid) has 5 payments in the past 14 days from 5 customers. 0% of those customers are under 45 days old. 0% of the amounts are round (multiples of $50, at least $200). Devices shared by two or more buyers: none.",
+      "finding": "Prism Electronics (electronics, Chandigarh) has 5 payments in the past 14 days from 5 customers. 0% of those customers are under 45 days old. 0% of the amounts are round (multiples of \u20b91,000, at least \u20b98,000). Devices shared by two or more buyers: none.",
       "evidence": [
         {
           "label": "Category",
@@ -223,7 +223,7 @@
       "id": "classify",
       "title": "Pattern classification",
       "status": "clear",
-      "started_at": "2026-08-11T15:00:06Z",
+      "started_at": "2026-08-11T04:30:06Z",
       "duration_ms": 390,
       "finding": "Legitimate activity. One large purchase on the usual device at home, from a long-standing customer.",
       "evidence": [
@@ -241,7 +241,7 @@
       "id": "recommend",
       "title": "Suggested action",
       "status": "clear",
-      "started_at": "2026-08-11T15:00:07Z",
+      "started_at": "2026-08-11T04:30:07Z",
       "duration_ms": 360,
       "finding": "Suggested action: approve. Risk score 20/100. Approve. The amount is unusual and the rest of the session is not. Holding it punishes a real purchase. A person still has to confirm this. FraudLens does not apply it.",
       "evidence": [
@@ -265,7 +265,7 @@
       {
         "id": "cus_0008",
         "type": "customer",
-        "label": "Sofia Fischer",
+        "label": "Priya Gupta",
         "sublabel": "cus_0008",
         "x": 0.2976,
         "y": 0.92,
@@ -292,7 +292,7 @@
       {
         "id": "ip_0015",
         "type": "ip",
-        "label": "Toronto",
+        "label": "Ahmedabad",
         "sublabel": "203.0.113.16",
         "x": 0.7021,
         "y": 0.08,
@@ -301,7 +301,7 @@
       {
         "id": "mer_013",
         "type": "merchant",
-        "label": "Lumen Electronics",
+        "label": "Prism Electronics",
         "sublabel": "electronics",
         "x": 0.08,
         "y": 0.2982,
@@ -338,48 +338,48 @@
   },
   "related_transactions": [
     {
-      "id": "txn_005202",
+      "id": "txn_005302",
       "occurred_at": "2026-08-06T19:20:00Z",
       "ts": 1786044000,
-      "amount_cents": 214000,
+      "amount_paise": 8560000,
       "status": "approved",
       "type": "card_purchase",
-      "merchant_name": "Lumen Electronics",
+      "merchant_name": "Prism Electronics",
       "merchant_category": "electronics",
       "device_id": "dev_0015",
-      "ip": "203.0.113.16 \u00b7 Toronto, CA",
-      "ip_country": "CA",
-      "city": "Toronto",
+      "ip": "203.0.113.16 \u00b7 Ahmedabad, IN",
+      "ip_country": "IN",
+      "city": "Ahmedabad",
       "flagged": true,
       "counterparty_account_id": null
     }
   ],
   "customer": {
     "id": "cus_0008",
-    "name": "Sofia Fischer",
-    "email": "sofia.fischer.7@example.com",
-    "home_city": "Toronto",
-    "home_country": "CA",
+    "name": "Priya Gupta",
+    "email": "priya.gupta.7@example.com",
+    "home_city": "Ahmedabad",
+    "home_country": "IN",
     "segment": "everyday",
-    "customer_since": "2020-09-25T00:00:00Z",
+    "customer_since": "2020-08-26T00:00:00Z",
     "account_id": "acct_0008",
-    "account_age_days": 2141
+    "account_age_days": 2171
   },
   "lead": {
-    "id": "txn_005202",
+    "id": "txn_005302",
     "occurred_at": "2026-08-06T19:20:00Z",
-    "amount_cents": 214000,
+    "amount_paise": 8560000,
     "status": "approved",
     "type": "card_purchase",
-    "merchant_name": "Lumen Electronics",
+    "merchant_name": "Prism Electronics",
     "merchant_category": "electronics",
     "device_id": "dev_0015",
     "device_label": "Windows laptop \u00b7 Windows 11 \u00b7 Chrome",
-    "ip": "203.0.113.16 \u00b7 Toronto, CA",
-    "ip_city": "Toronto",
-    "ip_country": "CA",
-    "card_last4": "6824"
+    "ip": "203.0.113.16 \u00b7 Ahmedabad, IN",
+    "ip_city": "Ahmedabad",
+    "ip_country": "IN",
+    "card_last4": "5644"
   },
-  "report_markdown": "# FraudLens case case_0014\n\n**Customer.** Sofia Fischer (cus_0008), Toronto, CA.\n**Lead payment.** txn_005202 \u00b7 $2,140.00 \u00b7 Lumen Electronics \u00b7 2026-08-06T19:20:00Z.\n**Pattern.** Legitimate activity (large purchase).\n**Risk score.** 20 / 100.\n**Suggested action.** approve \u2014 a human still has to confirm it.\n\n## Summary\n\nOne large purchase on the usual device at home, from a long-standing customer. Approve. The amount is unusual and the rest of the session is not. Holding it punishes a real purchase. Lead payment txn_005202 is $2,140.00 approved at Lumen Electronics on 06 Aug 2026 19:20 UTC, card \u2022\u20226824, device dev_0015 (Windows laptop \u00b7 Windows 11 \u00b7 Chrome). Before this episode, Sofia Fischer had 31 payments with a median of $41.20.\n\n## Why this score\n\n- **Case opened** (+4): Every queued payment starts with a small residual score.\n- **Explained one-off** (+16): Single large ticket, usual device, home IP, long tenure.\n\n## What the agent checked\n\n### Open the flagged payment (watch)\n\nQueue sent txn_005202 for Sofia Fischer: $2,140.00 at Lumen Electronics on 06 Aug 2026 19:20 UTC. The flagger's reasons were: Amount is far above this customer's own baseline; The payment's shape is an outlier for the whole book.\n\n- Transaction: txn_005202\n- Amount: $2,140.00\n- Customer: Sofia Fischer (cus_0008)\n- Why it was queued: amount_outlier, isolation_forest\n\n### Customer history and baseline (clear)\n\nSofia Fischer has 31 prior payments before this episode, median $41.20. Account acct_0008 is 2141 days old. Usual devices: dev_0015, dev_0016. Countries already seen: CA.\n\n- Account age: 2141 days\n- Prior payments: 31\n- Median amount: $41.20\n- Home: Toronto, CA\n\n### Payment velocity (clear)\n\nThe episode around txn_005202 holds 1 payment across 0 minutes. The busiest hour contains 1 payment. 0 declines in the episode. Merchants touched: Lumen Electronics.\n\n- Payments in episode: 1\n- Busiest hour: 1\n- Declines: 0\n- Distinct merchants: 1\n\n### Amount versus baseline (alert)\n\nEpisode amounts run from $2,140.00 to $2,140.00, median $2,140.00. The peak is 51.9\u00d7 the baseline median of $41.20.\n\n- Episode median: $2,140.00\n- Episode peak: $2,140.00\n- Baseline median: $41.20\n- Peak vs baseline: 51.9\u00d7\n\n### Device and IP linkage (clear)\n\nDevices in the episode: dev_0015 (Windows laptop \u00b7 Windows 11 \u00b7 Chrome, already on file). IPs: 203.0.113.16 \u00b7 Toronto, CA. The customer's home country is Canada. Every payment in this episode is there.\n\n- New devices: none\n- Mature devices reused: dev_0015\n- Countries: CA\n- Datacenter or VPN: no\n\n### Linked accounts and money flow (clear)\n\nNo other customer uses the devices in this episode. No peer-to-peer transfer or cash-out on this account in the six-day window. No cash-out path leaves this account in the six-day money graph.\n\n- Linked customers: 0\n- Household pattern: no\n- Reaches cash-out: no\n- Pass-through: no inbound\n\n### Merchant check (clear)\n\nLumen Electronics (electronics, Madrid) has 5 payments in the past 14 days from 5 customers. 0% of those customers are under 45 days old. 0% of the amounts are round (multiples of $50, at least $200). Devices shared by two or more buyers: none.\n\n- Category: electronics\n- Recent buyers: 5\n- Young-account share: 0%\n- Round-amount share: 0%\n\n### Pattern classification (clear)\n\nLegitimate activity. One large purchase on the usual device at home, from a long-standing customer.\n\n- Pattern: Legitimate activity\n- Detail: large purchase\n\n### Suggested action (clear)\n\nSuggested action: approve. Risk score 20/100. Approve. The amount is unusual and the rest of the session is not. Holding it punishes a real purchase. A person still has to confirm this. FraudLens does not apply it.\n\n- Suggested action: approve\n- Risk score: 20/100\n- Who decides: human analyst\n\n## Payments in the episode\n\n| When | Id | Amount | Status | Merchant | Device |\n| --- | --- | --- | --- | --- | --- |\n| 2026-08-06T19:20:00Z | txn_005202 | $2,140.00 | approved | Lumen Electronics | dev_0015 |\n\n## Action rationale\n\nApprove. The amount is unusual and the rest of the session is not. Holding it punishes a real purchase.\n\n## Held-out label\n\nThis section is joined after the investigation. The agent did not see it.\n\n- Fraud: no\n- Pattern: legitimate\n\n*FraudLens suggests. An analyst decides.*\n",
+  "report_markdown": "# FraudLens case case_0014\n\n**Customer.** Priya Gupta (cus_0008), Ahmedabad, IN.\n**Lead payment.** txn_005302 \u00b7 \u20b985,600.00 \u00b7 Prism Electronics \u00b7 2026-08-06T19:20:00Z.\n**Pattern.** Legitimate activity (large purchase).\n**Risk score.** 20 / 100.\n**Suggested action.** approve \u2014 a human still has to confirm it.\n\n## Summary\n\nOne large purchase on the usual device at home, from a long-standing customer. Approve. The amount is unusual and the rest of the session is not. Holding it punishes a real purchase. Lead payment txn_005302 is \u20b985,600.00 approved at Prism Electronics on 07 Aug 2026 00:50 IST, card \u2022\u20225644, device dev_0015 (Windows laptop \u00b7 Windows 11 \u00b7 Chrome). Before this episode, Priya Gupta had 32 payments with a median of \u20b91,737.98.\n\n## Why this score\n\n- **Case opened** (+4): Every queued payment starts with a small residual score.\n- **Explained one-off** (+16): Single large ticket, usual device, home IP, long tenure.\n\n## What the agent checked\n\n### Open the flagged payment (watch)\n\nQueue sent txn_005302 for Priya Gupta: \u20b985,600.00 at Prism Electronics on 07 Aug 2026 00:50 IST. The flagger's reasons were: Amount is far above this customer's own baseline; The payment's shape is an outlier for the whole book.\n\n- Transaction: txn_005302\n- Amount: \u20b985,600.00\n- Customer: Priya Gupta (cus_0008)\n- Why it was queued: amount_outlier, isolation_forest\n\n### Customer history and baseline (clear)\n\nPriya Gupta has 32 prior payments before this episode, median \u20b91,737.98. Account acct_0008 is 2171 days old. Usual devices: dev_0015, dev_0016. Countries already seen: IN.\n\n- Account age: 2171 days\n- Prior payments: 32\n- Median amount: \u20b91,737.98\n- Home: Ahmedabad, IN\n\n### Payment velocity (clear)\n\nThe episode around txn_005302 holds 1 payment across 0 minutes. The busiest hour contains 1 payment. 0 declines in the episode. Merchants touched: Prism Electronics.\n\n- Payments in episode: 1\n- Busiest hour: 1\n- Declines: 0\n- Distinct merchants: 1\n\n### Amount versus baseline (alert)\n\nEpisode amounts run from \u20b985,600.00 to \u20b985,600.00, median \u20b985,600.00. The peak is 49.3\u00d7 the baseline median of \u20b91,737.98.\n\n- Episode median: \u20b985,600.00\n- Episode peak: \u20b985,600.00\n- Baseline median: \u20b91,737.98\n- Peak vs baseline: 49.3\u00d7\n\n### Device and IP linkage (clear)\n\nDevices in the episode: dev_0015 (Windows laptop \u00b7 Windows 11 \u00b7 Chrome, already on file). IPs: 203.0.113.16 \u00b7 Ahmedabad, IN. The customer's home country is India. Every payment in this episode is there.\n\n- New devices: none\n- Mature devices reused: dev_0015\n- Countries: IN\n- Datacenter or VPN: no\n\n### Linked accounts and money flow (clear)\n\nNo other customer uses the devices in this episode. No UPI transfer or cash-out on this account in the six-day window. No cash-out path leaves this account in the six-day money graph.\n\n- Linked customers: 0\n- Household pattern: no\n- Reaches cash-out: no\n- Pass-through: no inbound\n\n### Merchant check (clear)\n\nPrism Electronics (electronics, Chandigarh) has 5 payments in the past 14 days from 5 customers. 0% of those customers are under 45 days old. 0% of the amounts are round (multiples of \u20b91,000, at least \u20b98,000). Devices shared by two or more buyers: none.\n\n- Category: electronics\n- Recent buyers: 5\n- Young-account share: 0%\n- Round-amount share: 0%\n\n### Pattern classification (clear)\n\nLegitimate activity. One large purchase on the usual device at home, from a long-standing customer.\n\n- Pattern: Legitimate activity\n- Detail: large purchase\n\n### Suggested action (clear)\n\nSuggested action: approve. Risk score 20/100. Approve. The amount is unusual and the rest of the session is not. Holding it punishes a real purchase. A person still has to confirm this. FraudLens does not apply it.\n\n- Suggested action: approve\n- Risk score: 20/100\n- Who decides: human analyst\n\n## Payments in the episode\n\n| When | Id | Amount | Status | Merchant | Device |\n| --- | --- | --- | --- | --- | --- |\n| 2026-08-06T19:20:00Z | txn_005302 | \u20b985,600.00 | approved | Prism Electronics | dev_0015 |\n\n## Action rationale\n\nApprove. The amount is unusual and the rest of the session is not. Holding it punishes a real purchase.\n\n## Held-out label\n\nThis section is joined after the investigation. The agent did not see it.\n\n- Fraud: no\n- Pattern: legitimate\n\n*FraudLens suggests. An analyst decides.*\n",
   "showcase": null
 }

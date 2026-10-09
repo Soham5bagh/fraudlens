@@ -1,9 +1,9 @@
 {
   "case_id": "case_0013",
-  "lead_transaction_id": "txn_005211",
+  "lead_transaction_id": "txn_005311",
   "customer_id": "cus_0016",
   "covered_transaction_ids": [
-    "txn_005211"
+    "txn_005311"
   ],
   "flag_reasons": [
     {
@@ -18,8 +18,8 @@
   "action": "approve",
   "action_rationale": "Approve. A replacement phone at home, spending like the customer always does, is not an account takeover.",
   "confidence": "high",
-  "summary": "Aisha Diaz used a new phone at home, and the amount matches their usual spend.",
-  "narrative": "The only new thing is the device. It is at home, and the amount matches a grocery run. Approve. A replacement phone at home, spending like the customer always does, is not an account takeover. Lead payment txn_005211 is $36.50 approved at Greenmarket Co-op on 06 Aug 2026 18:40 UTC, card \u2022\u20224823, device dev_0338 (iPhone \u00b7 iOS 18 \u00b7 Safari). Before this episode, Aisha Diaz had 29 payments with a median of $35.38.",
+  "summary": "Arjun Menon used a new phone at home, and the amount matches their usual spend.",
+  "narrative": "The only new thing is the device. It is at home, and the amount matches a grocery run. Approve. A replacement phone at home, spending like the customer always does, is not an account takeover. Lead payment txn_005311 is \u20b91,460.00 approved at Kirana Junction on 07 Aug 2026 00:10 IST, card \u2022\u20227949, device dev_0338 (iPhone \u00b7 iOS 18 \u00b7 Safari). Before this episode, Arjun Menon had 42 payments with a median of \u20b91,871.20.",
   "signals": [
     {
       "name": "Case opened",
@@ -37,21 +37,21 @@
       "id": "open_case",
       "title": "Open the flagged payment",
       "status": "watch",
-      "started_at": "2026-08-11T15:00:00Z",
+      "started_at": "2026-08-11T04:30:00Z",
       "duration_ms": 420,
-      "finding": "Queue sent txn_005211 for Aisha Diaz: $36.50 at Greenmarket Co-op on 06 Aug 2026 18:40 UTC. The flagger's reasons were: Device has never been used by this customer before.",
+      "finding": "Queue sent txn_005311 for Arjun Menon: \u20b91,460.00 at Kirana Junction on 07 Aug 2026 00:10 IST. The flagger's reasons were: Device has never been used by this customer before.",
       "evidence": [
         {
           "label": "Transaction",
-          "value": "txn_005211"
+          "value": "txn_005311"
         },
         {
           "label": "Amount",
-          "value": "$36.50"
+          "value": "\u20b91,460.00"
         },
         {
           "label": "Customer",
-          "value": "Aisha Diaz (cus_0016)"
+          "value": "Arjun Menon (cus_0016)"
         },
         {
           "label": "Why it was queued",
@@ -63,25 +63,25 @@
       "id": "customer_baseline",
       "title": "Customer history and baseline",
       "status": "clear",
-      "started_at": "2026-08-11T15:00:00Z",
+      "started_at": "2026-08-11T04:30:00Z",
       "duration_ms": 680,
-      "finding": "Aisha Diaz has 29 prior payments before this episode, median $35.38. Account acct_0016 is 1712 days old. Usual devices: dev_0031. Countries already seen: GB.",
+      "finding": "Arjun Menon has 42 prior payments before this episode, median \u20b91,871.20. Account acct_0016 is 1373 days old. Usual devices: dev_0031, dev_0032. Countries already seen: IN.",
       "evidence": [
         {
           "label": "Account age",
-          "value": "1712 days"
+          "value": "1373 days"
         },
         {
           "label": "Prior payments",
-          "value": "29"
+          "value": "42"
         },
         {
           "label": "Median amount",
-          "value": "$35.38"
+          "value": "\u20b91,871.20"
         },
         {
           "label": "Home",
-          "value": "London, GB"
+          "value": "Mumbai, IN"
         }
       ]
     },
@@ -89,9 +89,9 @@
       "id": "velocity",
       "title": "Payment velocity",
       "status": "clear",
-      "started_at": "2026-08-11T15:00:01Z",
+      "started_at": "2026-08-11T04:30:01Z",
       "duration_ms": 540,
-      "finding": "The episode around txn_005211 holds 1 payment across 0 minutes. The busiest hour contains 1 payment. 0 declines in the episode. Merchants touched: Greenmarket Co-op.",
+      "finding": "The episode around txn_005311 holds 1 payment across 0 minutes. The busiest hour contains 1 payment. 0 declines in the episode. Merchants touched: Kirana Junction.",
       "evidence": [
         {
           "label": "Payments in episode",
@@ -115,25 +115,25 @@
       "id": "amount",
       "title": "Amount versus baseline",
       "status": "clear",
-      "started_at": "2026-08-11T15:00:02Z",
+      "started_at": "2026-08-11T04:30:02Z",
       "duration_ms": 480,
-      "finding": "Episode amounts run from $36.50 to $36.50, median $36.50. The peak is in line with a baseline median of $35.38 (peak is 1.0\u00d7).",
+      "finding": "Episode amounts run from \u20b91,460.00 to \u20b91,460.00, median \u20b91,460.00. The peak is in line with a baseline median of \u20b91,871.20 (peak is 0.8\u00d7).",
       "evidence": [
         {
           "label": "Episode median",
-          "value": "$36.50"
+          "value": "\u20b91,460.00"
         },
         {
           "label": "Episode peak",
-          "value": "$36.50"
+          "value": "\u20b91,460.00"
         },
         {
           "label": "Baseline median",
-          "value": "$35.38"
+          "value": "\u20b91,871.20"
         },
         {
           "label": "Peak vs baseline",
-          "value": "1.0\u00d7"
+          "value": "0.8\u00d7"
         }
       ]
     },
@@ -141,9 +141,9 @@
       "id": "device_ip",
       "title": "Device and IP linkage",
       "status": "watch",
-      "started_at": "2026-08-11T15:00:03Z",
+      "started_at": "2026-08-11T04:30:03Z",
       "duration_ms": 730,
-      "finding": "Devices in the episode: dev_0338 (iPhone \u00b7 iOS 18 \u00b7 Safari, new to this customer). IPs: 203.0.113.32 \u00b7 London, GB. The customer's home country is the United Kingdom. Every payment in this episode is there.",
+      "finding": "Devices in the episode: dev_0338 (iPhone \u00b7 iOS 18 \u00b7 Safari, new to this customer). IPs: 203.0.113.32 \u00b7 Mumbai, IN. The customer's home country is India. Every payment in this episode is there.",
       "evidence": [
         {
           "label": "New devices",
@@ -155,7 +155,7 @@
         },
         {
           "label": "Countries",
-          "value": "GB"
+          "value": "IN"
         },
         {
           "label": "Datacenter or VPN",
@@ -167,9 +167,9 @@
       "id": "network",
       "title": "Linked accounts and money flow",
       "status": "clear",
-      "started_at": "2026-08-11T15:00:04Z",
+      "started_at": "2026-08-11T04:30:04Z",
       "duration_ms": 860,
-      "finding": "No other customer uses the devices in this episode. No peer-to-peer transfer or cash-out on this account in the six-day window. No cash-out path leaves this account in the six-day money graph.",
+      "finding": "No other customer uses the devices in this episode. No UPI transfer or cash-out on this account in the six-day window. No cash-out path leaves this account in the six-day money graph.",
       "evidence": [
         {
           "label": "Linked customers",
@@ -193,9 +193,9 @@
       "id": "merchant",
       "title": "Merchant check",
       "status": "clear",
-      "started_at": "2026-08-11T15:00:05Z",
+      "started_at": "2026-08-11T04:30:05Z",
       "duration_ms": 640,
-      "finding": "Greenmarket Co-op (grocery, Madrid) has 53 payments in the past 14 days from 43 customers. 0% of those customers are under 45 days old. 0% of the amounts are round (multiples of $50, at least $200). Devices shared by two or more buyers: none.",
+      "finding": "Kirana Junction (grocery, Chandigarh) has 54 payments in the past 14 days from 50 customers. 0% of those customers are under 45 days old. 0% of the amounts are round (multiples of \u20b91,000, at least \u20b98,000). Devices shared by two or more buyers: none.",
       "evidence": [
         {
           "label": "Category",
@@ -203,7 +203,7 @@
         },
         {
           "label": "Recent buyers",
-          "value": "43"
+          "value": "50"
         },
         {
           "label": "Young-account share",
@@ -219,7 +219,7 @@
       "id": "classify",
       "title": "Pattern classification",
       "status": "clear",
-      "started_at": "2026-08-11T15:00:06Z",
+      "started_at": "2026-08-11T04:30:06Z",
       "duration_ms": 390,
       "finding": "Legitimate activity. The only new thing is the device. It is at home, and the amount matches a grocery run.",
       "evidence": [
@@ -237,7 +237,7 @@
       "id": "recommend",
       "title": "Suggested action",
       "status": "clear",
-      "started_at": "2026-08-11T15:00:07Z",
+      "started_at": "2026-08-11T04:30:07Z",
       "duration_ms": 360,
       "finding": "Suggested action: approve. Risk score 18/100. Approve. A replacement phone at home, spending like the customer always does, is not an account takeover. A person still has to confirm this. FraudLens does not apply it.",
       "evidence": [
@@ -261,7 +261,7 @@
       {
         "id": "cus_0016",
         "type": "customer",
-        "label": "Aisha Diaz",
+        "label": "Arjun Menon",
         "sublabel": "cus_0016",
         "x": 0.2976,
         "y": 0.92,
@@ -288,7 +288,7 @@
       {
         "id": "ip_0031",
         "type": "ip",
-        "label": "London",
+        "label": "Mumbai",
         "sublabel": "203.0.113.32",
         "x": 0.7021,
         "y": 0.08,
@@ -297,7 +297,7 @@
       {
         "id": "mer_002",
         "type": "merchant",
-        "label": "Greenmarket Co-op",
+        "label": "Kirana Junction",
         "sublabel": "grocery",
         "x": 0.08,
         "y": 0.2982,
@@ -334,48 +334,48 @@
   },
   "related_transactions": [
     {
-      "id": "txn_005211",
+      "id": "txn_005311",
       "occurred_at": "2026-08-06T18:40:00Z",
       "ts": 1786041600,
-      "amount_cents": 3650,
+      "amount_paise": 146000,
       "status": "approved",
       "type": "card_purchase",
-      "merchant_name": "Greenmarket Co-op",
+      "merchant_name": "Kirana Junction",
       "merchant_category": "grocery",
       "device_id": "dev_0338",
-      "ip": "203.0.113.32 \u00b7 London, GB",
-      "ip_country": "GB",
-      "city": "London",
+      "ip": "203.0.113.32 \u00b7 Mumbai, IN",
+      "ip_country": "IN",
+      "city": "Mumbai",
       "flagged": true,
       "counterparty_account_id": null
     }
   ],
   "customer": {
     "id": "cus_0016",
-    "name": "Aisha Diaz",
-    "email": "aisha.diaz.15@example.com",
-    "home_city": "London",
-    "home_country": "GB",
+    "name": "Arjun Menon",
+    "email": "arjun.menon.15@example.com",
+    "home_city": "Mumbai",
+    "home_country": "IN",
     "segment": "everyday",
-    "customer_since": "2021-11-28T00:00:00Z",
+    "customer_since": "2022-11-02T00:00:00Z",
     "account_id": "acct_0016",
-    "account_age_days": 1712
+    "account_age_days": 1373
   },
   "lead": {
-    "id": "txn_005211",
+    "id": "txn_005311",
     "occurred_at": "2026-08-06T18:40:00Z",
-    "amount_cents": 3650,
+    "amount_paise": 146000,
     "status": "approved",
     "type": "card_purchase",
-    "merchant_name": "Greenmarket Co-op",
+    "merchant_name": "Kirana Junction",
     "merchant_category": "grocery",
     "device_id": "dev_0338",
     "device_label": "iPhone \u00b7 iOS 18 \u00b7 Safari",
-    "ip": "203.0.113.32 \u00b7 London, GB",
-    "ip_city": "London",
-    "ip_country": "GB",
-    "card_last4": "4823"
+    "ip": "203.0.113.32 \u00b7 Mumbai, IN",
+    "ip_city": "Mumbai",
+    "ip_country": "IN",
+    "card_last4": "7949"
   },
-  "report_markdown": "# FraudLens case case_0013\n\n**Customer.** Aisha Diaz (cus_0016), London, GB.\n**Lead payment.** txn_005211 \u00b7 $36.50 \u00b7 Greenmarket Co-op \u00b7 2026-08-06T18:40:00Z.\n**Pattern.** Legitimate activity (new device at home).\n**Risk score.** 18 / 100.\n**Suggested action.** approve \u2014 a human still has to confirm it.\n\n## Summary\n\nThe only new thing is the device. It is at home, and the amount matches a grocery run. Approve. A replacement phone at home, spending like the customer always does, is not an account takeover. Lead payment txn_005211 is $36.50 approved at Greenmarket Co-op on 06 Aug 2026 18:40 UTC, card \u2022\u20224823, device dev_0338 (iPhone \u00b7 iOS 18 \u00b7 Safari). Before this episode, Aisha Diaz had 29 payments with a median of $35.38.\n\n## Why this score\n\n- **Case opened** (+4): Every queued payment starts with a small residual score.\n- **New device at home** (+14): New hardware, household IP, amount inside the baseline.\n\n## What the agent checked\n\n### Open the flagged payment (watch)\n\nQueue sent txn_005211 for Aisha Diaz: $36.50 at Greenmarket Co-op on 06 Aug 2026 18:40 UTC. The flagger's reasons were: Device has never been used by this customer before.\n\n- Transaction: txn_005211\n- Amount: $36.50\n- Customer: Aisha Diaz (cus_0016)\n- Why it was queued: new_device\n\n### Customer history and baseline (clear)\n\nAisha Diaz has 29 prior payments before this episode, median $35.38. Account acct_0016 is 1712 days old. Usual devices: dev_0031. Countries already seen: GB.\n\n- Account age: 1712 days\n- Prior payments: 29\n- Median amount: $35.38\n- Home: London, GB\n\n### Payment velocity (clear)\n\nThe episode around txn_005211 holds 1 payment across 0 minutes. The busiest hour contains 1 payment. 0 declines in the episode. Merchants touched: Greenmarket Co-op.\n\n- Payments in episode: 1\n- Busiest hour: 1\n- Declines: 0\n- Distinct merchants: 1\n\n### Amount versus baseline (clear)\n\nEpisode amounts run from $36.50 to $36.50, median $36.50. The peak is in line with a baseline median of $35.38 (peak is 1.0\u00d7).\n\n- Episode median: $36.50\n- Episode peak: $36.50\n- Baseline median: $35.38\n- Peak vs baseline: 1.0\u00d7\n\n### Device and IP linkage (watch)\n\nDevices in the episode: dev_0338 (iPhone \u00b7 iOS 18 \u00b7 Safari, new to this customer). IPs: 203.0.113.32 \u00b7 London, GB. The customer's home country is the United Kingdom. Every payment in this episode is there.\n\n- New devices: dev_0338\n- Mature devices reused: none\n- Countries: GB\n- Datacenter or VPN: no\n\n### Linked accounts and money flow (clear)\n\nNo other customer uses the devices in this episode. No peer-to-peer transfer or cash-out on this account in the six-day window. No cash-out path leaves this account in the six-day money graph.\n\n- Linked customers: 0\n- Household pattern: no\n- Reaches cash-out: no\n- Pass-through: no inbound\n\n### Merchant check (clear)\n\nGreenmarket Co-op (grocery, Madrid) has 53 payments in the past 14 days from 43 customers. 0% of those customers are under 45 days old. 0% of the amounts are round (multiples of $50, at least $200). Devices shared by two or more buyers: none.\n\n- Category: grocery\n- Recent buyers: 43\n- Young-account share: 0%\n- Round-amount share: 0%\n\n### Pattern classification (clear)\n\nLegitimate activity. The only new thing is the device. It is at home, and the amount matches a grocery run.\n\n- Pattern: Legitimate activity\n- Detail: new device at home\n\n### Suggested action (clear)\n\nSuggested action: approve. Risk score 18/100. Approve. A replacement phone at home, spending like the customer always does, is not an account takeover. A person still has to confirm this. FraudLens does not apply it.\n\n- Suggested action: approve\n- Risk score: 18/100\n- Who decides: human analyst\n\n## Payments in the episode\n\n| When | Id | Amount | Status | Merchant | Device |\n| --- | --- | --- | --- | --- | --- |\n| 2026-08-06T18:40:00Z | txn_005211 | $36.50 | approved | Greenmarket Co-op | dev_0338 |\n\n## Action rationale\n\nApprove. A replacement phone at home, spending like the customer always does, is not an account takeover.\n\n## Held-out label\n\nThis section is joined after the investigation. The agent did not see it.\n\n- Fraud: no\n- Pattern: legitimate\n\n*FraudLens suggests. An analyst decides.*\n",
+  "report_markdown": "# FraudLens case case_0013\n\n**Customer.** Arjun Menon (cus_0016), Mumbai, IN.\n**Lead payment.** txn_005311 \u00b7 \u20b91,460.00 \u00b7 Kirana Junction \u00b7 2026-08-06T18:40:00Z.\n**Pattern.** Legitimate activity (new device at home).\n**Risk score.** 18 / 100.\n**Suggested action.** approve \u2014 a human still has to confirm it.\n\n## Summary\n\nThe only new thing is the device. It is at home, and the amount matches a grocery run. Approve. A replacement phone at home, spending like the customer always does, is not an account takeover. Lead payment txn_005311 is \u20b91,460.00 approved at Kirana Junction on 07 Aug 2026 00:10 IST, card \u2022\u20227949, device dev_0338 (iPhone \u00b7 iOS 18 \u00b7 Safari). Before this episode, Arjun Menon had 42 payments with a median of \u20b91,871.20.\n\n## Why this score\n\n- **Case opened** (+4): Every queued payment starts with a small residual score.\n- **New device at home** (+14): New hardware, household IP, amount inside the baseline.\n\n## What the agent checked\n\n### Open the flagged payment (watch)\n\nQueue sent txn_005311 for Arjun Menon: \u20b91,460.00 at Kirana Junction on 07 Aug 2026 00:10 IST. The flagger's reasons were: Device has never been used by this customer before.\n\n- Transaction: txn_005311\n- Amount: \u20b91,460.00\n- Customer: Arjun Menon (cus_0016)\n- Why it was queued: new_device\n\n### Customer history and baseline (clear)\n\nArjun Menon has 42 prior payments before this episode, median \u20b91,871.20. Account acct_0016 is 1373 days old. Usual devices: dev_0031, dev_0032. Countries already seen: IN.\n\n- Account age: 1373 days\n- Prior payments: 42\n- Median amount: \u20b91,871.20\n- Home: Mumbai, IN\n\n### Payment velocity (clear)\n\nThe episode around txn_005311 holds 1 payment across 0 minutes. The busiest hour contains 1 payment. 0 declines in the episode. Merchants touched: Kirana Junction.\n\n- Payments in episode: 1\n- Busiest hour: 1\n- Declines: 0\n- Distinct merchants: 1\n\n### Amount versus baseline (clear)\n\nEpisode amounts run from \u20b91,460.00 to \u20b91,460.00, median \u20b91,460.00. The peak is in line with a baseline median of \u20b91,871.20 (peak is 0.8\u00d7).\n\n- Episode median: \u20b91,460.00\n- Episode peak: \u20b91,460.00\n- Baseline median: \u20b91,871.20\n- Peak vs baseline: 0.8\u00d7\n\n### Device and IP linkage (watch)\n\nDevices in the episode: dev_0338 (iPhone \u00b7 iOS 18 \u00b7 Safari, new to this customer). IPs: 203.0.113.32 \u00b7 Mumbai, IN. The customer's home country is India. Every payment in this episode is there.\n\n- New devices: dev_0338\n- Mature devices reused: none\n- Countries: IN\n- Datacenter or VPN: no\n\n### Linked accounts and money flow (clear)\n\nNo other customer uses the devices in this episode. No UPI transfer or cash-out on this account in the six-day window. No cash-out path leaves this account in the six-day money graph.\n\n- Linked customers: 0\n- Household pattern: no\n- Reaches cash-out: no\n- Pass-through: no inbound\n\n### Merchant check (clear)\n\nKirana Junction (grocery, Chandigarh) has 54 payments in the past 14 days from 50 customers. 0% of those customers are under 45 days old. 0% of the amounts are round (multiples of \u20b91,000, at least \u20b98,000). Devices shared by two or more buyers: none.\n\n- Category: grocery\n- Recent buyers: 50\n- Young-account share: 0%\n- Round-amount share: 0%\n\n### Pattern classification (clear)\n\nLegitimate activity. The only new thing is the device. It is at home, and the amount matches a grocery run.\n\n- Pattern: Legitimate activity\n- Detail: new device at home\n\n### Suggested action (clear)\n\nSuggested action: approve. Risk score 18/100. Approve. A replacement phone at home, spending like the customer always does, is not an account takeover. A person still has to confirm this. FraudLens does not apply it.\n\n- Suggested action: approve\n- Risk score: 18/100\n- Who decides: human analyst\n\n## Payments in the episode\n\n| When | Id | Amount | Status | Merchant | Device |\n| --- | --- | --- | --- | --- | --- |\n| 2026-08-06T18:40:00Z | txn_005311 | \u20b91,460.00 | approved | Kirana Junction | dev_0338 |\n\n## Action rationale\n\nApprove. A replacement phone at home, spending like the customer always does, is not an account takeover.\n\n## Held-out label\n\nThis section is joined after the investigation. The agent did not see it.\n\n- Fraud: no\n- Pattern: legitimate\n\n*FraudLens suggests. An analyst decides.*\n",
   "showcase": null
 }

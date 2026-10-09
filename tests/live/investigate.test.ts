@@ -22,6 +22,19 @@ test("the live investigation is a LangGraph graph with a merchant-or-transfer br
   assert.equal(cardStep?.evidence[0].label, "Category");
 });
 
+test("live files are Indian customers, in rupees, on IST", async () => {
+  for (const scenario of PLANTED) {
+    const { investigation } = await runLive(scenario, 31);
+    assert.equal(investigation.customer.homeCountry, "IN", scenario);
+    assert.ok(investigation.narrative.includes("₹"), scenario);
+    assert.ok(investigation.narrative.includes(" IST"), scenario);
+    for (const banned of ["$", "UTC", "USD", "at UPI transfer"]) {
+      const text = [investigation.narrative, ...investigation.timeline.map((step) => step.finding)].join(" ");
+      assert.ok(!text.includes(banned), `${scenario} contains ${banned}`);
+    }
+  }
+});
+
 test("same seed produces the same investigation", async () => {
   const first = await runLive("card_testing", 1234);
   const second = await runLive("card_testing", 1234);

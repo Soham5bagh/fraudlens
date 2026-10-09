@@ -1,10 +1,10 @@
 import type { Action } from "./types";
 
-export function money(cents: number): string {
-  return new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
-  }).format(cents / 100);
+const RUPEES = new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR" });
+
+/** Paise to rupees with Indian digit grouping, for example ₹1,23,456.78. */
+export function money(paise: number): string {
+  return RUPEES.format(paise / 100);
 }
 
 export function pct(value: number): string {
@@ -24,10 +24,10 @@ export function when(iso: string): string {
     year: "numeric",
     hour: "2-digit",
     minute: "2-digit",
-    timeZone: "UTC",
+    timeZone: "Asia/Kolkata",
     hourCycle: "h23",
   }).format(new Date(iso));
-  return `${formatted} UTC`;
+  return `${formatted} IST`;
 }
 
 export function actionLabel(action: Action): string {

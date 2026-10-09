@@ -1,8 +1,16 @@
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
-export function money(cents: number | null | undefined): string {
-  if (cents == null || Number.isNaN(cents)) return "—";
-  return (cents / 100).toLocaleString("en-US", { style: "currency", currency: "USD" });
+const RUPEES = new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR" });
+const IST_OFFSET_MS = (5 * 60 + 30) * 60 * 1000;
+
+export function money(paise: number | null | undefined): string {
+  if (paise == null || Number.isNaN(paise)) return "—";
+  return RUPEES.format(paise / 100);
+}
+
+export function wholeRupees(paise: number): string {
+  const text = money(paise);
+  return text.endsWith(".00") ? text.slice(0, -3) : text;
 }
 
 export function plural(n: number, word: string): string {
@@ -26,19 +34,20 @@ export function isoFromMs(ms: number): string {
   return new Date(trimmed).toISOString().replace(".000Z", "Z");
 }
 
+/** India Standard Time has no daylight saving, so a fixed offset is exact. */
 export function clock(ts: number): string {
-  const d = new Date(ts * 1000);
+  const d = new Date(ts * 1000 + IST_OFFSET_MS);
   const day = String(d.getUTCDate()).padStart(2, "0");
   const hh = String(d.getUTCHours()).padStart(2, "0");
   const mm = String(d.getUTCMinutes()).padStart(2, "0");
-  return `${day} ${MONTHS[d.getUTCMonth()]} ${d.getUTCFullYear()} ${hh}:${mm} UTC`;
+  return `${day} ${MONTHS[d.getUTCMonth()]} ${d.getUTCFullYear()} ${hh}:${mm} IST`;
 }
 
 export function shortClock(ts: number): string {
-  const d = new Date(ts * 1000);
+  const d = new Date(ts * 1000 + IST_OFFSET_MS);
   const hh = String(d.getUTCHours()).padStart(2, "0");
   const mm = String(d.getUTCMinutes()).padStart(2, "0");
-  return `${hh}:${mm} UTC`;
+  return `${hh}:${mm} IST`;
 }
 
 export function minutesBetween(startTs: number, endTs: number): number {

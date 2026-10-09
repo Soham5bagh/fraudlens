@@ -1,9 +1,9 @@
 {
   "case_id": "case_0009",
-  "lead_transaction_id": "txn_005210",
+  "lead_transaction_id": "txn_005310",
   "customer_id": "cus_0003",
   "covered_transaction_ids": [
-    "txn_005210"
+    "txn_005310"
   ],
   "flag_reasons": [
     {
@@ -18,8 +18,8 @@
   "action": "approve",
   "action_rationale": "Approve. A replacement phone at home, spending like the customer always does, is not an account takeover.",
   "confidence": "high",
-  "summary": "Priya Keller used a new phone at home, and the amount matches their usual spend.",
-  "narrative": "The only new thing is the device. It is at home, and the amount matches a grocery run. Approve. A replacement phone at home, spending like the customer always does, is not an account takeover. Lead payment txn_005210 is $34.00 approved at Harbor Grocery on 05 Aug 2026 18:40 UTC, card \u2022\u20224456, device dev_0337 (iPhone \u00b7 iOS 18 \u00b7 Safari). Before this episode, Priya Keller had 33 payments with a median of $41.99.",
+  "summary": "Arnab Banerjee used a new phone at home, and the amount matches their usual spend.",
+  "narrative": "The only new thing is the device. It is at home, and the amount matches a grocery run. Approve. A replacement phone at home, spending like the customer always does, is not an account takeover. Lead payment txn_005310 is \u20b91,360.00 approved at Kirana Junction on 06 Aug 2026 00:10 IST, card \u2022\u20223545, device dev_0337 (iPhone \u00b7 iOS 18 \u00b7 Safari). Before this episode, Arnab Banerjee had 37 payments with a median of \u20b91,626.29.",
   "signals": [
     {
       "name": "Case opened",
@@ -37,21 +37,21 @@
       "id": "open_case",
       "title": "Open the flagged payment",
       "status": "watch",
-      "started_at": "2026-08-11T15:00:00Z",
+      "started_at": "2026-08-11T04:30:00Z",
       "duration_ms": 420,
-      "finding": "Queue sent txn_005210 for Priya Keller: $34.00 at Harbor Grocery on 05 Aug 2026 18:40 UTC. The flagger's reasons were: Device has never been used by this customer before.",
+      "finding": "Queue sent txn_005310 for Arnab Banerjee: \u20b91,360.00 at Kirana Junction on 06 Aug 2026 00:10 IST. The flagger's reasons were: Device has never been used by this customer before.",
       "evidence": [
         {
           "label": "Transaction",
-          "value": "txn_005210"
+          "value": "txn_005310"
         },
         {
           "label": "Amount",
-          "value": "$34.00"
+          "value": "\u20b91,360.00"
         },
         {
           "label": "Customer",
-          "value": "Priya Keller (cus_0003)"
+          "value": "Arnab Banerjee (cus_0003)"
         },
         {
           "label": "Why it was queued",
@@ -63,25 +63,25 @@
       "id": "customer_baseline",
       "title": "Customer history and baseline",
       "status": "clear",
-      "started_at": "2026-08-11T15:00:00Z",
+      "started_at": "2026-08-11T04:30:00Z",
       "duration_ms": 680,
-      "finding": "Priya Keller has 33 prior payments before this episode, median $41.99. Account acct_0003 is 385 days old. Usual devices: dev_0005, dev_0006. Countries already seen: GB.",
+      "finding": "Arnab Banerjee has 37 prior payments before this episode, median \u20b91,626.29. Account acct_0003 is 1033 days old. Usual devices: dev_0005, dev_0006. Countries already seen: IN.",
       "evidence": [
         {
           "label": "Account age",
-          "value": "385 days"
+          "value": "1033 days"
         },
         {
           "label": "Prior payments",
-          "value": "33"
+          "value": "37"
         },
         {
           "label": "Median amount",
-          "value": "$41.99"
+          "value": "\u20b91,626.29"
         },
         {
           "label": "Home",
-          "value": "Edinburgh, GB"
+          "value": "Bengaluru, IN"
         }
       ]
     },
@@ -89,9 +89,9 @@
       "id": "velocity",
       "title": "Payment velocity",
       "status": "clear",
-      "started_at": "2026-08-11T15:00:01Z",
+      "started_at": "2026-08-11T04:30:01Z",
       "duration_ms": 540,
-      "finding": "The episode around txn_005210 holds 1 payment across 0 minutes. The busiest hour contains 1 payment. 0 declines in the episode. Merchants touched: Harbor Grocery.",
+      "finding": "The episode around txn_005310 holds 1 payment across 0 minutes. The busiest hour contains 1 payment. 0 declines in the episode. Merchants touched: Kirana Junction.",
       "evidence": [
         {
           "label": "Payments in episode",
@@ -115,21 +115,21 @@
       "id": "amount",
       "title": "Amount versus baseline",
       "status": "clear",
-      "started_at": "2026-08-11T15:00:02Z",
+      "started_at": "2026-08-11T04:30:02Z",
       "duration_ms": 480,
-      "finding": "Episode amounts run from $34.00 to $34.00, median $34.00. The peak is in line with a baseline median of $41.99 (peak is 0.8\u00d7).",
+      "finding": "Episode amounts run from \u20b91,360.00 to \u20b91,360.00, median \u20b91,360.00. The peak is in line with a baseline median of \u20b91,626.29 (peak is 0.8\u00d7).",
       "evidence": [
         {
           "label": "Episode median",
-          "value": "$34.00"
+          "value": "\u20b91,360.00"
         },
         {
           "label": "Episode peak",
-          "value": "$34.00"
+          "value": "\u20b91,360.00"
         },
         {
           "label": "Baseline median",
-          "value": "$41.99"
+          "value": "\u20b91,626.29"
         },
         {
           "label": "Peak vs baseline",
@@ -141,9 +141,9 @@
       "id": "device_ip",
       "title": "Device and IP linkage",
       "status": "watch",
-      "started_at": "2026-08-11T15:00:03Z",
+      "started_at": "2026-08-11T04:30:03Z",
       "duration_ms": 730,
-      "finding": "Devices in the episode: dev_0337 (iPhone \u00b7 iOS 18 \u00b7 Safari, new to this customer). IPs: 203.0.113.6 \u00b7 Edinburgh, GB. The customer's home country is the United Kingdom. Every payment in this episode is there.",
+      "finding": "Devices in the episode: dev_0337 (iPhone \u00b7 iOS 18 \u00b7 Safari, new to this customer). IPs: 203.0.113.6 \u00b7 Bengaluru, IN. The customer's home country is India. Every payment in this episode is there.",
       "evidence": [
         {
           "label": "New devices",
@@ -155,7 +155,7 @@
         },
         {
           "label": "Countries",
-          "value": "GB"
+          "value": "IN"
         },
         {
           "label": "Datacenter or VPN",
@@ -167,9 +167,9 @@
       "id": "network",
       "title": "Linked accounts and money flow",
       "status": "clear",
-      "started_at": "2026-08-11T15:00:04Z",
+      "started_at": "2026-08-11T04:30:04Z",
       "duration_ms": 860,
-      "finding": "No other customer uses the devices in this episode. No peer-to-peer transfer or cash-out on this account in the six-day window. No cash-out path leaves this account in the six-day money graph.",
+      "finding": "No other customer uses the devices in this episode. No UPI transfer or cash-out on this account in the six-day window. No cash-out path leaves this account in the six-day money graph.",
       "evidence": [
         {
           "label": "Linked customers",
@@ -193,9 +193,9 @@
       "id": "merchant",
       "title": "Merchant check",
       "status": "clear",
-      "started_at": "2026-08-11T15:00:05Z",
+      "started_at": "2026-08-11T04:30:05Z",
       "duration_ms": 640,
-      "finding": "Harbor Grocery (grocery, Manchester) has 54 payments in the past 14 days from 43 customers. 0% of those customers are under 45 days old. 0% of the amounts are round (multiples of $50, at least $200). Devices shared by two or more buyers: none.",
+      "finding": "Kirana Junction (grocery, Chandigarh) has 56 payments in the past 14 days from 51 customers. 0% of those customers are under 45 days old. 0% of the amounts are round (multiples of \u20b91,000, at least \u20b98,000). Devices shared by two or more buyers: none.",
       "evidence": [
         {
           "label": "Category",
@@ -203,7 +203,7 @@
         },
         {
           "label": "Recent buyers",
-          "value": "43"
+          "value": "51"
         },
         {
           "label": "Young-account share",
@@ -219,7 +219,7 @@
       "id": "classify",
       "title": "Pattern classification",
       "status": "clear",
-      "started_at": "2026-08-11T15:00:06Z",
+      "started_at": "2026-08-11T04:30:06Z",
       "duration_ms": 390,
       "finding": "Legitimate activity. The only new thing is the device. It is at home, and the amount matches a grocery run.",
       "evidence": [
@@ -237,7 +237,7 @@
       "id": "recommend",
       "title": "Suggested action",
       "status": "clear",
-      "started_at": "2026-08-11T15:00:07Z",
+      "started_at": "2026-08-11T04:30:07Z",
       "duration_ms": 360,
       "finding": "Suggested action: approve. Risk score 18/100. Approve. A replacement phone at home, spending like the customer always does, is not an account takeover. A person still has to confirm this. FraudLens does not apply it.",
       "evidence": [
@@ -261,7 +261,7 @@
       {
         "id": "cus_0003",
         "type": "customer",
-        "label": "Priya Keller",
+        "label": "Arnab Banerjee",
         "sublabel": "cus_0003",
         "x": 0.2976,
         "y": 0.92,
@@ -288,16 +288,16 @@
       {
         "id": "ip_0005",
         "type": "ip",
-        "label": "Edinburgh",
+        "label": "Bengaluru",
         "sublabel": "203.0.113.6",
         "x": 0.7021,
         "y": 0.08,
         "emphasis": false
       },
       {
-        "id": "mer_001",
+        "id": "mer_002",
         "type": "merchant",
-        "label": "Harbor Grocery",
+        "label": "Kirana Junction",
         "sublabel": "grocery",
         "x": 0.08,
         "y": 0.2982,
@@ -325,7 +325,7 @@
       },
       {
         "source": "acct_0003",
-        "target": "mer_001",
+        "target": "mer_002",
         "kind": "paid",
         "label": "paid"
       }
@@ -334,48 +334,48 @@
   },
   "related_transactions": [
     {
-      "id": "txn_005210",
+      "id": "txn_005310",
       "occurred_at": "2026-08-05T18:40:00Z",
       "ts": 1785955200,
-      "amount_cents": 3400,
+      "amount_paise": 136000,
       "status": "approved",
       "type": "card_purchase",
-      "merchant_name": "Harbor Grocery",
+      "merchant_name": "Kirana Junction",
       "merchant_category": "grocery",
       "device_id": "dev_0337",
-      "ip": "203.0.113.6 \u00b7 Edinburgh, GB",
-      "ip_country": "GB",
-      "city": "Edinburgh",
+      "ip": "203.0.113.6 \u00b7 Bengaluru, IN",
+      "ip_country": "IN",
+      "city": "Bengaluru",
       "flagged": true,
       "counterparty_account_id": null
     }
   ],
   "customer": {
     "id": "cus_0003",
-    "name": "Priya Keller",
-    "email": "priya.keller.2@example.com",
-    "home_city": "Edinburgh",
-    "home_country": "GB",
+    "name": "Arnab Banerjee",
+    "email": "arnab.banerjee.2@example.com",
+    "home_city": "Bengaluru",
+    "home_country": "IN",
     "segment": "everyday",
-    "customer_since": "2025-07-16T00:00:00Z",
+    "customer_since": "2023-10-07T00:00:00Z",
     "account_id": "acct_0003",
-    "account_age_days": 385
+    "account_age_days": 1033
   },
   "lead": {
-    "id": "txn_005210",
+    "id": "txn_005310",
     "occurred_at": "2026-08-05T18:40:00Z",
-    "amount_cents": 3400,
+    "amount_paise": 136000,
     "status": "approved",
     "type": "card_purchase",
-    "merchant_name": "Harbor Grocery",
+    "merchant_name": "Kirana Junction",
     "merchant_category": "grocery",
     "device_id": "dev_0337",
     "device_label": "iPhone \u00b7 iOS 18 \u00b7 Safari",
-    "ip": "203.0.113.6 \u00b7 Edinburgh, GB",
-    "ip_city": "Edinburgh",
-    "ip_country": "GB",
-    "card_last4": "4456"
+    "ip": "203.0.113.6 \u00b7 Bengaluru, IN",
+    "ip_city": "Bengaluru",
+    "ip_country": "IN",
+    "card_last4": "3545"
   },
-  "report_markdown": "# FraudLens case case_0009\n\n**Customer.** Priya Keller (cus_0003), Edinburgh, GB.\n**Lead payment.** txn_005210 \u00b7 $34.00 \u00b7 Harbor Grocery \u00b7 2026-08-05T18:40:00Z.\n**Pattern.** Legitimate activity (new device at home).\n**Risk score.** 18 / 100.\n**Suggested action.** approve \u2014 a human still has to confirm it.\n\n## Summary\n\nThe only new thing is the device. It is at home, and the amount matches a grocery run. Approve. A replacement phone at home, spending like the customer always does, is not an account takeover. Lead payment txn_005210 is $34.00 approved at Harbor Grocery on 05 Aug 2026 18:40 UTC, card \u2022\u20224456, device dev_0337 (iPhone \u00b7 iOS 18 \u00b7 Safari). Before this episode, Priya Keller had 33 payments with a median of $41.99.\n\n## Why this score\n\n- **Case opened** (+4): Every queued payment starts with a small residual score.\n- **New device at home** (+14): New hardware, household IP, amount inside the baseline.\n\n## What the agent checked\n\n### Open the flagged payment (watch)\n\nQueue sent txn_005210 for Priya Keller: $34.00 at Harbor Grocery on 05 Aug 2026 18:40 UTC. The flagger's reasons were: Device has never been used by this customer before.\n\n- Transaction: txn_005210\n- Amount: $34.00\n- Customer: Priya Keller (cus_0003)\n- Why it was queued: new_device\n\n### Customer history and baseline (clear)\n\nPriya Keller has 33 prior payments before this episode, median $41.99. Account acct_0003 is 385 days old. Usual devices: dev_0005, dev_0006. Countries already seen: GB.\n\n- Account age: 385 days\n- Prior payments: 33\n- Median amount: $41.99\n- Home: Edinburgh, GB\n\n### Payment velocity (clear)\n\nThe episode around txn_005210 holds 1 payment across 0 minutes. The busiest hour contains 1 payment. 0 declines in the episode. Merchants touched: Harbor Grocery.\n\n- Payments in episode: 1\n- Busiest hour: 1\n- Declines: 0\n- Distinct merchants: 1\n\n### Amount versus baseline (clear)\n\nEpisode amounts run from $34.00 to $34.00, median $34.00. The peak is in line with a baseline median of $41.99 (peak is 0.8\u00d7).\n\n- Episode median: $34.00\n- Episode peak: $34.00\n- Baseline median: $41.99\n- Peak vs baseline: 0.8\u00d7\n\n### Device and IP linkage (watch)\n\nDevices in the episode: dev_0337 (iPhone \u00b7 iOS 18 \u00b7 Safari, new to this customer). IPs: 203.0.113.6 \u00b7 Edinburgh, GB. The customer's home country is the United Kingdom. Every payment in this episode is there.\n\n- New devices: dev_0337\n- Mature devices reused: none\n- Countries: GB\n- Datacenter or VPN: no\n\n### Linked accounts and money flow (clear)\n\nNo other customer uses the devices in this episode. No peer-to-peer transfer or cash-out on this account in the six-day window. No cash-out path leaves this account in the six-day money graph.\n\n- Linked customers: 0\n- Household pattern: no\n- Reaches cash-out: no\n- Pass-through: no inbound\n\n### Merchant check (clear)\n\nHarbor Grocery (grocery, Manchester) has 54 payments in the past 14 days from 43 customers. 0% of those customers are under 45 days old. 0% of the amounts are round (multiples of $50, at least $200). Devices shared by two or more buyers: none.\n\n- Category: grocery\n- Recent buyers: 43\n- Young-account share: 0%\n- Round-amount share: 0%\n\n### Pattern classification (clear)\n\nLegitimate activity. The only new thing is the device. It is at home, and the amount matches a grocery run.\n\n- Pattern: Legitimate activity\n- Detail: new device at home\n\n### Suggested action (clear)\n\nSuggested action: approve. Risk score 18/100. Approve. A replacement phone at home, spending like the customer always does, is not an account takeover. A person still has to confirm this. FraudLens does not apply it.\n\n- Suggested action: approve\n- Risk score: 18/100\n- Who decides: human analyst\n\n## Payments in the episode\n\n| When | Id | Amount | Status | Merchant | Device |\n| --- | --- | --- | --- | --- | --- |\n| 2026-08-05T18:40:00Z | txn_005210 | $34.00 | approved | Harbor Grocery | dev_0337 |\n\n## Action rationale\n\nApprove. A replacement phone at home, spending like the customer always does, is not an account takeover.\n\n## Held-out label\n\nThis section is joined after the investigation. The agent did not see it.\n\n- Fraud: no\n- Pattern: legitimate\n\n*FraudLens suggests. An analyst decides.*\n",
+  "report_markdown": "# FraudLens case case_0009\n\n**Customer.** Arnab Banerjee (cus_0003), Bengaluru, IN.\n**Lead payment.** txn_005310 \u00b7 \u20b91,360.00 \u00b7 Kirana Junction \u00b7 2026-08-05T18:40:00Z.\n**Pattern.** Legitimate activity (new device at home).\n**Risk score.** 18 / 100.\n**Suggested action.** approve \u2014 a human still has to confirm it.\n\n## Summary\n\nThe only new thing is the device. It is at home, and the amount matches a grocery run. Approve. A replacement phone at home, spending like the customer always does, is not an account takeover. Lead payment txn_005310 is \u20b91,360.00 approved at Kirana Junction on 06 Aug 2026 00:10 IST, card \u2022\u20223545, device dev_0337 (iPhone \u00b7 iOS 18 \u00b7 Safari). Before this episode, Arnab Banerjee had 37 payments with a median of \u20b91,626.29.\n\n## Why this score\n\n- **Case opened** (+4): Every queued payment starts with a small residual score.\n- **New device at home** (+14): New hardware, household IP, amount inside the baseline.\n\n## What the agent checked\n\n### Open the flagged payment (watch)\n\nQueue sent txn_005310 for Arnab Banerjee: \u20b91,360.00 at Kirana Junction on 06 Aug 2026 00:10 IST. The flagger's reasons were: Device has never been used by this customer before.\n\n- Transaction: txn_005310\n- Amount: \u20b91,360.00\n- Customer: Arnab Banerjee (cus_0003)\n- Why it was queued: new_device\n\n### Customer history and baseline (clear)\n\nArnab Banerjee has 37 prior payments before this episode, median \u20b91,626.29. Account acct_0003 is 1033 days old. Usual devices: dev_0005, dev_0006. Countries already seen: IN.\n\n- Account age: 1033 days\n- Prior payments: 37\n- Median amount: \u20b91,626.29\n- Home: Bengaluru, IN\n\n### Payment velocity (clear)\n\nThe episode around txn_005310 holds 1 payment across 0 minutes. The busiest hour contains 1 payment. 0 declines in the episode. Merchants touched: Kirana Junction.\n\n- Payments in episode: 1\n- Busiest hour: 1\n- Declines: 0\n- Distinct merchants: 1\n\n### Amount versus baseline (clear)\n\nEpisode amounts run from \u20b91,360.00 to \u20b91,360.00, median \u20b91,360.00. The peak is in line with a baseline median of \u20b91,626.29 (peak is 0.8\u00d7).\n\n- Episode median: \u20b91,360.00\n- Episode peak: \u20b91,360.00\n- Baseline median: \u20b91,626.29\n- Peak vs baseline: 0.8\u00d7\n\n### Device and IP linkage (watch)\n\nDevices in the episode: dev_0337 (iPhone \u00b7 iOS 18 \u00b7 Safari, new to this customer). IPs: 203.0.113.6 \u00b7 Bengaluru, IN. The customer's home country is India. Every payment in this episode is there.\n\n- New devices: dev_0337\n- Mature devices reused: none\n- Countries: IN\n- Datacenter or VPN: no\n\n### Linked accounts and money flow (clear)\n\nNo other customer uses the devices in this episode. No UPI transfer or cash-out on this account in the six-day window. No cash-out path leaves this account in the six-day money graph.\n\n- Linked customers: 0\n- Household pattern: no\n- Reaches cash-out: no\n- Pass-through: no inbound\n\n### Merchant check (clear)\n\nKirana Junction (grocery, Chandigarh) has 56 payments in the past 14 days from 51 customers. 0% of those customers are under 45 days old. 0% of the amounts are round (multiples of \u20b91,000, at least \u20b98,000). Devices shared by two or more buyers: none.\n\n- Category: grocery\n- Recent buyers: 51\n- Young-account share: 0%\n- Round-amount share: 0%\n\n### Pattern classification (clear)\n\nLegitimate activity. The only new thing is the device. It is at home, and the amount matches a grocery run.\n\n- Pattern: Legitimate activity\n- Detail: new device at home\n\n### Suggested action (clear)\n\nSuggested action: approve. Risk score 18/100. Approve. A replacement phone at home, spending like the customer always does, is not an account takeover. A person still has to confirm this. FraudLens does not apply it.\n\n- Suggested action: approve\n- Risk score: 18/100\n- Who decides: human analyst\n\n## Payments in the episode\n\n| When | Id | Amount | Status | Merchant | Device |\n| --- | --- | --- | --- | --- | --- |\n| 2026-08-05T18:40:00Z | txn_005310 | \u20b91,360.00 | approved | Kirana Junction | dev_0337 |\n\n## Action rationale\n\nApprove. A replacement phone at home, spending like the customer always does, is not an account takeover.\n\n## Held-out label\n\nThis section is joined after the investigation. The agent did not see it.\n\n- Fraud: no\n- Pattern: legitimate\n\n*FraudLens suggests. An analyst decides.*\n",
   "showcase": null
 }

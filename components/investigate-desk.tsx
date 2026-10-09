@@ -142,7 +142,7 @@ export function InvestigateDesk() {
               <p className="meta">Seed {seed} · {labelFor(choice)} · {file.customer.id}</p>
               <h2 style={{ fontSize: "clamp(28px, 4vw, 42px)" }}>{file.customer.name}</h2>
               <p className="lede" style={{ marginBottom: 0 }}>
-                {money(file.lead.amountCents)} at {file.lead.merchantName} · {when(file.lead.occurredAt)}
+                {money(file.lead.amountPaise)} {file.lead.type.startsWith("p2p") ? "by UPI transfer" : `at ${file.lead.merchantName}`} · {when(file.lead.occurredAt)}
               </p>
               <p className="meta">
                 {file.lead.id} · {file.lead.cardLast4 ? `card ••${file.lead.cardLast4}` : "no card on this transfer"} · {file.lead.deviceId} · {file.customer.homeCity}, {file.customer.homeCountry}
@@ -233,7 +233,7 @@ export function InvestigateDesk() {
                           <tr key={txn.id}>
                             <td>{when(txn.occurredAt)}</td>
                             <td>{txn.id}</td>
-                            <td>{money(txn.amountCents)}</td>
+                            <td>{money(txn.amountPaise)}</td>
                             <td>{txn.status}</td>
                             <td>{txn.merchantName}</td>
                           </tr>
