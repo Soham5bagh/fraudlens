@@ -171,12 +171,12 @@ h1 {
   line-height: 0.9;
   display: block;
 }
-.verdict.high .verdict-score b, .verdict.high .verdict-score strong { color: var(--block); }
-.verdict.mid .verdict-score b, .verdict.mid .verdict-score strong { color: var(--escalate); }
-.verdict.low .verdict-score b, .verdict.low .verdict-score strong { color: var(--approve); }
-.verdict-score span, .verdict-score strong { display: block; }
-.verdict-score span { color: var(--muted); font-size: 13px; margin-top: 4px; }
-.verdict-score strong { font-size: 16px; margin-top: 6px; }
+.verdict.high .verdict-score b, .verdict.high .verdict-score > strong { color: var(--block); }
+.verdict.mid .verdict-score b, .verdict.mid .verdict-score > strong { color: var(--escalate); }
+.verdict.low .verdict-score b, .verdict.low .verdict-score > strong { color: var(--approve); }
+.verdict-score > span, .verdict-score > strong { display: block; }
+.verdict-score > span { color: var(--muted); font-size: 13px; margin-top: 4px; }
+.verdict-score > strong { font-size: 16px; margin-top: 6px; }
 .verdict-why { margin: 0; font-size: 18px; line-height: 1.45; }
 .verdict-pattern { margin: 8px 0 0; font-weight: 650; }
 .info { position: relative; display: inline-flex; vertical-align: middle; margin-left: 6px; }
@@ -193,7 +193,7 @@ h1 {
   line-height: 1;
   padding: 0;
 }
-.info-tip {
+.info > .info-tip {
   display: none;
   position: absolute;
   z-index: 30;
@@ -210,7 +210,7 @@ h1 {
   text-transform: none;
   letter-spacing: 0;
 }
-.info:hover .info-tip, .info:focus-within .info-tip { display: block; }
+.info:hover > .info-tip, .info:focus-within > .info-tip { display: block; }
 .fold {
   background: var(--paper);
   border: 1px solid var(--line);
