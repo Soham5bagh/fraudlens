@@ -1,6 +1,8 @@
 # FraudLens
 
-Live desk: [https://halden-fraud-agent-demo.vercel.app](https://halden-fraud-agent-demo.vercel.app)
+Live desk: [https://fraudlens-desk.vercel.app](https://fraudlens-desk.vercel.app)
+
+The Vercel project is named `fraudlens`. `fraudlens.vercel.app` is already taken by another team, so the public address is `fraudlens-desk.vercel.app`. The previous address, [halden-fraud-agent-demo.vercel.app](https://halden-fraud-agent-demo.vercel.app), still opens this same desk.
 
 FraudLens is a fraud investigation desk for an Indian payments book. A payment is flagged, an agent reads the file the way an analyst would, and a person decides whether to approve, hold, escalate, or block. The agent never takes the action itself.
 
