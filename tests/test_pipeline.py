@@ -159,6 +159,29 @@ def test_explanations_cite_concrete_evidence():
         assert inv["graph"]["nodes"]
 
 
+def test_investigation_runs_on_langgraph():
+    from langgraph.graph.state import CompiledStateGraph
+
+    from engine.agent import investigation_graph
+
+    graph = investigation_graph()
+    assert isinstance(graph, CompiledStateGraph)
+    nodes = set(graph.get_graph().nodes)
+    steps = {"open_case", "customer_baseline", "velocity", "amount", "device_ip", "network", "merchant", "transfer", "classify", "recommend"}
+    assert steps <= nodes
+    _world, _visible, _flagged, _cases, investigations, _metrics = _run()
+    for inv in investigations:
+        assert [step["id"] for step in inv["timeline"]] == [
+            "open_case", "customer_baseline", "velocity", "amount", "device_ip", "network", "merchant", "classify", "recommend",
+        ]
+    transfer = next(inv for inv in investigations if inv["lead"]["type"] == "p2p_out")
+    card = next(inv for inv in investigations if inv["lead"]["type"] == "card_purchase")
+    transfer_step = next(step for step in transfer["timeline"] if step["id"] == "merchant")
+    card_step = next(step for step in card["timeline"] if step["id"] == "merchant")
+    assert transfer_step["evidence"] == [{"label": "Merchant", "value": "none (transfer)"}]
+    assert card_step["evidence"][0]["label"] == "Category"
+
+
 def test_legitimate_traps_are_approved():
     _world, _visible, _flagged, _cases, investigations, _metrics = _run()
     details = {inv["pattern_detail"] for inv in investigations if inv["action"] == "approve"}

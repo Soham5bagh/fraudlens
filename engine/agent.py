@@ -1,17 +1,24 @@
-"""Deterministic fraud investigator.
+"""Deterministic fraud investigator, run as a LangGraph state graph.
 
-The pipeline is a fixed graph of analyst steps. Each step reads the ledger,
-writes a timeline entry, and passes facts forward. Nothing in this module
-reads ground-truth labels. If an LLM key is set, `polish_narrative` may
-rewrite the prose; the decision, score, and evidence stay put.
+Each analyst step is a node. A node reads the ledger, appends one timeline
+entry, and merges its facts into the shared state. After the money-flow node
+the graph routes card purchases to the merchant check and transfers to the
+transfer check. NetworkX does the money-flow math inside the network node.
+
+Nothing in this module reads ground-truth labels. If an LLM key is set,
+`polish_narrative` may rewrite the prose; the decision, score, and evidence
+stay put.
 """
 
 from __future__ import annotations
 
+import operator
 import os
 from datetime import datetime, timedelta, timezone
+from typing import Annotated, Any, Callable, TypedDict
 
 import networkx as nx
+from langgraph.graph import END, START, StateGraph
 
 from engine.catalog import Catalog
 from engine.flagging import REASON_TEXT
@@ -31,6 +38,14 @@ PATTERN_LABELS = {
 }
 
 
+class InvestigationState(TypedDict):
+    case: dict
+    catalog: Any
+    clock: datetime
+    timeline: Annotated[list[dict], operator.add]
+    facts: dict
+
+
 def investigate_case(case: dict, world: dict) -> dict:
     # The desk reviews the queue the morning after the book closes, so device
     # links and merchant history include payments that posted later that week.
@@ -42,24 +57,81 @@ def investigate_case(case: dict, world: dict) -> dict:
         for row in world.get("enrollments", [])
         if row["customer_id"] == case["customer_id"] and row["enrolled_ts"] < case["window_start"]
     }
-    state: dict = {
-        "case": case,
-        "catalog": catalog,
-        "clock": REVIEW_CLOCK,
-        "timeline": [],
-        "facts": {"enrolled_devices": enrolled},
-        "signals": [],
-    }
-    open_case(state)
-    customer_baseline(state)
-    velocity_check(state)
-    amount_analysis(state)
-    device_and_ip(state)
-    linked_accounts(state)
-    merchant_check(state)
-    classify(state)
-    recommend(state)
-    return assemble(state)
+    final = investigation_graph().invoke(
+        {
+            "case": case,
+            "catalog": catalog,
+            "clock": REVIEW_CLOCK,
+            "timeline": [],
+            "facts": {"enrolled_devices": enrolled},
+        }
+    )
+    return assemble(final)
+
+
+def _node(step: Callable[[dict], None]) -> Callable[[InvestigationState], dict]:
+    """Run an analyst step on a private copy of the state and return only what it changed."""
+
+    def run(state: InvestigationState) -> dict:
+        scratch = {
+            "case": state["case"],
+            "catalog": state["catalog"],
+            "clock": state["clock"],
+            "timeline": [],
+            "facts": dict(state["facts"]),
+        }
+        step(scratch)
+        return {"clock": scratch["clock"], "timeline": scratch["timeline"], "facts": scratch["facts"]}
+
+    run.__name__ = step.__name__
+    return run
+
+
+def _route_after_network(state: InvestigationState) -> str:
+    lead = state["facts"]["lead"]
+    return "merchant" if state["catalog"].merchant(lead["merchant_id"]) else "transfer"
+
+
+_GRAPH = None
+
+
+def investigation_graph():
+    """The compiled LangGraph. Built once, reused for every case."""
+    global _GRAPH
+    if _GRAPH is not None:
+        return _GRAPH
+    steps = [
+        ("open_case", open_case),
+        ("customer_baseline", customer_baseline),
+        ("velocity", velocity_check),
+        ("amount", amount_analysis),
+        ("device_ip", device_and_ip),
+        ("network", linked_accounts),
+        ("merchant", merchant_check),
+        ("transfer", transfer_check),
+        ("classify", classify),
+        ("recommend", recommend),
+    ]
+    graph = StateGraph(InvestigationState)
+    for name, step in steps:
+        graph.add_node(name, _node(step))
+    graph.add_edge(START, "open_case")
+    graph.add_edge("open_case", "customer_baseline")
+    graph.add_edge("customer_baseline", "velocity")
+    graph.add_edge("velocity", "amount")
+    graph.add_edge("amount", "device_ip")
+    graph.add_edge("device_ip", "network")
+    graph.add_conditional_edges("network", _route_after_network, {"merchant": "merchant", "transfer": "transfer"})
+    graph.add_edge("merchant", "classify")
+    graph.add_edge("transfer", "classify")
+    graph.add_edge("classify", "recommend")
+    graph.add_edge("recommend", END)
+    _GRAPH = graph.compile()
+    return _GRAPH
+
+
+def graph_mermaid() -> str:
+    return investigation_graph().get_graph().draw_mermaid()
 
 
 def _step(state: dict, step_id: str, title: str, status: str, finding: str, evidence: list[dict], duration_ms: int) -> None:
@@ -509,23 +581,24 @@ def _account_label(catalog: Catalog, account_id: str) -> str:
     return f"{customer['name']} ({account_id})"
 
 
+def transfer_check(state: dict) -> None:
+    state["facts"]["merchant"] = None
+    state["facts"]["merchant_stats"] = {}
+    _step(
+        state,
+        "merchant",
+        "Merchant check",
+        "watch",
+        "The lead movement is a transfer, not a card purchase, so there is no merchant to underwrite. The money-flow step carries that evidence.",
+        [{"label": "Merchant", "value": "none (transfer)"}],
+        300,
+    )
+
+
 def merchant_check(state: dict) -> None:
     catalog: Catalog = state["catalog"]
     lead = state["facts"]["lead"]
     merchant = catalog.merchant(lead["merchant_id"])
-    if not merchant:
-        state["facts"]["merchant"] = None
-        state["facts"]["merchant_stats"] = {}
-        _step(
-            state,
-            "merchant",
-            "Merchant check",
-            "watch",
-            "The lead movement is a transfer, not a card purchase, so there is no merchant to underwrite. The money-flow step carries that evidence.",
-            [{"label": "Merchant", "value": "none (transfer)"}],
-            300,
-        )
-        return
     recent_start = lead["ts"] - 14 * 86400
     recent = [txn for txn in catalog.by_merchant[merchant["id"]] if txn["ts"] >= recent_start]
     buyers = []
