@@ -192,7 +192,7 @@
     "legitimate_cases": 8,
     "legitimate_cases_approved": 8
   },
-  "narrative": "The flagger queued 117 payments, catching 100% of fraud transactions and also pulling in 8 genuine customers. Halden, reviewing only that queue, caught 100% of fraud transactions at 100% precision and would have blocked 0 genuine customers. It cleared 8 genuine customers the queue would otherwise have stopped.",
+  "narrative": "The flagger queued 117 payments, catching 100% of fraud transactions and also pulling in 8 genuine customers. FraudLens, reviewing only that queue, caught 100% of fraud transactions at 100% precision and would have blocked 0 genuine customers. It cleared 8 genuine customers the queue would otherwise have stopped.",
   "case_ids_in_flag_order": [
     "case_0001",
     "case_0002",

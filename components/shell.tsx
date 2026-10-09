@@ -16,7 +16,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
     <div className="shell">
       <header className="topbar">
         <Link href="/" className="brand">
-          <strong>Halden</strong>
+          <strong>FraudLens</strong>
           <span>A fraud analyst that waits for you</span>
         </Link>
         <nav className="nav">

@@ -20,8 +20,8 @@ const mono = IBM_Plex_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Halden · fraud analyst",
-  description: "Halden investigates a suspicious payment, explains the risk, and waits for a person to approve, hold, escalate, or block.",
+  title: "FraudLens · fraud analyst",
+  description: "FraudLens investigates a suspicious payment, explains the risk, and waits for a person to approve, hold, escalate, or block.",
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {

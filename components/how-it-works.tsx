@@ -5,7 +5,7 @@ const STEPS = [
     icon: FlagIcon,
   },
   {
-    title: "Halden gathers evidence",
+    title: "FraudLens gathers evidence",
     body: "It reads the customer's history, the device, the location, the merchant, and where the money went.",
     icon: SearchIcon,
   },
@@ -16,7 +16,7 @@ const STEPS = [
   },
   {
     title: "A person decides",
-    body: "You approve, hold, escalate, or block. Halden never presses the button.",
+    body: "You approve, hold, escalate, or block. FraudLens never presses the button.",
     icon: PersonIcon,
   },
 ];

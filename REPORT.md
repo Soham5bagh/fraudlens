@@ -1,4 +1,4 @@
-# Halden — detection and false alarms
+# FraudLens — detection and false alarms
 
 Seed 42. 5,346 payments, 181 customers, 98 fraud payments, 30 cases in the analyst queue. Labels were held out until scoring.
 
@@ -6,13 +6,13 @@ Seed 42. 5,346 payments, 181 customers, 98 fraud payments, 30 cases in the analy
 
 Rubber-stamping the queue catches every fraud payment (recall 100%) and also stops 8 genuine customers: two travelers, two large electronics purchases, two new phones, a fashion sale, and someone sharing a household MacBook. Precision on that policy is 83.76%. False alarms: 19 legitimate payments. False positive rate: 0.36%.
 
-Halden, reading only that queue, also catches every fraud payment. Precision is 100%. False alarms: 0. Genuine customers blocked: 0. It cleared all 8 people the queue would have stopped.
+FraudLens, reading only that queue, also catches every fraud payment. Precision is 100%. False alarms: 0. Genuine customers blocked: 0. It cleared all 8 people the queue would have stopped.
 
 Caught means the suggested action is hold, escalate, or block. Approve means the customer is left alone. The agent does not apply either outcome.
 
 ## Confusion matrices
 
-Halden, transaction level:
+FraudLens, transaction level:
 
 |  | Predicted legitimate | Predicted fraud |
 | --- | --- | --- |

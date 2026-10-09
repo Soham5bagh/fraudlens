@@ -27,7 +27,7 @@ export const PATTERN_HELP: Record<string, { name: string; plain: string }> = {
   },
   random: {
     name: "Random",
-    plain: "Halden picks one of the five shapes. The page does not say which until you decide.",
+    plain: "FraudLens picks one of the five shapes. The page does not say which until you decide.",
   },
 };
 
@@ -51,7 +51,7 @@ export const ACTION_HELP: Record<Action, { label: string; plain: string }> = {
 };
 
 export const TERM_HELP = {
-  riskScore: "0 is ordinary spending. 100 is the strongest case Halden can make. A person still decides.",
+  riskScore: "0 is ordinary spending. 100 is the strongest case FraudLens can make. A person still decides.",
   recall: "Frauds caught: of the fraudulent payments in the book, how many this approach stopped.",
   precision: "Of the payments this approach called fraud, how many really were.",
   falseAlarms: "Legitimate payments that were treated as fraud.",

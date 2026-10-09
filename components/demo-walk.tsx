@@ -24,9 +24,9 @@ export function DemoWalk() {
   return (
     <>
       <p className="kicker">About three minutes</p>
-      <h1>Watch Halden work through {steps.length} payments.</h1>
+      <h1>Watch FraudLens work through {steps.length} payments.</h1>
       <p className="lede">
-        Open them in order. Each one is a file from the queue: what was flagged, what Halden found, and what it recommends.
+        Open them in order. Each one is a file from the queue: what was flagged, what FraudLens found, and what it recommends.
         {steps[steps.length - 1]?.slot === "legitimate"
           ? " The last one is a genuine customer a basic rule queue would have blocked."
           : ""}

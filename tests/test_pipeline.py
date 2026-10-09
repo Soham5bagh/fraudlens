@@ -207,7 +207,7 @@ def test_sqlite_keeps_labels_in_their_own_table(tmp_path, monkeypatch):
     # Rebuild writes the shared demo database. Point it at a temp file.
     import engine.build as build
 
-    db_path = tmp_path / "halden.db"
+    db_path = tmp_path / "fraudlens.db"
     monkeypatch.setattr(build, "DB_PATH", db_path)
     monkeypatch.setattr(build, "SEED_DIR", tmp_path / "seed")
     monkeypatch.setattr(build, "PUBLIC_DIR", tmp_path / "public")

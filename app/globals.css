@@ -55,9 +55,10 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 .brand { display: flex; flex-direction: column; gap: 2px; }
 .brand strong {
   font-family: var(--font-serif), Georgia, serif;
-  font-weight: 560;
-  font-size: 22px;
-  letter-spacing: -0.03em;
+  font-weight: 600;
+  font-size: 21px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
 }
 .brand span { color: var(--muted); font-size: 13px; }
 .nav { display: flex; gap: 6px; flex-wrap: wrap; }
@@ -428,7 +429,7 @@ th { color: var(--muted); font-weight: 600; font-size: 12px; }
 .compare, .compare-plain { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 .compare-plain { margin: 0 0 16px; }
 .compare-plain article { padding: 16px 18px; }
-.compare-plain article.halden { border-color: #9bb0c9; }
+.compare-plain article.fraudlens { border-color: #9bb0c9; }
 .figure { display: grid; gap: 12px; margin-top: 12px; }
 .figure div { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 10px; align-items: baseline; }
 .figure b {

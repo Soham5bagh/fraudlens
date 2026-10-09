@@ -22,14 +22,14 @@ from engine.textutil import money
 ROOT = Path(__file__).resolve().parents[1]
 SEED_DIR = ROOT / "data" / "seed"
 PUBLIC_DIR = ROOT / "public" / "data"
-DB_PATH = ROOT / "data" / "halden.db"
+DB_PATH = ROOT / "data" / "fraudlens.db"
 
 DEMO_SLOTS = [
     ("card_testing", "Card testing", "Start with the burst. Tiny amounts, many merchants, a device the customer has never used, then a gift card that actually clears. The suggestion is block. Do not press it yourself."),
     ("account_takeover", "Account takeover", "Contrast this with the trip you will open last. Here the device is new, the country is new, and the spend is gift cards and crypto at many times the baseline."),
     ("mule_chain", "Mule-account chain", "Follow the money, not the single payment. Shared devices, a young account, and a path that ends at a crypto cash-out the same day."),
     ("merchant_collusion", "Merchant collusion", "The fourth pattern. Round amounts, one merchant, buyers who share a laptop. Escalating one card does not fix the merchant."),
-    ("legitimate", "Genuine customer", "This one was queued. Halden reads the file and approves it. This is the false alarm the rubber-stamp desk would have blocked."),
+    ("legitimate", "Genuine customer", "This one was queued. FraudLens reads the file and approves it. This is the false alarm the rubber-stamp desk would have blocked."),
 ]
 
 

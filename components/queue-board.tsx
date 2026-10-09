@@ -144,9 +144,9 @@ export function QueueBoard() {
   return (
     <>
       <p className="kicker">Synthetic payments · a person still makes the call</p>
-      <h1>Halden investigates a suspicious payment, then waits for you.</h1>
+      <h1>FraudLens investigates a suspicious payment, then waits for you.</h1>
       <p className="lede">
-        Halden is a fraud analyst. When a payment looks odd, it gathers the evidence, names what kind of fraud it might be, and recommends what to do. It never blocks anyone by itself.
+        FraudLens is a fraud analyst. When a payment looks odd, it gathers the evidence, names what kind of fraud it might be, and recommends what to do. It never blocks anyone by itself.
       </p>
       <div className="cta-row">
         <Link href="/demo" className="primary cta">Watch the guided demo</Link>
@@ -255,9 +255,9 @@ function ScoreLine({ metrics }: { metrics: Metrics }) {
   const frauds = metrics.population.fraud_transactions;
   return (
     <>
-      On this synthetic book, Halden caught {metrics.agent.tp} of {frauds} frauds and raised {metrics.agent.fp} false alarms.
+      On this synthetic book, FraudLens caught {metrics.agent.tp} of {frauds} frauds and raised {metrics.agent.fp} false alarms.
       A basic rule queue caught the same {metrics.naive.tp} frauds and raised {metrics.naive.fp} false alarms, which would have blocked {metrics.headline.genuine_customers_blocked_by_queue} genuine customers.
-      Halden would have blocked {metrics.headline.genuine_customers_blocked_by_agent}.
+      FraudLens would have blocked {metrics.headline.genuine_customers_blocked_by_agent}.
     </>
   );
 }

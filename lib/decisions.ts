@@ -1,6 +1,6 @@
 import type { Action, AnalystDecision } from "./types";
 
-const KEY = "halden.decisions.v1";
+const KEY = "fraudlens.decisions.v1";
 
 export function loadDecisions(): Record<string, AnalystDecision> {
   if (typeof window === "undefined") return {};

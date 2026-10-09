@@ -9,7 +9,7 @@ def case_markdown(investigation: dict, truth: dict | None = None) -> str:
     lead = investigation["lead"]
     customer = investigation["customer"]
     lines = [
-        f"# Halden case {investigation['case_id']}",
+        f"# FraudLens case {investigation['case_id']}",
         "",
         f"**Customer.** {customer['name']} ({customer['id']}), {customer['home_city']}, {customer['home_country']}.",
         f"**Lead payment.** {lead['id']} · {money(lead['amount_cents'])} · {lead['merchant_name']} · {lead['occurred_at']}.",
@@ -53,7 +53,7 @@ def case_markdown(investigation: dict, truth: dict | None = None) -> str:
             f"- Pattern: {truth['pattern']}",
             "",
         ]
-    lines.append("*Halden suggests. An analyst decides.*")
+    lines.append("*FraudLens suggests. An analyst decides.*")
     lines.append("")
     return "\n".join(lines)
 
@@ -63,7 +63,7 @@ def summary_markdown(metrics: dict, meta: dict) -> str:
     agent = metrics["agent"]
     harm = metrics["customers_wrongly_blocked"]
     lines = [
-        "# Halden detection report",
+        "# FraudLens detection report",
         "",
         metrics["narrative"],
         "",
@@ -77,7 +77,7 @@ def summary_markdown(metrics: dict, meta: dict) -> str:
         f"- Customers: {metrics['population']['customers']}",
         f"- Cases in the analyst queue: {metrics['population']['cases']}",
         "",
-        "## Naive flagger vs Halden",
+        "## Naive flagger vs FraudLens",
         "",
         "| | Frauds caught (recall) | Precision | False positive rate | False alarms (payments) | Genuine customers blocked |",
         "| --- | --- | --- | --- | --- | --- |",
@@ -86,7 +86,7 @@ def summary_markdown(metrics: dict, meta: dict) -> str:
             f"{naive['fp']} | {harm['naive']} |"
         ),
         (
-            f"| Follow Halden | {_pct(agent['recall'])} | {_pct(agent['precision'])} | {_pct(agent['fpr'])} | "
+            f"| Follow FraudLens | {_pct(agent['recall'])} | {_pct(agent['precision'])} | {_pct(agent['fpr'])} | "
             f"{agent['fp']} | {harm['agent_block']} |"
         ),
         "",
@@ -95,7 +95,7 @@ def summary_markdown(metrics: dict, meta: dict) -> str:
         "",
         "### Confusion matrix (transaction level)",
         "",
-        "| Halden | Predicted legitimate | Predicted fraud |",
+        "| FraudLens | Predicted legitimate | Predicted fraud |",
         "| --- | --- | --- |",
         f"| Actually legitimate | {agent['tn']} | {agent['fp']} |",
         f"| Actually fraud | {agent['fn']} | {agent['tp']} |",
@@ -107,7 +107,7 @@ def summary_markdown(metrics: dict, meta: dict) -> str:
         "",
         "## By pattern",
         "",
-        "| Pattern | Fraud payments | Caught by Halden | Recall | Cases named correctly |",
+        "| Pattern | Fraud payments | Caught by FraudLens | Recall | Cases named correctly |",
         "| --- | --- | --- | --- | --- |",
     ]
     labels = {
@@ -129,7 +129,7 @@ def summary_markdown(metrics: dict, meta: dict) -> str:
         f"- Fraud cases named as the right pattern: {metrics['queue']['fraud_cases_named_correctly']} / {metrics['queue']['fraud_cases']}",
         f"- Legitimate cases approved: {metrics['queue']['legitimate_cases_approved']} / {metrics['queue']['legitimate_cases']}",
         "",
-        "### Genuine customers the queue would have stopped, and Halden cleared",
+        "### Genuine customers the queue would have stopped, and FraudLens cleared",
         "",
     ]
     cleared = harm["cleared_by_agent"]
@@ -173,7 +173,7 @@ def summary_markdown(metrics: dict, meta: dict) -> str:
         "## How to read this",
         "",
         "The flagger is a wide net: velocity, amount, new device, foreign IP, shared device, young accounts, and an Isolation Forest. "
-        "Halden re-investigates each case with history, a money-flow graph, and merchant checks, then suggests an action. "
+        "FraudLens re-investigates each case with history, a money-flow graph, and merchant checks, then suggests an action. "
         "It never blocks anyone by itself.",
         "",
     ]

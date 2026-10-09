@@ -3,7 +3,7 @@ import path from "path";
 import { NextResponse } from "next/server";
 import type { Action } from "@/lib/types";
 
-const FILE = path.join("/tmp", "halden-decisions.json");
+const FILE = path.join("/tmp", "fraudlens-decisions.json");
 const ACTIONS = new Set<Action>(["approve", "hold", "escalate", "block"]);
 
 type Stored = {

@@ -25,11 +25,11 @@ export function MetricsBoard() {
 
   return (
     <>
-      <p className="kicker">Synthetic book · the answers were hidden from Halden</p>
+      <p className="kicker">Synthetic book · the answers were hidden from FraudLens</p>
       <h1>Did it catch the fraud without stopping real customers?</h1>
       <p className="lede">
-        On {population.transactions.toLocaleString()} synthetic payments, Halden caught {agent.tp} of {population.fraud_transactions} frauds and raised {agent.fp} false alarms.
-        A basic rule queue caught the same {naive.tp} frauds and raised {naive.fp} false alarms. Following that queue would have blocked {headline.genuine_customers_blocked_by_queue} genuine customers. Following Halden would have blocked {headline.genuine_customers_blocked_by_agent}.
+        On {population.transactions.toLocaleString()} synthetic payments, FraudLens caught {agent.tp} of {population.fraud_transactions} frauds and raised {agent.fp} false alarms.
+        A basic rule queue caught the same {naive.tp} frauds and raised {naive.fp} false alarms. Following that queue would have blocked {headline.genuine_customers_blocked_by_queue} genuine customers. Following FraudLens would have blocked {headline.genuine_customers_blocked_by_agent}.
       </p>
       <div className="compare-plain">
         <article className="panel">
@@ -40,8 +40,8 @@ export function MetricsBoard() {
             <div><b>{naive.fp}</b><span>false alarms <Info text={TERM_HELP.falseAlarms} /></span></div>
           </div>
         </article>
-        <article className="panel halden">
-          <h2>Halden <Info text="The same flagged payments, read one by one. A person still has to agree." /></h2>
+        <article className="panel fraudlens">
+          <h2>FraudLens <Info text="The same flagged payments, read one by one. A person still has to agree." /></h2>
           <div className="figure">
             <div><b>{agent.tp}</b><span>frauds caught, of {population.fraud_transactions}</span></div>
             <div><b>{headline.genuine_customers_blocked_by_agent}</b><span>genuine customers wrongly blocked</span></div>
@@ -77,7 +77,7 @@ export function MetricsBoard() {
       </div>
 
       <section className="panel" style={{ marginBottom: 14 }}>
-        <h2>Rates <Info text="Grey is the basic rule queue. Blue is Halden. Frauds caught is recall. Precision is how often a fraud call was right." /></h2>
+        <h2>Rates <Info text="Grey is the basic rule queue. Blue is FraudLens. Frauds caught is recall. Precision is how often a fraud call was right." /></h2>
         <div className="bars">
           <Bar label="Frauds caught" naive={naive.recall} agent={agent.recall} />
           <Bar label="Right when it says fraud" naive={naive.precision} agent={agent.precision} />
@@ -93,7 +93,7 @@ export function MetricsBoard() {
 
       <div className="compare">
         <Matrix title="If an analyst blocks every flag" row={naive} />
-        <Matrix title="If an analyst follows Halden" row={agent} />
+        <Matrix title="If an analyst follows FraudLens" row={agent} />
       </div>
 
       <section className="panel" style={{ margin: "14px 0" }}>
@@ -175,7 +175,7 @@ export function MetricsBoard() {
 
       <section className="panel">
         <h2>Genuine customers the rule queue would have stopped</h2>
-        <p>Halden approved every one of them. These are real-looking trips, big purchases, and ordinary spending that only looked odd to the rules.</p>
+        <p>FraudLens approved every one of them. These are real-looking trips, big purchases, and ordinary spending that only looked odd to the rules.</p>
         <ul>
           {metrics.customers_wrongly_blocked.cleared_by_agent.map((customer) => (
             <li key={customer.customer_id}>
@@ -216,7 +216,7 @@ function Bar({
       </div>
       <div className="meta">{naiveText ?? pct(naive)}</div>
       <div className="bar-row">
-        <span>{label} · Halden</span>
+        <span>{label} · FraudLens</span>
         <div className="track" aria-hidden>
           <i className="agent" style={{ width: `${Math.max(agent > 0 ? 2 : 0, agent * 100)}%` }} />
         </div>

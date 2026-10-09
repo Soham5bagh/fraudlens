@@ -111,7 +111,7 @@ export function InvestigateDesk() {
       <p className="kicker">Live file · made up in your browser</p>
       <h1>Investigate a new payment.</h1>
       <p className="lede">
-        Pick the kind of case you want to see, then open a fresh flagged payment. Halden checks the history, the device, the location, and where the money went. It does not know which kind you picked. That answer appears only after you decide.
+        Pick the kind of case you want to see, then open a fresh flagged payment. FraudLens checks the history, the device, the location, and where the money went. It does not know which kind you picked. That answer appears only after you decide.
       </p>
       <div className="filters" role="group" aria-label="What kind of case to generate">
         {CHOICES.map((item) => (
@@ -161,7 +161,7 @@ export function InvestigateDesk() {
               <section className="verdict pending" aria-live="polite">
                 <div>
                   <p className="kicker">Verdict</p>
-                  <p className="verdict-why">Halden is still checking this payment.</p>
+                  <p className="verdict-why">FraudLens is still checking this payment.</p>
                   <p className="hint">Score and recommendation land when the last check finishes.</p>
                 </div>
               </section>
@@ -201,7 +201,7 @@ export function InvestigateDesk() {
             {ready ? (
               <>
                 <section className="panel">
-                  <h2>What Halden thinks happened</h2>
+                  <h2>What FraudLens thinks happened</h2>
                   <p className="narrative">{file.narrative}</p>
                 </section>
                 <section className="panel">
@@ -248,7 +248,7 @@ export function InvestigateDesk() {
 
           <aside className="sticky-side">
             <section className="panel">
-              <p className="kicker">Your decision <Info text="Halden does not apply this. You do." /></p>
+              <p className="kicker">Your decision <Info text="FraudLens does not apply this. You do." /></p>
               {ready ? (
                 <>
                   <h2 style={{ textTransform: "capitalize" }}>{actionLabel(file.action)} <Info text={actionPlain(file.action)} /></h2>
@@ -272,7 +272,7 @@ export function InvestigateDesk() {
                   {decision ? (
                     <p className="note">
                       Recorded {when(decision.decidedAt)}: {actionLabel(decision.action)}
-                      {decision.override ? " · override" : " · matches Halden"}. Kept in this browser.
+                      {decision.override ? " · override" : " · matches FraudLens"}. Kept in this browser.
                     </p>
                   ) : (
                     <p className="note">The planted scenario appears after you record a decision.</p>
@@ -287,10 +287,10 @@ export function InvestigateDesk() {
               <section className="panel">
                 <h2>What was actually planted</h2>
                 <p>
-                  Planted: {truth.label}. {patternPlain(truth.scenario)} Halden named {file.patternLabel} and suggested {file.action}.{" "}
+                  Planted: {truth.label}. {patternPlain(truth.scenario)} FraudLens named {file.patternLabel} and suggested {file.action}.{" "}
                   {verdict(truth, file) ? "That matches." : "That does not match."}
                 </p>
-                <p className="note">Halden never received this label. It only saw the generated payments.</p>
+                <p className="note">FraudLens never received this label. It only saw the generated payments.</p>
               </section>
             ) : null}
 

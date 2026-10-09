@@ -902,7 +902,7 @@ function recommend(state: State) {
     "recommend",
     "Suggested action",
     action === "block" || action === "escalate" ? "alert" : action === "hold" ? "watch" : "clear",
-    `Suggested action: ${action}. Risk score ${score}/100. ${rationale} A person still has to confirm this. Halden does not apply it.`,
+    `Suggested action: ${action}. Risk score ${score}/100. ${rationale} A person still has to confirm this. FraudLens does not apply it.`,
     [
       { label: "Suggested action", value: action },
       { label: "Risk score", value: `${score}/100` },

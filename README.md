@@ -1,12 +1,12 @@
-# Halden
+# FraudLens
 
 Live desk: [https://halden-fraud-agent-demo.vercel.app](https://halden-fraud-agent-demo.vercel.app)
 
-Halden is a fraud investigation desk. A payment is flagged, an agent reads the file the way an analyst would, and a person decides whether to approve, hold, escalate, or block. The agent never takes the action itself.
+FraudLens is a fraud investigation desk. A payment is flagged, an agent reads the file the way an analyst would, and a person decides whether to approve, hold, escalate, or block. The agent never takes the action itself.
 
 It runs on a seeded synthetic book: card testing, account takeover, mule-account chains, merchant collusion, and honest customers who look suspicious (a real trip, a one-off electronics purchase, a lunch-hour sale, a new phone at home, a shared household device). No API key.
 
-On seed 42 the blunt queue catches **100%** of fraud payments and would also block **8 genuine customers**. Halden still catches **100%**, at **100% precision**, and would block **0** genuine customers. The same checks on seeds 7, 99, and 123 are on the metrics page and in `REPORT.md`. Seed 99 keeps one legitimate $24.21 pharmacy payment that fell inside an account-takeover window (precision 98.99%). That result is reported as it came out.
+On seed 42 the blunt queue catches **100%** of fraud payments and would also block **8 genuine customers**. FraudLens still catches **100%**, at **100% precision**, and would block **0** genuine customers. The same checks on seeds 7, 99, and 123 are on the metrics page and in `REPORT.md`. Seed 99 keeps one legitimate $24.21 pharmacy payment that fell inside an account-takeover window (precision 98.99%). That result is reported as it came out.
 
 ## Run it locally
 
@@ -19,7 +19,7 @@ npm run dev
 
 Open http://127.0.0.1:43123.
 
-`python -m engine.build` rewrites `data/halden.db`, `data/seed/`, and `public/data/`. The committed JSON is already generated with seed `42`, so you can skip the Python steps and just run:
+`python -m engine.build` rewrites `data/fraudlens.db`, `data/seed/`, and `public/data/`. The committed JSON is already generated with seed `42`, so you can skip the Python steps and just run:
 
 ```bash
 npm install
@@ -106,14 +106,14 @@ The investigator is a fixed graph of steps, in the shape of a LangGraph flow wit
 
 ## Data assumptions
 
-See [DATA_ASSUMPTIONS.md](DATA_ASSUMPTIONS.md). Short version: one currency (USD), documentation-range IP addresses, devices enrolled on the customer profile, and fraud planted on top of ordinary card spend. The flagger is deliberately wide. Halden's job is to put the honest customers back.
+See [DATA_ASSUMPTIONS.md](DATA_ASSUMPTIONS.md). Short version: one currency (USD), documentation-range IP addresses, devices enrolled on the customer profile, and fraud planted on top of ordinary card spend. The flagger is deliberately wide. FraudLens's job is to put the honest customers back.
 
 ## Scorecard (seed 42)
 
 | | Recall | Precision | False alarms | Genuine customers blocked |
 | --- | --- | --- | --- | --- |
 | Rubber-stamp the queue | 100% | 83.8% | 19 payments | 8 |
-| Follow Halden | 100% | 100% | 0 | 0 |
+| Follow FraudLens | 100% | 100% | 0 | 0 |
 
 5,346 payments, 181 customers, 98 fraud payments, 30 cases. All four patterns are named correctly on every fraud case. All 8 legitimate cases are approved. Detail is in [REPORT.md](REPORT.md). Talking points for a 3–5 minute pitch are in [DEMO_SCRIPT.md](DEMO_SCRIPT.md).
 

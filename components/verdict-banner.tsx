@@ -18,7 +18,7 @@ export function VerdictBanner({
 }) {
   const band = riskBand(score);
   return (
-    <section className={`verdict ${band.tone}`} aria-label="Halden's verdict">
+    <section className={`verdict ${band.tone}`} aria-label="FraudLens verdict">
       <div className="verdict-score">
         <b>{score}</b>
         <span>out of 100 <Info text={TERM_HELP.riskScore} /></span>

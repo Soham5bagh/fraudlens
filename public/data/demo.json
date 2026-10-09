@@ -51,7 +51,7 @@
     {
       "slot": "legitimate",
       "title": "Genuine customer",
-      "say": "This one was queued. Halden reads the file and approves it. This is the false alarm the rubber-stamp desk would have blocked.",
+      "say": "This one was queued. FraudLens reads the file and approves it. This is the false alarm the rubber-stamp desk would have blocked.",
       "case_id": "case_0003",
       "customer_name": "Marcus Costa",
       "summary": "Marcus Costa is travelling on a device already on file. The foreign IP is the trip, not a takeover.",

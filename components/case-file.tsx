@@ -126,7 +126,7 @@ export function CaseFileView() {
             <div className="row-title">
               <span className={`pill ${file.action}`} title={actionPlain(file.action)}>{actionLabel(file.action)}</span>
               <span className="pill" title={patternPlain(file.pattern)}>{file.pattern_label}</span>
-              <span className="pill" title="How sure Halden is about the pattern name. The risk score is separate.">{file.confidence} confidence</span>
+              <span className="pill" title="How sure FraudLens is about the pattern name. The risk score is separate.">{file.confidence} confidence</span>
             </div>
             <h1 style={{ fontSize: "clamp(28px, 4vw, 42px)" }}>{file.customer.name}</h1>
             <p className="lede" style={{ marginBottom: 0 }}>
@@ -219,7 +219,7 @@ export function CaseFileView() {
 
         <aside className="sticky-side">
           <section className="panel">
-            <p className="kicker">Your decision <Info text="Halden does not apply this. You do." /></p>
+            <p className="kicker">Your decision <Info text="FraudLens does not apply this. You do." /></p>
             <h2 style={{ textTransform: "capitalize" }}>{actionLabel(file.action)} <Info text={actionPlain(file.action)} /></h2>
             <p>{file.action_rationale}</p>
             <div className="actions" style={{ marginTop: 12 }}>
@@ -252,7 +252,7 @@ export function CaseFileView() {
             {saved || decision ? (
               <p className="note">
                 Recorded {decision ? when(decision.decidedAt) : "just now"}: {actionLabel(decision?.action ?? action)}
-                {(decision?.override ?? action !== file.action) ? " · override" : " · matches Halden"}.
+                {(decision?.override ?? action !== file.action) ? " · override" : " · matches FraudLens"}.
                 Kept in this browser. A production desk would write a database.
               </p>
             ) : null}
@@ -264,11 +264,11 @@ export function CaseFileView() {
           </details>
 
           <section className="panel">
-            <h2>What was actually planted <Info text="Hidden from Halden. Open it after you decide." /></h2>
+            <h2>What was actually planted <Info text="Hidden from FraudLens. Open it after you decide." /></h2>
             {truth ? (
               <p>
                 {truth.is_fraud ? `Fraud · ${patternName(truth.pattern)}. ${patternPlain(truth.pattern)}` : "A genuine customer."}
-                {" "}Halden said {patternName(truth.predicted_pattern)} and {truth.action}.
+                {" "}FraudLens said {patternName(truth.predicted_pattern)} and {truth.action}.
                 {" "}{truth.correct_action ? "The recommendation matches the planted label." : "The recommendation does not match the planted label."}
               </p>
             ) : (

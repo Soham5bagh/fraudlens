@@ -5,7 +5,7 @@ export function GET() {
   return new NextResponse(readSeed("report.md"), {
     headers: {
       "Content-Type": "text/markdown; charset=utf-8",
-      "Content-Disposition": "attachment; filename=halden-detection-report.md",
+      "Content-Disposition": "attachment; filename=fraudlens-detection-report.md",
     },
   });
 }

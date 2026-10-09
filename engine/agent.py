@@ -1003,7 +1003,7 @@ def recommend(state: dict) -> None:
         "recommend",
         "Suggested action",
         "alert" if action in {"block", "escalate"} else "watch" if action == "hold" else "clear",
-        f"Suggested action: {action}. Risk score {score}/100. {rationale} A person still has to confirm this. Halden does not apply it.",
+        f"Suggested action: {action}. Risk score {score}/100. {rationale} A person still has to confirm this. FraudLens does not apply it.",
         [
             {"label": "Suggested action", "value": action},
             {"label": "Risk score", "value": f"{score}/100"},
