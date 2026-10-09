@@ -1,5 +1,6 @@
 import { investigate } from "./investigate";
 import { isoFromSeconds, mulberry32, randInt } from "./format";
+import { PLANTED, resolveScenario } from "./scenarios";
 import type {
   Account,
   CaseInput,
@@ -16,13 +17,7 @@ import type {
   World,
 } from "./types";
 
-export const PLANTED: PlantedScenario[] = [
-  "card_testing",
-  "account_takeover",
-  "mule_chain",
-  "merchant_collusion",
-  "genuine",
-];
+export { PLANTED, resolveScenario };
 
 const LABELS: Record<PlantedScenario, string> = {
   card_testing: "Card testing",
@@ -45,16 +40,11 @@ const CITIES: [string, string][] = [
   ["Tallinn", "EE"],
 ];
 
-export function resolveScenario(choice: ScenarioChoice, seed: number): PlantedScenario {
-  if (choice === "random") return PLANTED[Math.abs(seed) % PLANTED.length];
-  return PLANTED.includes(choice) ? choice : "card_testing";
-}
-
-export function runLive(choice: ScenarioChoice, seed: number): { investigation: Investigation; truth: Truth } {
+export async function runLive(choice: ScenarioChoice, seed: number): Promise<{ investigation: Investigation; truth: Truth }> {
   const scenario = resolveScenario(choice, seed);
   const built = buildWorld(scenario, seed);
   return {
-    investigation: investigate(built.world, built.caseInput),
+    investigation: await investigate(built.world, built.caseInput),
     truth: built.truth,
   };
 }

@@ -1,3 +1,4 @@
+import { Annotation, END, START, StateGraph } from "@langchain/langgraph/web";
 import type { Action } from "@/lib/types";
 import { Catalog } from "./catalog";
 import {
@@ -104,11 +105,73 @@ type State = {
   facts: Facts;
 };
 
+const LiveState = Annotation.Root({
+  catalog: Annotation<Catalog>(),
+  caseInput: Annotation<CaseInput>(),
+  clock: Annotation<number>(),
+  timeline: Annotation<TimelineStep[]>({ reducer: (left, right) => left.concat(right), default: () => [] }),
+  facts: Annotation<Facts>(),
+});
+
+type GraphState = typeof LiveState.State;
+
+function node(run: (state: State) => void) {
+  return (state: GraphState) => {
+    const scratch: State = {
+      catalog: state.catalog,
+      caseInput: state.caseInput,
+      clock: state.clock,
+      timeline: [],
+      facts: { ...state.facts },
+    };
+    run(scratch);
+    return { clock: scratch.clock, timeline: scratch.timeline, facts: scratch.facts };
+  };
+}
+
+function routeAfterNetwork(state: GraphState): "merchant" | "transfer" {
+  return state.catalog.merchant(state.facts.lead.merchant_id) ? "merchant" : "transfer";
+}
+
+function buildInvestigationGraph() {
+  return new StateGraph(LiveState)
+    .addNode("open_case", node(openCase))
+    .addNode("customer_baseline", node(customerBaseline))
+    .addNode("velocity", node(velocityCheck))
+    .addNode("amount", node(amountAnalysis))
+    .addNode("device_ip", node(deviceAndIp))
+    .addNode("network", node(linkedAccounts))
+    .addNode("merchant", node(merchantCheck))
+    .addNode("transfer", node(transferCheck))
+    .addNode("classify", node(classify))
+    .addNode("recommend", node(recommend))
+    .addEdge(START, "open_case")
+    .addEdge("open_case", "customer_baseline")
+    .addEdge("customer_baseline", "velocity")
+    .addEdge("velocity", "amount")
+    .addEdge("amount", "device_ip")
+    .addEdge("device_ip", "network")
+    .addConditionalEdges("network", routeAfterNetwork, { merchant: "merchant", transfer: "transfer" })
+    .addEdge("merchant", "classify")
+    .addEdge("transfer", "classify")
+    .addEdge("classify", "recommend")
+    .addEdge("recommend", END)
+    .compile();
+}
+
+let compiled: ReturnType<typeof buildInvestigationGraph> | null = null;
+
+/** The compiled LangGraph, built once and shared by every live file. */
+export function investigationGraph() {
+  compiled ??= buildInvestigationGraph();
+  return compiled;
+}
+
 /**
  * Investigate a flagged case from the ledger alone.
  * The planted scenario is not an argument and is not read off the world.
  */
-export function investigate(world: World, caseInput: CaseInput): Investigation {
+export async function investigate(world: World, caseInput: CaseInput): Promise<Investigation> {
   const asOf = Math.max(...world.transactions.map((txn) => txn.ts));
   const catalog = new Catalog(world, asOf);
   const enrolled = new Set(
@@ -120,23 +183,14 @@ export function investigate(world: World, caseInput: CaseInput): Investigation {
   if (!lead) throw new Error(`Lead ${caseInput.lead_transaction_id} is not in the ledger`);
   const customer = catalog.customer(caseInput.customer_id);
   const merchant = catalog.merchant(lead.merchant_id);
-  const state: State = {
+  const final = await investigationGraph().invoke({
     catalog,
     caseInput,
     clock: REVIEW_MS,
     timeline: [],
     facts: emptyFacts(lead, customer, merchant?.name ?? "peer-to-peer transfer", enrolled),
-  };
-  openCase(state);
-  customerBaseline(state);
-  velocityCheck(state);
-  amountAnalysis(state);
-  deviceAndIp(state);
-  linkedAccounts(state);
-  merchantCheck(state);
-  classify(state);
-  recommend(state);
-  return assemble(state);
+  });
+  return assemble(final);
 }
 
 function emptyFacts(lead: Txn, customer: World["customers"][number], merchantName: string, enrolled: Set<string>): Facts {
@@ -550,24 +604,25 @@ function accountLabel(catalog: Catalog, accountId: string): string {
   return `${customer.name} (${accountId})`;
 }
 
+function transferCheck(state: State) {
+  state.facts.merchant = null;
+  state.facts.merchantStats = { buyers: 0, youngShare: 0, roundShare: 0, sharedDevices: [], categories: [] };
+  step(
+    state,
+    "merchant",
+    "Merchant check",
+    "watch",
+    "The lead movement is a transfer, not a card purchase, so there is no merchant to underwrite. The money-flow step carries that evidence.",
+    [{ label: "Merchant", value: "none (transfer)" }],
+    300,
+  );
+}
+
 function merchantCheck(state: State) {
   const catalog = state.catalog;
   const lead = state.facts.lead;
   const merchant = catalog.merchant(lead.merchant_id);
-  if (!merchant) {
-    state.facts.merchant = null;
-    state.facts.merchantStats = { buyers: 0, youngShare: 0, roundShare: 0, sharedDevices: [], categories: [] };
-    step(
-      state,
-      "merchant",
-      "Merchant check",
-      "watch",
-      "The lead movement is a transfer, not a card purchase, so there is no merchant to underwrite. The money-flow step carries that evidence.",
-      [{ label: "Merchant", value: "none (transfer)" }],
-      300,
-    );
-    return;
-  }
+  if (!merchant) throw new Error(`Merchant check reached without a merchant on ${lead.id}`);
   const recentStart = lead.ts - 14 * 86400;
   const recent = (catalog.byMerchant.get(merchant.id) ?? []).filter((txn) => txn.ts >= recentStart);
   const buyers: string[] = [];

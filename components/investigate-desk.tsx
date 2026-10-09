@@ -10,7 +10,7 @@ import { ACTIONS, loadDecisions, saveDecision } from "@/lib/decisions";
 import { actionLabel, money, when } from "@/lib/format";
 import { actionPlain, patternPlain, statusPlain } from "@/lib/glossary";
 import { useDecisionKeys } from "@/lib/use-decision-keys";
-import { PLANTED, runLive } from "@/lib/live/generate";
+import { PLANTED } from "@/lib/live/scenarios";
 import type { Investigation, PlantedScenario, ScenarioChoice, Truth } from "@/lib/live/types";
 import type { Action, AnalystDecision } from "@/lib/types";
 
@@ -40,27 +40,40 @@ export function InvestigateDesk() {
   const [decision, setDecision] = useState<AnalystDecision | undefined>();
   const [action, setAction] = useState<Action>("approve");
   const [note, setNote] = useState("");
+  const [failed, setFailed] = useState<string | null>(null);
 
   useEffect(() => {
     setPicked(choice);
   }, [choice]);
 
   useEffect(() => {
-    if (seed == null) {
-      setFile(null);
-      setTruth(null);
-      setShown(0);
-      return;
-    }
-    const result = runLive(choice, seed);
-    const caseKey = decisionKey(result.truth.scenario, seed);
-    const existing = loadDecisions()[caseKey];
-    setFile(result.investigation);
-    setTruth(result.truth);
+    void import("@/lib/live/generate");
+  }, []);
+
+  useEffect(() => {
+    setFile(null);
+    setTruth(null);
     setShown(0);
-    setDecision(existing);
-    setAction(existing?.action ?? result.investigation.action);
-    setNote(existing?.note ?? "");
+    setFailed(null);
+    if (seed == null) return;
+    let active = true;
+    import("@/lib/live/generate")
+      .then(({ runLive }) => runLive(choice, seed))
+      .then((result) => {
+        if (!active) return;
+        const existing = loadDecisions()[decisionKey(result.truth.scenario, seed)];
+        setFile(result.investigation);
+        setTruth(result.truth);
+        setDecision(existing);
+        setAction(existing?.action ?? result.investigation.action);
+        setNote(existing?.note ?? "");
+      })
+      .catch(() => {
+        if (active) setFailed("This file could not be built. Try another seed.");
+      });
+    return () => {
+      active = false;
+    };
   }, [choice, seed]);
 
   useEffect(() => {
@@ -112,7 +125,11 @@ export function InvestigateDesk() {
         Investigate a new payment
       </button>
 
-      {seed == null || !file || !truth ? (
+      {failed ? (
+        <div className="state" style={{ marginTop: 18 }}>{failed}</div>
+      ) : seed != null && (!file || !truth) ? (
+        <div className="state" style={{ marginTop: 18 }}>Opening the file…</div>
+      ) : seed == null || !file || !truth ? (
         <p className="note" style={{ marginTop: 18 }}>
           Nothing is open yet. A seed in the address bar, such as{" "}
           <Link href="/investigate?scenario=card_testing&seed=1234">/investigate?scenario=card_testing&seed=1234</Link>,
